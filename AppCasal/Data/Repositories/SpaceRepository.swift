@@ -1,0 +1,95 @@
+//
+//  SpaceRepository.swift
+//  AppCasal
+//
+
+import CoreData
+
+/// Creates and finds the couple space and its members.
+final class SpaceRepository {
+    enum SpaceError: LocalizedError {
+        case storeUnavailable
+
+        var errorDescription: String? {
+            switch self {
+            case .storeUnavailable:
+                String(localized: "O armazenamento local não está disponível.")
+            }
+        }
+    }
+
+    private let persistence: PersistenceController
+
+    init(persistence: PersistenceController) {
+        self.persistence = persistence
+    }
+
+    private var context: NSManagedObjectContext { persistence.viewContext }
+
+    /// The active space. A user has at most one; owned spaces win over shared ones.
+    func activeSpace() -> CoupleSpace? {
+        let request = CoupleSpace.fetchRequest()
+        request.predicate = NSPredicate(format: "deletedAt == nil")
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \CoupleSpace.createdAt, ascending: true)]
+        let spaces = (try? context.fetch(request)) ?? []
+        return spaces.first { !persistence.isInSharedStore($0) } ?? spaces.first
+    }
+
+    func role(in space: CoupleSpace) -> Member.Role {
+        persistence.isInSharedStore(space) ? .participant : .owner
+    }
+
+    func createSpace(ownerName: String, userRecordName: String, now: Date = .now) throws -> CoupleSpace {
+        guard let store = persistence.privateStore else { throw SpaceError.storeUnavailable }
+
+        let space = CoupleSpace(context: context)
+        context.assign(space, to: store)
+        space.id = UUID()
+        space.createdAt = now
+        space.modifiedAt = now
+        space.createdBy = userRecordName
+
+        insertMember(named: ownerName, userRecordName: userRecordName, role: .owner, in: space, now: now)
+        try persistence.save()
+        return space
+    }
+
+    func member(for userRecordName: String, in space: CoupleSpace) -> Member? {
+        space.members?.first { $0.userRecordName == userRecordName }
+    }
+
+    /// Creates the current user's member record in `space` if it does not exist yet.
+    /// Called by the participant once the shared space has been imported.
+    @discardableResult
+    func ensureMember(named name: String, userRecordName: String, in space: CoupleSpace, now: Date = .now) throws -> Member {
+        if let existing = member(for: userRecordName, in: space) {
+            return existing
+        }
+        let member = insertMember(named: name, userRecordName: userRecordName, role: role(in: space), in: space, now: now)
+        try persistence.save()
+        return member
+    }
+
+    @discardableResult
+    private func insertMember(
+        named name: String,
+        userRecordName: String,
+        role: Member.Role,
+        in space: CoupleSpace,
+        now: Date
+    ) -> Member {
+        let member = Member(context: context)
+        // Related objects must live in the same store as the space.
+        if let store = space.objectID.persistentStore {
+            context.assign(member, to: store)
+        }
+        member.id = UUID()
+        member.displayName = name
+        member.userRecordName = userRecordName
+        member.role = role.rawValue
+        member.createdAt = now
+        member.modifiedAt = now
+        member.space = space
+        return member
+    }
+}
