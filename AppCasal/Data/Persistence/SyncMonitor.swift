@@ -53,6 +53,16 @@ final class SyncMonitor {
         }
     }
 
+    /// Summary for the sync banner. Demo and missing accounts take precedence over events.
+    func displayState(isDemo: Bool, accountStatus: AccountService.Status) -> SyncDisplayState {
+        if isDemo { return .demo }
+        guard accountStatus == .available else { return .accountUnavailable }
+        guard let latest = entries.first else { return .upToDate }
+        if !latest.isFinished { return .syncing }
+        if !latest.succeeded { return .failed(latest.errorDescription ?? String(localized: "Erro desconhecido.")) }
+        return .upToDate
+    }
+
     private static func storeName(for event: NSPersistentCloudKitContainer.Event, in container: NSPersistentCloudKitContainer) -> String {
         let store = container.persistentStoreCoordinator.persistentStores.first { $0.identifier == event.storeIdentifier }
         return store?.url?.deletingPathExtension().lastPathComponent ?? "?"

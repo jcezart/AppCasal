@@ -8,14 +8,21 @@ import SwiftUI
 @main
 struct AppCasalApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-    private let environment = AppEnvironment.shared
+    private let environment: AppEnvironment
+
+    init() {
+        LaunchLog.mark("app init")
+        NavigationAppearance.apply()
+        environment = AppEnvironment.shared
+        LaunchLog.mark("environment ready")
+    }
 
     var body: some Scene {
         WindowGroup {
             if AppEnvironment.isRunningTests {
                 Color.clear
             } else {
-                SharingSpikeView(environment: environment)
+                RootView(environment: environment)
                     .environment(\.managedObjectContext, environment.persistence.viewContext)
             }
         }

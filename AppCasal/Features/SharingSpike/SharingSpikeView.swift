@@ -3,12 +3,13 @@
 //  AppCasal
 //
 
+#if DEBUG
 import CloudKit
 import CoreData
 import SwiftUI
 
-/// Stage 1 test screen (no visual design): create a space, invite, accept,
-/// and create/edit a simple record from both accounts.
+/// DEBUG-only stage 1 test screen (no visual design): create a space, invite, accept,
+/// and create/edit a simple record from both accounts. Reached from "Nosso espaço".
 struct SharingSpikeView: View {
     let environment: AppEnvironment
 
@@ -19,8 +20,7 @@ struct SharingSpikeView: View {
     private var account: AccountService { environment.account }
 
     var body: some View {
-        NavigationStack {
-            List {
+        List {
                 AccountSection(account: account)
                 if account.status == .available, let userRecordName = account.userRecordName {
                     acceptanceSection
@@ -55,13 +55,10 @@ struct SharingSpikeView: View {
             } message: {
                 Text(errorMessage ?? "")
             }
-        }
         .task {
             await account.refresh()
             reload()
         }
-        .task { await account.observeAccountChanges() }
-        .task { await environment.sync.observe(environment.persistence.container) }
         .task {
             for await _ in NotificationCenter.default.notifications(named: .NSPersistentStoreRemoteChange) {
                 reload()
@@ -458,3 +455,4 @@ private struct SyncSection: View {
         }
     }
 }
+#endif

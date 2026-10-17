@@ -50,6 +50,7 @@ final class PersistenceController {
         let sharedDescription = Self.storeDescription(named: "Shared", scope: .shared, mode: mode)
         container.persistentStoreDescriptions = [privateDescription, sharedDescription]
 
+        LaunchLog.mark("stores loading")
         var firstError: Error?
         container.loadPersistentStores { _, error in
             if let error, firstError == nil {
@@ -57,6 +58,7 @@ final class PersistenceController {
             }
         }
         loadError = firstError
+        LaunchLog.mark("stores loaded")
 
         let coordinator = container.persistentStoreCoordinator
         privateStore = privateDescription.url.flatMap { coordinator.persistentStore(for: $0) }

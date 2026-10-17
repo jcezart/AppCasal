@@ -32,3 +32,14 @@ nonisolated extension CoupleSpace {
         NSFetchRequest<CoupleSpace>(entityName: "CoupleSpace")
     }
 }
+
+nonisolated extension CoupleSpace {
+    /// Whole days since `relationshipStart`, counted in calendar days; nil when not set.
+    func daysTogether(now: Date = .now, calendar: Calendar = .current) -> Int? {
+        guard let relationshipStart else { return nil }
+        let start = calendar.startOfDay(for: relationshipStart)
+        let end = calendar.startOfDay(for: now)
+        guard let days = calendar.dateComponents([.day], from: start, to: end).day, days >= 0 else { return nil }
+        return days
+    }
+}

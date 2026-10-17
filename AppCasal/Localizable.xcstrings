@@ -1,7 +1,315 @@
 {
   "sourceLanguage" : "pt-BR",
   "strings" : {
+    "“%@”" : {
 
+    },
+    "%@ · %@" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "%@ e %@" : {
+      "comment" : "Couple names, e.g. 'Ana e Lucas'",
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ e %2$@"
+          }
+        }
+      }
+    },
+    "%@ Suas alterações continuam salvas neste iPhone." : {
+
+    },
+    "%lld dias juntos" : {
+
+    },
+    "A memória mais recente de vocês aparece aqui." : {
+
+    },
+    "Abre os recados" : {
+
+    },
+    "Abrindo o espaço de vocês" : {
+
+    },
+    "Aceitando o convite…" : {
+
+    },
+    "Aguardando" : {
+
+    },
+    "Aguardando seu par" : {
+
+    },
+    "Algo deu errado" : {
+
+    },
+    "Aqui é onde a nossa história continua." : {
+
+    },
+    "As metas que vocês concluírem ficam guardadas aqui." : {
+
+    },
+    "Como você quer aparecer para o seu par?" : {
+
+    },
+    "Compartilhamento encerrado" : {
+
+    },
+    "Concluídas" : {
+
+    },
+    "Conectados" : {
+
+    },
+    "Convidar seu par" : {
+
+    },
+    "Convite aceito. Trazendo o espaço de vocês do iCloud…" : {
+
+    },
+    "Convite enviado" : {
+
+    },
+    "Criar nosso espaço" : {
+
+    },
+    "Dados fictícios, só neste aparelho. Nada é enviado ao iCloud." : {
+
+    },
+    "Data" : {
+
+    },
+    "É assim que você aparece para o seu par." : {
+
+    },
+    "Em andamento" : {
+
+    },
+    "Entrar no espaço" : {
+
+    },
+    "Entre na sua conta iCloud nos Ajustes do iPhone para criar ou abrir o espaço de vocês." : {
+
+    },
+    "Enviados" : {
+
+    },
+    "Erro desconhecido." : {
+
+    },
+    "Este convite inclui mais de uma pessoa além do dono. Um espaço é só para o casal." : {
+
+    },
+    "Favoritos" : {
+
+    },
+    "Foto do casal" : {
+
+    },
+    "Gerenciar convite" : {
+
+    },
+    "Guardem aqui os momentos de vocês, com fotos, data e lugar." : {
+
+    },
+    "iCloud indisponível" : {
+
+    },
+    "Início" : {
+
+    },
+    "Início do relacionamento" : {
+
+    },
+    "Mapa" : {
+
+    },
+    "Memórias" : {
+
+    },
+    "Metas" : {
+
+    },
+    "Meu perfil" : {
+
+    },
+    "Modo demonstração" : {
+
+    },
+    "Não definido" : {
+
+    },
+    "Não foi possível sincronizar" : {
+
+    },
+    "Não foi possível verificar sua conta iCloud." : {
+
+    },
+    "Não foi possível verificar sua conta iCloud. %@" : {
+
+    },
+    "Nenhum favorito ainda" : {
+
+    },
+    "Nenhum lugar salvo ainda" : {
+
+    },
+    "Nenhum recadinho ainda" : {
+
+    },
+    "Nenhum recadinho enviado" : {
+
+    },
+    "Nenhum recadinho recebido" : {
+
+    },
+    "Nenhuma memória ainda" : {
+
+    },
+    "Nenhuma meta ainda" : {
+
+    },
+    "Nenhuma meta concluída" : {
+
+    },
+    "Nosso espaço" : {
+
+    },
+    "Nossos momentos, para sempre." : {
+
+    },
+    "Nossos planos" : {
+
+    },
+    "O armazenamento local não está disponível." : {
+
+    },
+    "O compartilhamento deste espaço foi encerrado. Um novo relacionamento começa em um novo espaço." : {
+
+    },
+    "O iCloud está temporariamente indisponível. Tente de novo em instantes." : {
+
+    },
+    "O último recadinho entre vocês aparece aqui." : {
+
+    },
+    "O uso do iCloud está restrito neste iPhone." : {
+
+    },
+    "OK" : {
+
+    },
+    "Os dados continuam com você. Um novo relacionamento começa em um novo espaço." : {
+
+    },
+    "Os lugares que vocês visitaram e os que querem conhecer vão aparecer no mapa." : {
+
+    },
+    "Os planos de vocês e o progresso de cada um aparecem aqui." : {
+
+    },
+    "Os recadinhos que você marcar com o coração aparecem aqui. Só você vê seus favoritos." : {
+
+    },
+    "Para guardar o que vivemos, o que sonhamos e tudo o que ainda vamos viver juntos." : {
+
+    },
+    "Parceiro ou parceira ainda não entrou" : {
+
+    },
+    "Pequenas palavras guardadas para sempre." : {
+
+    },
+    "Pequenas palavras, grandes significados." : {
+
+    },
+    "Precisamos do iCloud" : {
+
+    },
+    "Progresso" : {
+
+    },
+    "Que bom ter você aqui" : {
+
+    },
+    "Queremos ir" : {
+
+    },
+    "Recados" : {
+
+    },
+    "Recebeu um convite? Abra o link que seu par enviou e o espaço de vocês aparece aqui." : {
+
+    },
+    "Recebidos" : {
+
+    },
+    "Remover data" : {
+
+    },
+    "Salvar" : {
+
+    },
+    "Seu nome" : {
+
+    },
+    "Seu par" : {
+
+    },
+    "Sincronizando" : {
+
+    },
+    "Sonhos que se constroem juntos." : {
+
+    },
+    "Suas alterações estão salvas no iCloud." : {
+
+    },
+    "Suas alterações ficam neste iPhone até o iCloud voltar." : {
+
+    },
+    "Tentar novamente" : {
+
+    },
+    "Todos" : {
+
+    },
+    "Tudo sincronizado" : {
+
+    },
+    "Última memória" : {
+
+    },
+    "Último recadinho" : {
+
+    },
+    "Um espaço só nosso" : {
+
+    },
+    "Usada para contar os dias juntos no Início." : {
+
+    },
+    "Viagens, planos e conquistas, com etapas e prazo." : {
+
+    },
+    "Visitados" : {
+
+    },
+    "Você já tem um espaço próprio. Por enquanto, cada pessoa participa de um único espaço." : {
+
+    },
+    "Você pode continuar usando o app normalmente." : {
+
+    }
   },
   "version" : "1.0"
 }

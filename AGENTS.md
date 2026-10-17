@@ -22,10 +22,11 @@ Referência comum para todos os agentes (Claude, Codex e outros) que trabalham n
 ## Resumo atual
 
 - **Etapa 0:** concluída.
-- **Etapa 1:** implementada, **aguardando validação entre duas contas iCloud reais**.
-- **Testes:** 11 testes unitários passando (simulador iOS 26.3).
-- **Não validado em aparelhos:** convites, sincronização, notificações e conflitos.
-- **Próximo:** primeiro teste real só do fluxo básico (S1–S5 e P1). Offline, conflitos e notificações vêm depois, separadamente. Nenhuma outra funcionalidade antes disso e de nova aprovação.
+- **Etapa 1:** implementada, **aguardando validação entre duas contas iCloud reais** (aparelhos indisponíveis por enquanto).
+- **Incremento atual (autorizado em 2026-10-17, ordem do usuário):** design system + navegação + ambiente de demonstração **implementados e validados localmente no simulador**; aguardando revisão das capturas pelo usuário antes do fluxo de memórias.
+- **Testes:** 19 testes unitários passando (simulador iOS 26.3), incluindo contraste de 11 pares de cores em claro e escuro.
+- **Não validado em aparelhos:** convites, sincronização entre parceiros, notificações e conflitos.
+- **Ordem autorizada:** (1) design system, (2) navegação, (3) ambiente de demonstração, (4) fluxo de memórias. Não avançar para memórias antes da revisão das capturas.
 - **Última atualização:** 2026-10-17.
 
 ## Produto
@@ -45,12 +46,14 @@ Referência comum para todos os agentes (Claude, Codex e outros) que trabalham n
 | Swift | 6.0; `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor`; approachable concurrency |
 | Idioma | `developmentRegion = pt-BR`; `knownRegions = Base, pt-BR`; `AppCasal/Localizable.xcstrings` (fonte pt-BR) |
 | Targets | `AppCasal` (app) e `AppCasalTests` (unit, Swift Testing, hospedado no app) |
-| Scheme | compartilhado em `AppCasal.xcodeproj/xcshareddata/xcschemes/AppCasal.xcscheme` |
+| Schemes | compartilhados: `AppCasal` (real, CloudKit) e `AppCasal Demo` (DEBUG, `-AppCasalDemo YES`, dados fictícios locais) |
 | Bundle IDs | `jc.app.dev.AppCasal`, `jc.app.dev.AppCasalTests` |
 | Team | `F44CYBRGC2` (conta paga), assinatura automática |
 | Container CloudKit | `iCloud.jc.app.dev.casal` (registrado no time; incluído no perfil "iOS Team Provisioning Profile: jc.app.dev.AppCasal") |
 | Entitlements | `AppCasal/AppCasal.entitlements`: CloudKit, container acima, `aps-environment = development` |
-| Info.plist | gerado + parcial `AppCasal/Info.plist` (`CKSharingSupported`, `UIBackgroundModes = remote-notification`); excluído dos recursos por exceção da pasta sincronizada |
+| Ícone do app | `AppIcon.appiconset`: `AppIcon.png` (claro, 1024×1024, sem alfa; dois cadeados de coração interligados, arte do usuário) e `AppIcon-Dark.png` (escuro, gerado a partir da arte clara: cadeados recortados com fundo transparente, o iOS desenha o fundo escuro). Variante tingida não fornecida, por decisão do usuário: o sistema gera |
+| Info.plist | gerado + parcial `AppCasal/Info.plist` (`CKSharingSupported`, `UIBackgroundModes = remote-notification`, `UILaunchScreen`); excluído dos recursos por exceção da pasta sincronizada |
+| Tela de abertura | `UILaunchScreen` com `UIColorName = LaunchBackground` (`#FAF5EE`, igual ao fundo do ícone, sem variante escura) e `UIImageName = LaunchLogo` (cadeados com fundo transparente, 220 pt). `INFOPLIST_KEY_UILaunchScreen_Generation` removido |
 | Git | `main`, remoto `git@github.com:jcezart/AppCasal.git` (SSH via Keychain) |
 | Limitação | agentes não operam a interface do Xcode; inspeção e build pelo diretório e `xcodebuild` |
 
@@ -67,13 +70,20 @@ Referência comum para todos os agentes (Claude, Codex e outros) que trabalham n
 **Padrão:** MVVM + Repository, proporcional ao projeto.
 
 - **Views:** SwiftUI; listas leem com `@FetchRequest` filtrado pelo espaço e por `deletedAt`.
-- **ViewModels:** `@Observable`, só em telas com lógica real (ainda nenhum; a tela de teste usa estado local).
+- **ViewModels:** `@Observable`, só em telas com lógica real (ainda nenhum: as telas atuais só leem com `@FetchRequest` e escrevem por repositórios).
+- **Navegação:** `RootView` decide entre erro do store, carregando, iCloud indisponível, criar espaço, entrar no espaço (participante sem `Member`) e `MainTabView`. `MainTabView` usa `TabView` nativo com 5 abas (`AppTab`), um `NavigationStack` por aba, e abre "Nosso espaço" (`SpaceView`) em sheet pelo avatar do Início.
 - **Repositories:** toda escrita passa por eles; atribuem o store do objeto relacionado, preenchem autoria e datas, aplicam exclusão lógica.
 - **PersistenceController:** dois stores no mesmo container: `Private.sqlite` (`.private`) e `Shared.sqlite` (`.shared`), com histórico persistente e notificação de mudança remota. Modos `.cloudKit`, `.local(directory:)` (testes de reabertura) e `.inMemory` (testes).
 - **ShareService:** cria o share, apresenta `UICloudSharingController` (somente privado + leitura e escrita), aceita convites, aplica `CoupleLimit`.
 - **SyncMonitor:** guarda os últimos eventos de `NSPersistentCloudKitContainer.eventChangedNotification`.
-- **AccountService:** estado da conta iCloud e `userRecordName`; reage a `CKAccountChanged`.
-- **AppEnvironment:** grafo de dependências criado uma vez; usa `.inMemory` quando roda sob testes.
+- **AccountService:** estado da conta iCloud e `userRecordName`; reage a `CKAccountChanged`. Guarda o `userRecordName` (identificador opaco por container, não é dado pessoal nem segredo) em `UserDefaults` (`account.cachedUserRecordName`): com ele o app abre direto no espaço, sem esperar a rede, e funciona offline. A verificação no iCloud roda depois, sem bloquear. Problemas transitórios (indisponível temporariamente, não determinado, erro) não bloqueiam quem já tem identidade no aparelho; só "sem conta" e "restrito" bloqueiam e apagam a identidade guardada. Troca de conta é detectada quando o `userRecordID()` volta diferente.
+- **LaunchLog:** marcas de tempo da abertura (`Logger`, categoria `launch`).
+- **AppEnvironment:** grafo de dependências criado uma vez, com `RunMode`:
+  - `.production`: stores reais com CloudKit.
+  - `.demo` (só DEBUG, só com o argumento `-AppCasalDemo YES`, nunca automático, nunca em resposta a erro do iCloud): stores `.local` em `Application Support/DemoStores/`, sem CloudKit, identidade local fixa (`AccountService(localUserRecordName:)`), dados fictícios gerados por `DemoData.seedIfNeeded` usando os repositórios de produção.
+  - `.preview` (só DEBUG): stores em memória com os mesmos dados fictícios, para `#Preview`.
+  - `.tests`: stores em memória.
+- **Design system:** `DesignSystem/Tokens` (`Palette`, `Spacing`, `Radius`, papéis de fonte, `NavigationAppearance`) e `DesignSystem/Components`.
 
 **Isolamento (Swift 6):** o target tem `MainActor` como padrão. As subclasses de `NSManagedObject` são `nonisolated` porque o espelhamento do CloudKit cria e lê objetos nas próprias filas; o isolamento real é o do contexto. Toda leitura e escrita do app acontece no `viewContext`, no `MainActor`. `CKShare`, `CKShare.Metadata` e `CKShare.Participant` são `Sendable` no iOS 17+ (SDK). O delegate de notificações tem um método `nonisolated` que só devolve opções, sem estado. Nenhuma marcação insegura foi usada.
 
@@ -84,22 +94,32 @@ AppCasal/
 ├── AGENTS.md / CLAUDE.md
 ├── AppCasal.xcodeproj/                      # + xcshareddata/xcschemes/AppCasal.xcscheme
 ├── AppCasal/
-│   ├── App/                                 # AppCasalApp, AppDelegate, SceneDelegate, AppEnvironment
+│   ├── App/                                 # AppCasalApp, AppDelegate, SceneDelegate, AppEnvironment, RootView, MainTabView, AppTab
+│   ├── DesignSystem/
+│   │   ├── Tokens/                          # Palette, Metrics (Spacing, Radius), Typography
+│   │   └── Components/                      # SurfaceCard, SectionLabel, Chips, PillSegmentedControl, Buttons, Avatars,
+│   │                                        # States (Empty/Loading/Error/SyncStatus), ProgressBar, NoteCards, InfoCard,
+│   │                                        # CoupleHeroHeader, SettingsRow, AdaptiveStack
 │   ├── Data/
 │   │   ├── Model/AppCasal.xcdatamodeld      # CoupleSpace, Member, Note
 │   │   ├── Model/Entities/                  # subclasses nonisolated
 │   │   ├── Persistence/                     # PersistenceController, SyncMonitor
 │   │   ├── Sharing/                         # ShareService, CoupleLimit
-│   │   ├── Notifications/                   # NoteAlertSubscription (experimento)
+│   │   ├── Notifications/                   # NoteAlertSubscription (experimento, só DEBUG)
+│   │   ├── Demo/                            # DemoData (só DEBUG)
 │   │   └── Repositories/                    # SpaceRepository, NoteRepository
 │   ├── Services/                            # AccountService
-│   ├── Features/SharingSpike/               # tela de teste da etapa 1 (sem design; será substituída)
+│   ├── Features/
+│   │   ├── Onboarding/                      # CreateSpaceView, JoinSpaceView, AccountUnavailableView
+│   │   ├── Home/ Map/ Memories/ Notes/ Goals/
+│   │   ├── Space/                           # SpaceView ("Nosso espaço"), editar nome, data de início
+│   │   └── SharingSpike/                    # diagnóstico da etapa 1, só DEBUG, aberto em "Nosso espaço"
 │   ├── Assets.xcassets, Localizable.xcstrings
 │   ├── AppCasal.entitlements, Info.plist
-└── AppCasalTests/                           # CoupleLimit, esquema CloudKit, repositórios, reabertura
+└── AppCasalTests/                           # CoupleLimit, esquema CloudKit, repositórios, reabertura, contraste, design, demo
 ```
 
-Pastas planejadas para etapas futuras: `DesignSystem/{Tokens,Components}`, `Features/{Onboarding,Space,Home,Map,Memories,Notes,Goals}`, `Services/{Location,PhotoProcessing}`.
+Pastas planejadas para etapas futuras: `Services/{Location,PhotoProcessing}`.
 
 ### Modelo de dados
 
@@ -190,66 +210,79 @@ Estado atual (tela de teste):
 - Criar um novo espaço depois de encerrar o anterior ainda não é possível na tela de teste (só um espaço por usuário); fica para a etapa 4.
 - Saída do participante e remoção do cache ao detectar revogação: etapa 4.
 
-## Referência visual e design system (aprovado; implementação na etapa 3)
+## Referência visual e design system (implementado; validado localmente)
 
-**Referência:** imagem "Álbum afetivo de Ana e Lucas" (fora do repositório, em `~/Downloads`). Seis telas: Início, Mapa, Memórias, Recados, Metas, Perfil e conexão. Nomes, fotos e textos são fictícios e não viram conteúdo fixo.
+**Referência:** imagem "Álbum afetivo de Ana e Lucas" (fora do repositório, em `~/Downloads`). Seis telas: Início, Mapa, Memórias, Recados, Metas, Perfil e conexão. Nomes, fotos e textos são fictícios e não viram conteúdo fixo (aparecem só no modo demonstração e em previews).
 
 **Extraído da imagem:** fundo creme quente; cartões claros quase planos; fotos com cantos arredondados; destaque terracota; títulos em serifada e metadados em sem serifa; subtítulos poéticos; chips de categoria e estado; segmentado em pílula; memórias por mês; 5 abas; perfil pelo avatar; banner de sincronização.
 
-**Tokens (proposta complementar baseada na imagem; medir contraste ao implementar):**
+**Tokens implementados** (Asset Catalog, claro e escuro; acesso por `Palette`). Contraste medido por `PaletteContrastTests` (WCAG, ≥ 4,5:1 para todos os pares de texto usados, nos dois modos):
 
-| Token | Claro | Uso |
-|---|---|---|
-| `canvas` | `#F7F0E8` | fundo |
-| `surface` | `#FCF8F3` | cartões |
-| `surfaceMuted` | `#F2E4DA` | chips, banner, controles inativos |
-| `accent` | `#B4553F` | botões preenchidos, seleção (branco ≈ 4,9:1) |
-| `accentText` | `#9A4433` | texto/ícones terracota pequenos (≈ 5,7:1) |
-| `textPrimary` | `#3D1F1A` | títulos e corpo |
-| `textSecondary` | `#76655D` | metadados (≈ 4,9:1) |
-| `success` | `#4E8B5A` | "Conectado" |
-| `separator` | `#E8DAD0` | divisores raros |
+| Token (`Palette`) | Asset | Claro | Escuro | Uso |
+|---|---|---|---|---|
+| `canvas` | Canvas | `#F7F0E8` | `#1C1614` | fundo |
+| `surface` | Surface | `#FCF8F3` | `#272019` | cartões |
+| `surfaceMuted` | SurfaceMuted | `#F2E4DA` | `#352A24` | chips, banners, segmentado |
+| `accent` | Terracotta | `#B4553F` | `#A9503B` | preenchimentos, seleção, progresso |
+| `onAccent` | OnTerracotta | `#FFFFFF` | `#FFFFFF` | texto sobre `accent` |
+| `accentText` | TerracottaText | `#9A4433` | `#E39A86` | texto/ícones terracota; também `AccentColor` (tint) |
+| `textPrimary` | Ink | `#3D1F1A` | `#F3E7DF` | títulos e corpo |
+| `textSecondary` | InkSecondary | `#6E5D55` | `#BFAEA5` | metadados |
+| `success` | Leaf | `#356B40` | `#7CBF88` | "Conectados" |
+| `hairline` | Hairline | `#E8DAD0` | `#3A302B` | bordas e divisores |
 
-- Modo escuro: variantes no Asset Catalog (complementar; a imagem só mostra o claro).
-- Tipografia: New York (`.fontDesign(.serif)`) em títulos, nomes, títulos de cartões e recadinhos; SF Pro no resto; sempre estilos de texto (Dynamic Type).
-- Espaçamento em grade de 4 pt; margem 20; padding de cartão 16; `@ScaledMetric`.
-- Cantos `.continuous`: cartão 20, foto 14, botão 14, chips e segmentado em cápsula.
-- Sombra muito suave ou nenhuma; SF Symbols; sem emoji como ícone.
-- Componentes: `CoupleHeroHeader`, `SurfaceCard`, `MemoryCard`, `MemoryRow`, `NoteCard`, `NotePreview`, `GoalCard`, `GoalSummaryRow`, `ProgressBar`, `StepChecklist`, `TagChip`, `StatusChip`, `PillSegmentedControl`, `PrimaryButton`, `SoftButton`, `AvatarView`, `CoupleAvatars`, `SyncStatusBanner`, `EmptyStateView`, `ErrorBanner`, `PlaceCard`, `MapFilterBar`, `SettingsRow`.
-- Estados por tela: vazio, carregando, erro, sincronização pendente (contagem aproximada pelo histórico persistente).
+Ajustes em relação à proposta: `textSecondary` (`#76655D` → `#6E5D55`) e `success` (`#4E8B5A` → `#356B40`) escurecidos porque ficavam abaixo de 4,5:1 sobre `surfaceMuted`. Modo escuro é proposta complementar (a imagem só mostra o claro).
 
-**Navegação:** `TabView` nativo com Início, Mapa, Memórias (linha do tempo das memórias), Recados, Metas (com histórico de concluídas). "Nosso espaço" pelo avatar no Início. Criação em sheets. Onboarding antes das abas.
+- **Tipografia:** `Font.displayTitle`, `.sectionTitle`, `.cardTitle`, `.noteQuote` em New York (serifada do sistema); `.metadata`, `.chipLabel` e demais em SF Pro. Todos derivados de estilos de texto (Dynamic Type). Títulos de navegação em serifada via `NavigationAppearance.apply()` (aparência do `UINavigationBar`, único meio para títulos nativos). `navigationSubtitle` (iOS 26) para os subtítulos poéticos.
+- **Métricas:** `Spacing` (4–40, margem 20, cartão 16), `Radius` (cartão 20, foto 14, botão 14), sempre `.continuous`.
+- **Componentes implementados:** `surfaceCard()`, `canvasBackground()`, `SectionLabel`, `TagChip`, `StatusChip`, `PillSegmentedControl`, `.primary` e `.soft` (estilos de botão), `AvatarView`, `CoupleAvatars`, `EmptyStateView`, `LoadingStateView`, `ErrorBanner`, `SyncStatusBanner` (+ `SyncDisplayState`), `ProgressBar`, `NoteCard`, `NotePreviewCard`, `InfoCard`, `CoupleHeroHeader`, `SettingsRow`, `AdaptiveStack`. Todos com `#Preview`.
+- **Componentes ainda não implementados** (entram com cada funcionalidade): `MemoryCard`, `MemoryRow`, `GoalCard`, `GoalSummaryRow`, `StepChecklist`, `PlaceCard`, busca do mapa.
+- **Acessibilidade implementada:** estilos de texto em tudo; `AdaptiveStack` troca linhas horizontais por verticais em tamanhos de acessibilidade; segmentado em pílula vira vertical nesses tamanhos; elementos combinados para VoiceOver; ícones decorativos ocultos; `isSelected` em segmentos e filtros; `accessibilityLabel` no avatar ("Nosso espaço"); Reduzir Movimento desliga a animação do segmentado.
+- **Abertura e boas-vindas:** tela de abertura do sistema com a marca (fundo creme e cadeados) e `WelcomeView` com a mesma cor, o mesmo logo, no mesmo tamanho e posição, mais "Um espaço só nosso" e indicador de progresso, que só aparecem se a preparação passar de 400 ms. Cores fixas da marca nos dois modos, para não haver salto da abertura para o app. Sem atraso artificial.
+- **Estados:** vazio (`EmptyStateView`, `InfoCard`), carregando (`LoadingStateView`), erro (`ErrorBanner`, erro do store na raiz), iCloud indisponível (`AccountUnavailableView`), sincronização (`SyncStatusBanner`: sincronizado, sincronizando, falhou, iCloud indisponível, demonstração). Contagem de alterações pendentes ainda não implementada.
+
+**Navegação implementada:** `TabView` nativo com Início, Mapa, Memórias, Recados, Metas (título "Nossos planos"). "Nosso espaço" pelo avatar no Início (sheet), com perfil (nome), data de início do relacionamento, convite (dono, fora do modo demonstração), estado da conexão e banner de sincronização. Diagnóstico técnico da etapa 1 só em DEBUG, dentro de "Nosso espaço".
+
+**Conteúdo das abas neste incremento:**
+- Início: herói (nomes, dias juntos, gradiente quente sem foto), último recadinho real, cartões vazios de metas e memória.
+- Mapa: `Map` nativo, filtros em Liquid Glass (só estado visual; sem lugares ainda), cartão vazio.
+- Memórias e Metas: estados vazios (funcionalidades nos próximos incrementos).
+- Recados: recebidos e enviados reais (leitura); favoritos com estado vazio (favoritos e escrita na etapa de recadinhos).
 
 **Liquid Glass (APIs do iOS 26, sem fallback de versão):**
 
-| Onde | Como | Por quê |
+| Onde | Como | Estado |
 |---|---|---|
-| Barra de abas | `TabView` nativo | padrão do sistema |
-| Barras de navegação e ações "+" / "Escrever recadinho" | `ToolbarItem` nativo; ação principal `.glassProminent` com `accent` | controles sobre conteúdo rolável |
-| Mapa: busca, filtros, "+", localização | `glassEffect` em `GlassEffectContainer` | controles flutuantes sobre conteúdo dinâmico |
-| Mapa: detalhe do lugar | sheet nativa com `presentationDetents` | material do sistema |
-| Ações sobre fotos | `.buttonStyle(.glass)` | legibilidade sobre imagem |
-| Sem glass | cartões, recadinhos, metas, formulários, perfil, banner, segmentado | superfícies estáveis de leitura |
+| Barra de abas | `TabView` nativo | implementado |
+| Barras de navegação e botões de toolbar (avatar, "OK") | `ToolbarItem` nativo | implementado |
+| Mapa: filtros | `glassEffect(.regular.interactive())` em `GlassEffectContainer`; selecionado com `.tint(accent)` | implementado |
+| Mapa: busca, "+", detalhe do lugar | glass / sheet nativa | planejado (incremento do mapa) |
+| Ações principais "+" / "Escrever recadinho" | `.glassProminent` | planejado (com cada funcionalidade) |
+| Ações sobre fotos | `.buttonStyle(.glass)` | planejado (fotos) |
+| Sem glass | cartões, recadinhos, formulários, perfil, banners, segmentado em pílula | implementado assim |
 
-Verificar com Reduzir Transparência, Aumentar Contraste e Reduzir Movimento.
-
-**Ajustes em relação à imagem:** barra de abas nativa flutuante; títulos de navegação nativos em serifada; mapa no estilo nativo; linhas horizontais viram verticais em Dynamic Type grande.
+**Ajustes em relação à imagem:** barra de abas nativa flutuante; títulos de navegação nativos em serifada; mapa no estilo nativo; herói desenhado por baixo das barras; linhas horizontais e segmentado viram verticais em Dynamic Type de acessibilidade.
 
 ## Estado das funcionalidades
 
-| Funcionalidade | Estado |
-|---|---|
-| Configuração do projeto (etapa 0) | implementada (build, testes, perfil com container) |
-| Fluxo mínimo de compartilhamento (etapa 1) | implementada; **validação real pendente** |
-| Experimento de avisos de recadinho | implementado só em DEBUG, ativação manual; não testado |
-| Modelo de dados completo, deduplicação, monitor de sync | planejada |
-| Design system e shell de navegação | planejada |
-| Onboarding, perfil, "Nosso espaço", encerramento | planejada |
-| Recadinhos (histórico, favoritos pessoais, avisos) | planejada |
-| Memórias com fotos e linha do tempo | planejada |
-| Metas com prazo, etapas, progresso e histórico | planejada |
-| Mapa, lugares, busca, rotas, converter em memória | planejada |
-| Início | planejada |
+Legenda: **implementado** (código existe e compila); **validado localmente** (build, testes unitários ou conferência visual no simulador); **aguardando duas contas** (só pode ser validado em dois aparelhos com contas iCloud distintas).
+
+| Funcionalidade | Implementado | Validado localmente | Aguardando duas contas |
+|---|---|---|---|
+| Configuração do projeto (etapa 0) | sim | sim (build, testes, perfil com container) | — |
+| Criar espaço, convidar, aceitar, entrar com nome (etapa 1 + onboarding) | sim | parcial (repositórios testados; telas no simulador sem iCloud) | sim (S1–S7, P1) |
+| Recadinho de teste criado/editado pelos dois (diagnóstico DEBUG) | sim | parcial (repositório testado) | sim (S3–S5) |
+| Experimento de avisos (só DEBUG, manual) | sim | não | sim (N1–N6) |
+| Design system (tokens, componentes, estados) | sim | sim (17 testes, capturas claro/escuro/AX) | — |
+| Navegação (5 abas, "Nosso espaço" pelo avatar, diagnóstico DEBUG) | sim | sim (capturas no simulador) | — |
+| Ambiente de demonstração | sim | sim (testes de separação e seed; capturas) | — |
+| "Nosso espaço": editar nome, data de início | sim | parcial (repositório testado; edição pela UI não exercitada) | sincronização entre parceiros |
+| Encerrar compartilhamento / sair / apagar espaço | parcial (encerrar marca `sharingEndedAt`) | parcial (`CoupleLimit` testado) | sim (S7) |
+| Memórias com fotos e linha do tempo | não | — | — |
+| Recadinhos (escrita, favoritos, avisos) | leitura apenas | — | — |
+| Metas | não (estado vazio) | — | — |
+| Mapa, lugares, busca, rotas | não (mapa e filtros visuais) | — | — |
+| Modelo completo, deduplicação, contagem de pendências | não | — | — |
 
 ## Persistência, CloudKit e CKShare — configuração atual
 
@@ -264,11 +297,11 @@ Verificar com Reduzir Transparência, Aumentar Contraste e Reduzir Movimento.
 |---|---|---|---|
 | 0 | Configuração (iOS 26, iPhone, Swift 6, pt-BR, String Catalog, testes, CloudKit, Push, Background Modes, Info.plist) | build sem avisos; testes passam; container no perfil | concluída |
 | 1 | Fluxo mínimo: criar espaço, convidar, aceitar, criar/editar registro pelos dois, persistência após reabrir | S1–S7 e P1 em dois aparelhos | implementada; validação pendente |
-| 2 | Modelo completo, repositórios, deduplicação, monitor de sincronização | testes em store em memória; modo avião | aguardando |
-| 3 | Design system e shell | previews; Dynamic Type AX3; modo escuro; contraste ≥ 4,5:1 | aguardando |
+| 2 | Modelo completo, repositórios, deduplicação, monitor de sincronização | testes em store em memória; modo avião | parcial: entidades entram com cada funcionalidade |
+| 3 | Design system, navegação e ambiente de demonstração | previews; Dynamic Type de acessibilidade; modo escuro; contraste ≥ 4,5:1 | implementada e validada localmente; aguardando revisão do usuário |
 | 4 | Onboarding e "Nosso espaço" (convite, conexão, encerrar/sair, novo parceiro = novo espaço) | fluxo entre 2 contas | aguardando |
 | 5 | Recadinhos + favoritos + avisos | N1–N6 | aguardando |
-| 6 | Memórias + fotos + linha do tempo | memória com 3 fotos no outro aparelho | aguardando |
+| 6 | Memórias + fotos + linha do tempo | local: criar, editar, listar, detalhe, fotos, persistência ao reabrir; entre contas: memória com 3 fotos no outro aparelho | próxima, após revisão das capturas |
 | 7 | Metas + etapas + histórico | etapas marcadas ao mesmo tempo | aguardando |
 | 8 | Mapa + lugares + rotas + converter em memória | busca, rota, memória ligada | aguardando |
 | 9 | Início | dados reais e estados vazios | aguardando |
@@ -314,6 +347,9 @@ Disponibilidade de dois aparelhos com contas iCloud distintas: **não confirmada
 | 2026-10-17 | Avisos: experimentar `CKDatabaseSubscription` com `recordType` nos bancos privado e compartilhado, só em DEBUG e com ativação manual | API documentada, sem banco público; não entra na distribuição | em teste |
 | 2026-10-17 | Convite via `UICloudSharingController` (não `ShareLink`) | permite restringir a privado + leitura e escrita e gerenciar participantes | implementada |
 | 2026-10-17 | Subclasses de `NSManagedObject` `nonisolated`; acesso do app só pelo `viewContext` no `MainActor` | isolamento correto com MainActor padrão e espelhamento em filas próprias | implementada |
+| 2026-10-17 | Sem aparelhos: avançar design system → navegação → demonstração → memórias | não bloquear o que não depende de CloudKit | aprovada pelo usuário |
+| 2026-10-17 | Modo demonstração só em DEBUG, por argumento explícito, stores próprios, repositórios de produção | sem implementação paralela; nunca misturar com dados reais | implementada |
+| 2026-10-17 | `Palette` isolada no `MainActor` | os símbolos de cor gerados pelo Asset Catalog herdam o isolamento padrão; uso só em views | implementada |
 
 ## Pendências do usuário
 
@@ -328,6 +364,13 @@ Disponibilidade de dois aparelhos com contas iCloud distintas: **não confirmada
 - Comportamento de conflito do framework não documentado (C1–C4).
 - `UICloudSharingController` não limita o número de convidados; o limite é aplicado pelo app na aceitação e sinalizado ao dono.
 - `xcode-select` aponta para Command Line Tools (regra 14).
+- Abertura num iPhone real não medida. Em build Debug iniciado pelo Xcode (com depurador) a abertura é bem mais lenta que pelo ícone; medir abrindo pela tela inicial, de preferência em Release. Na primeira abertura (sem identidade guardada) e com iCloud, o app ainda espera `userRecordID()`; a tela de boas-vindas cobre essa espera.
+- `navigationSubtitle` é truncado pelo sistema em tamanhos de acessibilidade (controle nativo).
+- Contraste do texto sobre os filtros em Liquid Glass do mapa não é medido (depende do mapa por trás); conferido só visualmente.
+- Reduzir Transparência e Aumentar Contraste não foram conferidos (o `simctl` não alterna Reduzir Transparência); conferir no Xcode (Environment Overrides) ou em aparelho.
+- Ícone escuro gerado por recorte automático (saturação/luminância + preenchimento de reflexos internos + borda suavizada); conferido em 1024 px sobre fundo escuro, mas o estilo de ícone escuro da tela inicial não foi visto no simulador (o `simctl` não alterna esse ajuste). Conferir num iPhone: Ajustes > Tela de Início e Biblioteca de Apps > Personalizar > Escuro. O conjunto `Messages Icon.stickersiconset` recebido não se aplica (o app não tem extensão do iMessage).
+- `Localizable.xcstrings` é sincronizado pelo Xcode (hoje com 56 chaves, da etapa 1). As chaves deste incremento entram na próxima sincronização feita pelo Xcode; não editar o catálogo à mão para "completar".
+- O modo demonstração não oferece convite (sem CloudKit); o banner mostra "Modo demonstração".
 
 ## Validações
 
@@ -339,6 +382,13 @@ Disponibilidade de dois aparelhos com contas iCloud distintas: **não confirmada
 | 2026-10-17 | Build para aparelho com `-allowProvisioningUpdates` | BUILD SUCCEEDED; perfil inclui `iCloud.jc.app.dev.casal`, CloudKit e `aps-environment = development`; Info.plist final com `CKSharingSupported`, `remote-notification`, `pt-BR`, família 1 |
 | 2026-10-17 | App aberto no simulador iOS 26.3 sem conta iCloud | abre sem falhas; mostra "Entre no iCloud nos Ajustes…" |
 | 2026-10-17 | Build Release para aparelho | BUILD SUCCEEDED; ID `note-alerts-experiment-v1` ausente do binário Release (presente no Debug) |
+| 2026-10-17 | `xcodebuild test` após design system | 17 testes em 5 suítes passaram (+ `PaletteContrastTests` com 22 casos, `DesignSupportTests`: dias juntos, parceiro, estado de sync, separação e seed da demonstração) |
+| 2026-10-17 | Build Release após design system | BUILD SUCCEEDED; textos `DemoStores`, `demo.owner`, `AppCasalDemo`, `AppCasalInitialTab`, `Diagnóstico de compartilhamento`, `note-alerts-experiment` ausentes do binário |
+| 2026-10-17 | Tempo de abertura (simulador iPhone 17, iOS 26.3, Debug, sem depurador) | bancos locais em ~10 ms; ambiente pronto em ~35 ms; primeira tela do espaço em ~120 ms após `init` do app (identidade local). Antes da correção, a tela de abertura gerada era vazia (preta em modo escuro) |
+| 2026-10-17 | Tela de abertura e boas-vindas (modo escuro do sistema) | fundo `#FAF5EE` idêntico dentro e fora do logo (amostragem de pixels da captura); sem tela preta; 19 testes passaram (+ `AccountServiceTests`); `AppCasalHoldWelcome` ausente do binário Release |
+| 2026-10-17 | Ícone escuro | `Assets.car` contém `AppIcon` com `UIAppearanceDark` (1024, não opaco) além da clara |
+| 2026-10-17 | Ícone do app | build OK; `CFBundleIconName = AppIcon` no Info.plist final; ícone visível na tela inicial do simulador |
+| 2026-10-17 | Capturas no simulador iPhone 17 (iOS 26.3), modo demonstração | Início, Mapa, Memórias, Recados, Metas, Nosso espaço (claro); Início e Recados (escuro); Início e Recados (acessibilidade XL); produção sem iCloud. Corrigidos durante a conferência: faixa sem gradiente sob a barra no Início, herói alto demais e cartões/segmentado truncados em acessibilidade |
 
 Não testado: fluxo com conta iCloud real, criação do esquema CloudKit, convite, aceitação, sincronização entre aparelhos, avisos, conflitos.
 
@@ -346,14 +396,18 @@ Não testado: fluxo com conta iCloud real, criação do esquema CloudKit, convit
 
 - **2026-10-17:** etapas 0 e 1 implementadas. Arquivos principais: `AppCasal.xcodeproj/project.pbxproj`, `AppCasal/AppCasal.entitlements`, `AppCasal/Info.plist`, `AppCasal/App/*`, `AppCasal/Data/**`, `AppCasal/Services/AccountService.swift`, `AppCasal/Features/SharingSpike/SharingSpikeView.swift`, `AppCasalTests/*`. Template `ContentView.swift` removido.
 - Experimento de avisos restrito a DEBUG; commit local da etapa (sem push).
-- **Retomar em:** resultados do primeiro teste básico (S1–S5, P1) em aparelhos → registrar em "Validações" e "Observado em testes"; depois aguardar aprovação da etapa 2.
+- **2026-10-17:** design system, navegação e ambiente de demonstração implementados. Arquivos principais: `AppCasal/DesignSystem/**`, `AppCasal/App/{RootView,MainTabView,AppTab,AppEnvironment,AppCasalApp}.swift`, `AppCasal/Features/{Onboarding,Home,Map,Memories,Notes,Goals,Space}/*`, `AppCasal/Data/Demo/DemoData.swift`, `AppCasal/Assets.xcassets/*.colorset`, scheme `AppCasal Demo`, `AppCasalTests/{PaletteContrastTests,DesignSupportTests}.swift`. Sem commit ainda.
+- **2026-10-17:** ícone do app aplicado a partir de `~/Downloads/Dois cadeados de coração interligados/apple-devices` (arte iOS 1024×1024).
+- **2026-10-17:** tela preta na abertura corrigida: `UILaunchScreen` com a marca, `WelcomeView`, identidade iCloud guardada no aparelho para abrir sem rede, marcas de tempo `LaunchLog`. DEBUG: `-AppCasalHoldWelcome YES` mantém a tela de boas-vindas para revisão. Arquivos: `AppCasal/Info.plist`, `Assets.xcassets/{LaunchLogo.imageset,LaunchBackground.colorset}`, `Features/Onboarding/WelcomeView.swift`, `App/RootView.swift`, `Services/{AccountService,LaunchLog}.swift`, `AppCasalTests/AccountServiceTests.swift`, `project.pbxproj`.
+- **2026-10-17:** usuário aprovou visual, paleta escura, commit e início do fluxo de memórias; ícone escuro gerado e aplicado.
+- **Retomar em:** revisão das capturas pelo usuário → fluxo de memórias (entidades `Memory`/`MemoryPhoto` compatíveis com CloudKit, repositório, criação, edição, linha do tempo, detalhe, fotos, teste de reabertura). Testes S/N/C/P continuam pendentes até haver aparelhos.
 
 ## Próximos passos (em ordem)
 
-1. Usuário executa o fluxo básico: S1–S5 e P1.
-2. Em seguida, separadamente: offline e conflitos (C1–C4), encerramento (S6–S7), avisos (N1–N6).
-3. Registrar resultados; decidir solução de avisos com base em N1–N6.
-4. Etapa 2 (após aprovação).
+1. Usuário revisa as capturas do design system e da navegação.
+2. Fluxo de memórias (local, no modo demonstração e em produção sem sincronização validada).
+3. Quando houver aparelhos: fluxo básico S1–S5 e P1; depois C1–C4, S6–S7, N1–N6, separadamente.
+4. Registrar resultados; decidir solução de avisos com base em N1–N6.
 
 ## Histórico
 
@@ -364,3 +418,4 @@ Não testado: fluxo com conta iCloud real, criação do esquema CloudKit, convit
 - **2026-10-17 (corrigido):** afirmação de que a exclusão lógica "nunca perde dados". Corrigida: facilita recuperação, não elimina sobrescritas.
 - **2026-10-17 (substituído):** proposta de "Exportar uma cópia" ao sair e reconvite no mesmo espaço. Exportação adiada; novo parceiro passa a exigir novo espaço.
 - **2026-10-17:** etapa 0 concluída e etapa 1 implementada (validação real pendente).
+- **2026-10-17:** sem aparelhos disponíveis, usuário autorizou avançar em design system, navegação, demonstração e memórias. Implementados design system, navegação e modo demonstração; tela de teste da etapa 1 passou a ser diagnóstico só em DEBUG (antes era a tela inicial).

@@ -70,6 +70,23 @@ final class SpaceRepository {
         return member
     }
 
+    /// The other partner, if they already joined.
+    func partner(of userRecordName: String, in space: CoupleSpace) -> Member? {
+        space.members?.first { $0.userRecordName != userRecordName }
+    }
+
+    func updateDisplayName(_ member: Member, to name: String, now: Date = .now) throws {
+        member.displayName = name
+        member.modifiedAt = now
+        try persistence.save()
+    }
+
+    func setRelationshipStart(_ date: Date?, in space: CoupleSpace, now: Date = .now) throws {
+        space.relationshipStart = date
+        space.modifiedAt = now
+        try persistence.save()
+    }
+
     @discardableResult
     private func insertMember(
         named name: String,
