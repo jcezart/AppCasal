@@ -101,7 +101,7 @@ struct GameView: View {
                     if current < questions.count - 1 { index = current + 1 }
                 }
                 .buttonStyle(.text)
-                HStack(spacing: Spacing.s) {
+                AdaptiveStack(spacing: Spacing.s) {
                     if current > 0 {
                         Button("Voltar") { index = current - 1 }
                             .buttonStyle(.soft)

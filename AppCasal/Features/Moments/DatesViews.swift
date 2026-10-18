@@ -321,7 +321,7 @@ struct DatePlansView: View {
                     ErrorBanner(message: errorMessage)
                 }
                 section("Convites para você", invitedMe) { plan in
-                    HStack(spacing: Spacing.xs) {
+                    AdaptiveStack(spacing: Spacing.xs) {
                         Button("Aceitar") { act { try context.repository.respond(to: plan, accept: true, by: me) } }
                             .buttonStyle(.soft)
                         Button("Agora não") { act { try context.repository.respond(to: plan, accept: false, by: me) } }

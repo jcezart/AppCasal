@@ -42,12 +42,12 @@ struct MomentsHomeCard: View {
     @ViewBuilder
     private var card: some View {
         VStack(alignment: .leading, spacing: Spacing.s) {
-            HStack {
+            AdaptiveStack(spacing: Spacing.xs) {
                 Text("Hoje, nós dois")
                     .font(.cardTitle)
                     .foregroundStyle(Palette.textPrimary)
                     .accessibilityAddTraits(.isHeader)
-                Spacer(minLength: Spacing.xs)
+                Spacer(minLength: 0)
                 if let category = session?.category.flatMap(QuestionCategory.init(rawValue:)) {
                     TagChip(title: category.title, systemImage: category.systemImage)
                 }
@@ -207,7 +207,7 @@ struct DailyQuestionView: View {
 
     private func questionHeader(_ session: DailyQuestion) -> some View {
         VStack(alignment: .leading, spacing: Spacing.s) {
-            HStack(spacing: Spacing.xs) {
+            AdaptiveStack(spacing: Spacing.xs) {
                 if let category = session.category.flatMap(QuestionCategory.init(rawValue:)) {
                     TagChip(title: category.title, systemImage: category.systemImage)
                 }
@@ -357,6 +357,7 @@ struct DiscoverySection: View {
             Text("Sua reação à resposta de \(context.name(for: partner.authorID))")
                 .font(.metadata)
                 .foregroundStyle(Palette.textSecondary)
+            // Four 48 pt buttons fit at any text size; they wrap only on the narrowest screens.
             HStack(spacing: Spacing.xs) {
                 ForEach(MomentReaction.allCases) { reaction in
                     let isSelected = mine.reaction == reaction.rawValue
@@ -394,12 +395,12 @@ struct AnswerCard: View {
                 .font(.noteQuote)
                 .foregroundStyle(Palette.textPrimary)
                 .fixedSize(horizontal: false, vertical: true)
-            HStack(spacing: Spacing.xs) {
+            // Stacks vertically at accessibility text sizes.
+            AdaptiveStack(spacing: Spacing.xs) {
                 if let date {
                     Text(NoteTimestamp.text(for: date))
                 }
                 if let reaction {
-                    Spacer(minLength: Spacing.xs)
                     Label(String(localized: "\(reaction.by): \(reaction.reaction.title)"), systemImage: reaction.reaction.systemImage)
                         .foregroundStyle(Palette.accentText)
                 }
