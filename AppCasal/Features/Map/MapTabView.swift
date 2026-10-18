@@ -35,6 +35,9 @@ struct MapTabView: View {
     @State private var visibleRegion: MKCoordinateRegion?
     @State private var selectedID: UUID?
     @State private var isSearching = false
+    @State private var isShowingList = false
+    /// Chosen in the list; shown on the map once the list sheet has closed.
+    @State private var pendingListSelection: UUID?
 
     init(environment: AppEnvironment, space: CoupleSpace, userRecordName: String) {
         self.environment = environment
@@ -89,11 +92,25 @@ struct MapTabView: View {
                 .presentationDetents([.height(320), .large])
                 .presentationBackgroundInteraction(.enabled(upThrough: .height(320)))
         }
+        .sheet(isPresented: $isShowingList, onDismiss: showPendingListSelection) {
+            PlaceListView(environment: environment, places: Array(places), filter: $filter) { place in
+                pendingListSelection = place.id
+                isShowingList = false
+            }
+            .presentationDetents([.medium, .large])
+        }
         .sheet(isPresented: $isSearching) {
             PlaceSearchView(environment: environment, space: space, userRecordName: userRecordName, region: visibleRegion) { place in
                 position = .region(MKCoordinateRegion(center: place.coordinate, latitudinalMeters: 1500, longitudinalMeters: 1500))
             }
         }
+    }
+
+    private func showPendingListSelection() {
+        guard let id = pendingListSelection, let place = places.first(where: { $0.id == id }) else { return }
+        pendingListSelection = nil
+        position = .region(MKCoordinateRegion(center: place.coordinate, latitudinalMeters: 1500, longitudinalMeters: 1500))
+        selectedID = id
     }
 
     private func markerSymbol(for place: Place) -> String {
@@ -123,6 +140,18 @@ struct MapTabView: View {
                         filterButton(option)
                     }
                     Spacer(minLength: 0)
+                    Button {
+                        isShowingList = true
+                    } label: {
+                        Image(systemName: "list.bullet")
+                            .font(.body.weight(.semibold))
+                            .foregroundStyle(Palette.textPrimary)
+                            .frame(width: 40, height: 40)
+                    }
+                    .buttonStyle(.plain)
+                    .glassEffect(.regular.interactive(), in: .circle)
+                    .accessibilityLabel(Text("Lista de lugares"))
+                    .accessibilityIdentifier("map.list")
                 }
             }
         }
@@ -168,6 +197,86 @@ struct MapTabView: View {
         }
         .padding(.horizontal, Spacing.screen)
         .padding(.bottom, Spacing.xs)
+    }
+}
+
+/// The saved places as a list, by status (same filter as the map). Choosing one shows it
+/// on the map with its details.
+private struct PlaceListView: View {
+    let environment: AppEnvironment
+    let places: [Place]
+    @Binding var filter: MapTabView.Filter
+    let onSelect: (Place) -> Void
+
+    private var shown: [Place] {
+        places
+            .filter { place in
+                switch filter {
+                case .all: true
+                case .visited: place.placeStatus == .visited
+                case .wishlist: place.placeStatus == .wishlist
+                }
+            }
+            .sorted { ($0.name ?? "").localizedStandardCompare($1.name ?? "") == .orderedAscending }
+    }
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: Spacing.m) {
+                    PillSegmentedControl(selection: $filter, options: MapTabView.Filter.allCases.map { .init(value: $0, title: $0.title) })
+                    if shown.isEmpty {
+                        EmptyStateView(
+                            systemImage: "mappin.and.ellipse",
+                            title: "Nenhum lugar aqui",
+                            message: "Os lugares salvos pela busca do Mapa aparecem nesta lista."
+                        )
+                    }
+                    LazyVStack(spacing: Spacing.s) {
+                        ForEach(shown) { place in
+                            Button { onSelect(place) } label: { row(place) }
+                                .buttonStyle(.plain)
+                                .accessibilityHint(Text("Mostra no mapa"))
+                        }
+                    }
+                }
+                .padding(Spacing.screen)
+            }
+            .canvasBackground()
+            .navigationTitle("Lugares")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+
+    private func row(_ place: Place) -> some View {
+        AdaptiveStack {
+            Image(systemName: place.placeStatus == .visited ? place.placeCategory.systemImage : "bookmark.fill")
+                .foregroundStyle(Palette.accentText)
+                .frame(width: 36, height: 36)
+                .background(Palette.surfaceMuted, in: .rect(cornerRadius: 10, style: .continuous))
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: Spacing.xxs) {
+                Text(place.name ?? "")
+                    .font(.headline)
+                    .foregroundStyle(Palette.textPrimary)
+                if let address = place.address, !address.isEmpty {
+                    Text(address)
+                        .font(.subheadline)
+                        .foregroundStyle(Palette.textSecondary)
+                }
+                HStack(spacing: Spacing.xs) {
+                    StatusChip(title: place.placeStatus == .visited ? "Visitado" : "Queremos ir", systemImage: place.placeStatus.systemImage, tone: place.placeStatus == .visited ? .success : .accent)
+                    if let distance = environment.location.distance(to: place.coordinate) {
+                        Text(distance, format: .measurement(width: .abbreviated, usage: .road))
+                            .font(.metadata)
+                            .foregroundStyle(Palette.textSecondary)
+                    }
+                }
+            }
+            Spacer(minLength: 0)
+        }
+        .surfaceCard()
+        .accessibilityElement(children: .combine)
     }
 }
 

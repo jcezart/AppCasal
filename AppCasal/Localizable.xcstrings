@@ -27,6 +27,16 @@
         }
       }
     },
+    "%@ acertou %lld de %lld." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ acertou %2$lld de %3$lld."
+          }
+        }
+      }
+    },
     "%@ às %@" : {
       "localizations" : {
         "pt-BR" : {
@@ -36,6 +46,12 @@
           }
         }
       }
+    },
+    "%@ começou esta rodada." : {
+
+    },
+    "%@ começou uma rodada." : {
+
     },
     "%@ e %@" : {
       "comment" : "Couple names, e.g. 'Ana e Lucas'",
@@ -48,7 +64,36 @@
         }
       }
     },
+    "%@ escolheu: %@" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ escolheu: %2$@"
+          }
+        }
+      }
+    },
+    "%@ já respondeu." : {
+
+    },
+    "%@ já respondeu. A resposta aparece depois que você enviar a sua." : {
+
+    },
     "%@ Suas alterações continuam salvas neste iPhone." : {
+
+    },
+    "%@: %@" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@: %2$@"
+          }
+        }
+      }
+    },
+    "%@: sem palpites para comparar." : {
 
     },
     "%lld" : {
@@ -59,6 +104,16 @@
     },
     "%lld alterações aguardando envio. Você pode continuar editando." : {
 
+    },
+    "%lld convite(s) de %@ esperando resposta." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld convite(s) de %2$@ esperando resposta."
+          }
+        }
+      }
     },
     "%lld de %lld etapas" : {
       "localizations" : {
@@ -79,7 +134,19 @@
     "%lld fotos" : {
 
     },
+    "%lld ideia(s) com esses filtros." : {
+
+    },
+    "%lld ideia(s) de vocês." : {
+
+    },
     "%lld lembretes" : {
+
+    },
+    "%lld lugar(es) salvos no Mapa." : {
+
+    },
+    "%lld plano(s) em aberto." : {
 
     },
     "%lld/%lld" : {
@@ -95,6 +162,9 @@
     "1 dia antes" : {
 
     },
+    "100 ideias para casais." : {
+
+    },
     "A %@ de você" : {
 
     },
@@ -105,6 +175,24 @@
 
     },
     "A notificação chega às %lldh, neste iPhone e no do seu par." : {
+
+    },
+    "A pergunta de hoje ainda não chegou a este iPhone. Ela aparece depois que o iCloud sincronizar." : {
+
+    },
+    "A pergunta de hoje está esperando por vocês." : {
+
+    },
+    "A pergunta deste dia ainda não chegou a este iPhone. Ela aparece depois que o iCloud sincronizar; não criamos outra pergunta só para você." : {
+
+    },
+    "A resposta pode ter até %lld caracteres." : {
+
+    },
+    "A rodada é para dois: convide seu par primeiro." : {
+
+    },
+    "Abraço" : {
 
     },
     "Abre as metas" : {
@@ -123,6 +211,9 @@
 
     },
     "Aceitando o convite…" : {
+
+    },
+    "Aceitar" : {
 
     },
     "Adicionar" : {
@@ -146,6 +237,9 @@
     "Aguardando seu par" : {
 
     },
+    "Ainda não há o que reviver" : {
+
+    },
     "Ajustar foto de perfil" : {
 
     },
@@ -153,6 +247,12 @@
 
     },
     "Algo deu errado" : {
+
+    },
+    "Amei" : {
+
+    },
+    "Aniversário das memórias" : {
 
     },
     "Aniversário de namoro" : {
@@ -176,10 +276,16 @@
     "Arraste para posicionar e use dois dedos para aproximar." : {
 
     },
+    "As memórias que vocês guardarem voltam aqui depois de algumas semanas, e no aniversário de cada uma." : {
+
+    },
     "As metas que vocês concluírem ficam guardadas aqui." : {
 
     },
     "As notificações do app estão desativadas. Ative nos Ajustes para receber os lembretes." : {
+
+    },
+    "As perguntas de cada dia ficam guardadas aqui." : {
 
     },
     "Até" : {
@@ -188,7 +294,29 @@
     "Até %@" : {
 
     },
+    "Até %lld caracteres no título e %lld na descrição." : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Até %1$lld caracteres no título e %2$lld na descrição."
+          }
+        }
+      }
+    },
     "Até %lld fotos. Elas são reduzidas para ocupar menos espaço no iCloud." : {
+
+    },
+    "Até 1 hora" : {
+
+    },
+    "Até 2 horas" : {
+
+    },
+    "Até 30 min" : {
+
+    },
+    "Até custo baixo" : {
 
     },
     "Ativadas" : {
@@ -209,7 +337,25 @@
     "Busque um lugar para guardar onde vocês foram ou querem ir." : {
 
     },
+    "Cada resposta mostra um pouco de quem vocês são hoje." : {
+
+    },
+    "Cada um escolhe uma resposta sobre si e tenta adivinhar a do par. Não existe resposta certa: vale a escolha de cada um." : {
+
+    },
     "Cancelar" : {
+
+    },
+    "Cancelar convite" : {
+
+    },
+    "Cancelar esta rodada?" : {
+
+    },
+    "Cancelar rodada" : {
+
+    },
+    "Carinho" : {
 
     },
     "Casa" : {
@@ -218,7 +364,28 @@
     "Categoria" : {
 
     },
+    "Cerca de %@" : {
+
+    },
+    "Cerca de %lld min" : {
+
+    },
     "Chegou um carinho pra você. Toque para ler." : {
+
+    },
+    "Combinado por %@" : {
+
+    },
+    "Combinado! O plano está em Planos e convites." : {
+
+    },
+    "Combinados" : {
+
+    },
+    "Começar de novo" : {
+
+    },
+    "Começar rodada" : {
 
     },
     "Começar um novo espaço" : {
@@ -231,6 +398,9 @@
 
     },
     "Como chegar" : {
+
+    },
+    "Como seria" : {
 
     },
     "Como você quer aparecer para o seu par?" : {
@@ -257,7 +427,19 @@
     "Conectados" : {
 
     },
+    "Confira o título, a descrição e a duração da ideia." : {
+
+    },
+    "Continuar" : {
+
+    },
     "Continuar editando" : {
+
+    },
+    "Continuar jogando" : {
+
+    },
+    "Convidar meu par" : {
 
     },
     "Convidar seu par" : {
@@ -272,7 +454,22 @@
     "Convite aceito. Trazendo o espaço de vocês do iCloud…" : {
 
     },
+    "Convite cancelado" : {
+
+    },
+    "Convite de %@" : {
+
+    },
     "Convite enviado" : {
+
+    },
+    "Convite enviado para %@. Aparece quando o iCloud sincronizar." : {
+
+    },
+    "Convite recusado" : {
+
+    },
+    "Convites para você" : {
 
     },
     "Criar memória" : {
@@ -281,10 +478,37 @@
     "Criar nosso espaço" : {
 
     },
+    "Custo" : {
+
+    },
+    "Custo a confirmar" : {
+
+    },
+    "Custo baixo" : {
+
+    },
+    "Custo e duração são só uma orientação para vocês." : {
+
+    },
+    "Custo estimado" : {
+
+    },
+    "Custo variável" : {
+
+    },
+    "Dá para fazer à distância" : {
+
+    },
     "Dados fictícios, só neste aparelho. Nada é enviado ao iCloud." : {
 
     },
     "Data" : {
+
+    },
+    "De novo: %@" : {
+
+    },
+    "De onde vêm as ideias" : {
 
     },
     "Dê um nome para o lembrete." : {
@@ -294,6 +518,12 @@
 
     },
     "Dê um título para a meta." : {
+
+    },
+    "Depois de enviada, a resposta não muda. As respostas aparecem quando vocês dois tiverem respondido." : {
+
+    },
+    "Depois de enviadas, as respostas não mudam. O resultado aparece quando vocês dois terminarem." : {
 
     },
     "Desativadas" : {
@@ -320,6 +550,12 @@
     "Digite %@ para confirmar" : {
 
     },
+    "Duração" : {
+
+    },
+    "Duração a confirmar" : {
+
+    },
     "É amanhã." : {
 
     },
@@ -335,6 +571,9 @@
     "Editar" : {
 
     },
+    "Editar ideia" : {
+
+    },
     "Editar lembrete" : {
 
     },
@@ -347,6 +586,9 @@
     "Editar recadinho" : {
 
     },
+    "Ela foi excluída ou ainda não chegou a este iPhone pelo iCloud." : {
+
+    },
     "Ela vai para Excluídos recentemente, de onde vocês podem restaurá-la." : {
 
     },
@@ -357,6 +599,15 @@
 
     },
     "Em andamento" : {
+
+    },
+    "Em casa" : {
+
+    },
+    "Em casa ou fora" : {
+
+    },
+    "Em Escolhe por nós, toquem em Vamos fazer ou convidem o seu par." : {
 
     },
     "Encontro" : {
@@ -377,10 +628,28 @@
     "Enviar" : {
 
     },
+    "Enviar resposta" : {
+
+    },
+    "Enviar resposta?" : {
+
+    },
+    "Enviar respostas" : {
+
+    },
+    "Enviar respostas?" : {
+
+    },
     "Erro desconhecido." : {
 
     },
     "Escolha em cada lembrete" : {
+
+    },
+    "Escolham de onde vêm as ideias e o que cabe no dia. Custos e durações são estimativas." : {
+
+    },
+    "Escolhe por nós" : {
 
     },
     "Escolher foto" : {
@@ -392,10 +661,25 @@
     "Escreva alguma coisa no recadinho." : {
 
     },
+    "Escreva sua resposta antes de enviar." : {
+
+    },
     "Escrever recadinho" : {
 
     },
+    "Escrever um recadinho" : {
+
+    },
     "Especial" : {
+
+    },
+    "Esperando %@" : {
+
+    },
+    "Esperando %@ terminar. O resultado aparece para os dois ao mesmo tempo." : {
+
+    },
+    "Esta rodada já foi concluída." : {
 
     },
     "Estamos trazendo o espaço de vocês do iCloud. Isso pode levar alguns segundos." : {
@@ -434,6 +718,9 @@
     "Excluir lembrete" : {
 
     },
+    "Explorar momentos" : {
+
+    },
     "Faltam %lld dias." : {
 
     },
@@ -446,7 +733,22 @@
     "Feita" : {
 
     },
+    "Feito" : {
+
+    },
+    "Feito %@" : {
+
+    },
+    "Feitos" : {
+
+    },
+    "Filtros" : {
+
+    },
     "Finanças" : {
+
+    },
+    "Fora de casa" : {
 
     },
     "Foto" : {
@@ -456,6 +758,9 @@
 
     },
     "Fotos" : {
+
+    },
+    "Futuro" : {
 
     },
     "Gerenciar compartilhamento" : {
@@ -477,7 +782,28 @@
         }
       }
     },
+    "Guardar como memória" : {
+
+    },
+    "Guardar esse momento" : {
+
+    },
+    "Guardem aqui encontros que vocês querem viver. Eles entram no sorteio quando Nossas ideias estiver ligado." : {
+
+    },
     "Guardem aqui os momentos de vocês, com fotos, data e descrição." : {
+
+    },
+    "Há %lld anos" : {
+
+    },
+    "Há %lld anos, neste dia" : {
+
+    },
+    "Há 1 ano" : {
+
+    },
+    "Há 1 ano, neste dia" : {
 
     },
     "Hoje" : {
@@ -486,7 +812,34 @@
     "Hoje às %@" : {
 
     },
+    "Hoje, nós dois" : {
+
+    },
+    "Horário" : {
+
+    },
+    "Humor" : {
+
+    },
     "iCloud indisponível" : {
+
+    },
+    "Ideia de %@" : {
+
+    },
+    "Ideia de encontro às sextas" : {
+
+    },
+    "Ideia para esta semana" : {
+
+    },
+    "Ideias de encontro" : {
+
+    },
+    "Ideias do app" : {
+
+    },
+    "Informar duração" : {
 
     },
     "Início" : {
@@ -498,25 +851,58 @@
     "Isto apaga o espaço e tudo o que há nele (memórias, fotos, recados, metas e lugares) para vocês dois, neste iPhone e no iCloud. Não dá para desfazer." : {
 
     },
+    "Já apareceram as %lld ideias com esses filtros." : {
+
+    },
+    "Lembram de “%@”? Que tal reviver esse momento?" : {
+
+    },
+    "Lembranças" : {
+
+    },
     "Lembrar" : {
 
     },
     "Lembrar do aniversário de namoro?" : {
 
     },
+    "Lembrete da pergunta do dia" : {
+
+    },
     "Lembretes" : {
+
+    },
+    "Limpar filtros" : {
 
     },
     "Lugar" : {
 
     },
+    "Lugar a confirmar" : {
+
+    },
     "Lugares" : {
+
+    },
+    "Mais momentos" : {
 
     },
     "Mais opções" : {
 
     },
+    "Manter" : {
+
+    },
     "Mapa" : {
+
+    },
+    "Marcar como feito" : {
+
+    },
+    "Me fez sorrir" : {
+
+    },
+    "Memória indisponível" : {
 
     },
     "Memórias" : {
@@ -529,6 +915,12 @@
 
     },
     "Modo demonstração" : {
+
+    },
+    "Nada combinado ainda" : {
+
+    },
+    "Nada combinado ainda." : {
 
     },
     "Nada por aqui" : {
@@ -591,6 +983,12 @@
     "Nenhuma foto" : {
 
     },
+    "Nenhuma ideia com esses filtros" : {
+
+    },
+    "Nenhuma ideia de vocês ainda" : {
+
+    },
     "Nenhuma memória ainda" : {
 
     },
@@ -600,10 +998,22 @@
     "Nenhuma meta em andamento" : {
 
     },
+    "Nenhuma pergunta ainda" : {
+
+    },
     "No dia" : {
 
     },
+    "No máximo um lembrete por dia, só neste iPhone; a pergunta do dia vem primeiro. O lembrete some quando você responde. Avisos de que seu par respondeu ainda não estão disponíveis: vocês veem isso no app." : {
+
+    },
     "No WhatsApp, toque em Continuar: só quem abrir o link primeiro entra." : {
+
+    },
+    "Nossa descoberta" : {
+
+    },
+    "Nossas ideias" : {
 
     },
     "Nosso espaço" : {
@@ -633,10 +1043,16 @@
     "Nova etapa" : {
 
     },
+    "Nova ideia" : {
+
+    },
     "Nova memória" : {
 
     },
     "Nova meta" : {
+
+    },
+    "Nova rodada" : {
 
     },
     "Novo lembrete" : {
@@ -652,6 +1068,15 @@
 
     },
     "O compartilhamento deste espaço foi encerrado. Um novo relacionamento começa em um novo espaço." : {
+
+    },
+    "O conteúdo de Hoje, nós dois não pôde ser carregado." : {
+
+    },
+    "O conteúdo desta área não pôde ser carregado." : {
+
+    },
+    "O conteúdo desta área não pôde ser carregado. Atualize o app." : {
 
     },
     "O espaço compartilhado foi encerrado. Abra o app para ver." : {
@@ -678,6 +1103,9 @@
     "O uso do iCloud está restrito neste iPhone." : {
 
     },
+    "Ontem" : {
+
+    },
     "Ontem às %@" : {
 
     },
@@ -696,6 +1124,9 @@
     "Os dados continuam com você." : {
 
     },
+    "Os filtros continuam valendo: nenhuma ideia cabe em todos eles ao mesmo tempo." : {
+
+    },
     "Os planos de vocês e o progresso de cada um aparecem aqui." : {
 
     },
@@ -705,7 +1136,19 @@
     "Os recadinhos que você marcar com o coração aparecem aqui. Só você vê seus favoritos." : {
 
     },
+    "Outra ideia" : {
+
+    },
+    "Outra memória" : {
+
+    },
+    "Outra sugestão" : {
+
+    },
     "Outro" : {
+
+    },
+    "Palpite recebido: %@" : {
 
     },
     "Para %@" : {
@@ -732,6 +1175,37 @@
     "Pequenas palavras, grandes significados." : {
 
     },
+    "Pequeno gesto" : {
+
+    },
+    "Pergunta %lld de %lld" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Pergunta %1$lld de %2$lld"
+          }
+        }
+      }
+    },
+    "Pergunta ainda não disponível" : {
+
+    },
+    "Pergunta de hoje: %@" : {
+
+    },
+    "Pergunta do dia" : {
+
+    },
+    "Perguntas anteriores" : {
+
+    },
+    "Planos de encontro" : {
+
+    },
+    "Planos e convites" : {
+
+    },
     "Praia" : {
 
     },
@@ -744,6 +1218,12 @@
     "Precisamos do iCloud" : {
 
     },
+    "Preferências" : {
+
+    },
+    "Preparando a pergunta de hoje…" : {
+
+    },
     "Preparando convite" : {
 
     },
@@ -753,10 +1233,49 @@
     "Progresso" : {
 
     },
+    "Próxima" : {
+
+    },
+    "Pular esta pergunta" : {
+
+    },
+    "pulou" : {
+
+    },
+    "Qualquer custo, inclusive a confirmar" : {
+
+    },
+    "Qualquer duração" : {
+
+    },
+    "Qualquer lugar" : {
+
+    },
+    "Quando vocês dois tiverem respondido, as respostas aparecem aqui." : {
+
+    },
     "Que bom ter você aqui" : {
 
     },
+    "Que bom! Fica guardado só neste iPhone." : {
+
+    },
+    "Que descoberta" : {
+
+    },
+    "Que tal escolher um encontro juntos?" : {
+
+    },
+    "Que tal repetir uma parte desse dia? Voltem ao lugar, refaçam o prato ou ouçam a mesma música." : {
+
+    },
+    "Quem conhece melhor?" : {
+
+    },
     "Queremos ir" : {
+
+    },
+    "Rascunho guardado só neste iPhone." : {
 
     },
     "Reabrir" : {
@@ -780,7 +1299,13 @@
     "Recebidos" : {
 
     },
+    "Recusados ou cancelados" : {
+
+    },
     "Registrar visita" : {
+
+    },
+    "Registrar visita e guardar" : {
 
     },
     "Relacionamento" : {
@@ -801,6 +1326,18 @@
     "Repetir" : {
 
     },
+    "Responder" : {
+
+    },
+    "Resposta enviada. Esperando %@." : {
+
+    },
+    "Resposta enviada. Seu par ainda não está no espaço." : {
+
+    },
+    "Respostas e descobertas de outros dias." : {
+
+    },
     "Restaurante" : {
 
     },
@@ -808,6 +1345,15 @@
 
     },
     "Restaurar" : {
+
+    },
+    "Reviver esse momento" : {
+
+    },
+    "Rodada curta de cinco perguntas." : {
+
+    },
+    "Rodada em andamento." : {
 
     },
     "Sair do espaço" : {
@@ -828,10 +1374,22 @@
     "Sem conexão" : {
 
     },
+    "Sem conexão: sua resposta está salva neste iPhone e será enviada quando a internet voltar." : {
+
+    },
+    "Sem gasto adicional" : {
+
+    },
     "Sem notificação" : {
 
     },
+    "Sem respostas" : {
+
+    },
     "Seu nome" : {
+
+    },
+    "Seu palpite sobre %@" : {
 
     },
     "Seu par" : {
@@ -840,22 +1398,52 @@
     "Seu par ainda não está aqui" : {
 
     },
+    "Seu par ainda não está no espaço" : {
+
+    },
+    "Seu par respondeu" : {
+
+    },
+    "Seus convites" : {
+
+    },
     "Sincronizando" : {
 
     },
     "Situação" : {
 
     },
+    "Só quem criou o espaço prepara as perguntas." : {
+
+    },
     "Só quem escreveu o recadinho pode alterá-lo." : {
 
     },
+    "Só quem escreveu pode alterar." : {
+
+    },
+    "Sobre você" : {
+
+    },
     "Sonhos que se constroem juntos." : {
+
+    },
+    "Sortear uma ideia" : {
+
+    },
+    "Sua reação à resposta de %@" : {
+
+    },
+    "Sua resposta" : {
 
     },
     "Suas alterações estão salvas no iCloud." : {
 
     },
     "Suas alterações ficam neste iPhone até o iCloud voltar." : {
+
+    },
+    "Suas escolhas ficam guardadas só neste iPhone até você enviar." : {
 
     },
     "Tentar novamente" : {
@@ -888,10 +1476,16 @@
     "Trocar foto" : {
 
     },
+    "Trocar sugestão" : {
+
+    },
     "Tudo sincronizado" : {
 
     },
     "Última memória" : {
+
+    },
+    "Última rodada" : {
 
     },
     "Último recadinho" : {
@@ -903,7 +1497,31 @@
     "Um recadinho novo, um aniversário chegando: o iPhone avisa vocês dois." : {
 
     },
+    "Uma gentileza simples para hoje." : {
+
+    },
+    "Uma ideia de encontro, do app ou de vocês." : {
+
+    },
+    "Uma ideia para vocês" : {
+
+    },
+    "Uma memória de vocês para lembrar juntos e, quem sabe, repetir um pedaço." : {
+
+    },
+    "Uma memória de vocês para lembrar juntos." : {
+
+    },
     "Uma nota (opcional)" : {
+
+    },
+    "Uma pergunta para se descobrirem e uma ideia para viverem juntos." : {
+
+    },
+    "Uma pergunta para se descobrirem." : {
+
+    },
+    "Uma sugestão simples, sem obrigação e sem esperar nada em troca." : {
 
     },
     "Usada para contar os dias juntos no Início." : {
@@ -912,7 +1530,22 @@
     "Usar foto" : {
 
     },
+    "Vamos fazer" : {
+
+    },
+    "Vamos reviver?" : {
+
+    },
     "Ver memória" : {
+
+    },
+    "Ver pergunta" : {
+
+    },
+    "Ver planos e convites" : {
+
+    },
+    "Ver respostas" : {
 
     },
     "Viagem" : {
@@ -936,6 +1569,9 @@
     "Você deixa de ver o espaço neste iPhone. Nada é apagado do iCloud do seu par." : {
 
     },
+    "Você já respondeu. A resposta enviada não muda." : {
+
+    },
     "Você já tem um espaço próprio. Por enquanto, cada pessoa participa de um único espaço." : {
 
     },
@@ -946,6 +1582,33 @@
 
     },
     "Você pode convidar depois, pelo Início ou em Nosso espaço." : {
+
+    },
+    "Você respondeu" : {
+
+    },
+    "Você tem um rascunho guardado neste iPhone." : {
+
+    },
+    "Você terminou" : {
+
+    },
+    "Você terminou. Esperando %@." : {
+
+    },
+    "Vocês dois responderam" : {
+
+    },
+    "Vocês dois responderam." : {
+
+    },
+    "Vocês já viram todas" : {
+
+    },
+    "Vocês vão precisar: %@." : {
+
+    },
+    "Voltar" : {
 
     }
   },

@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import CoreImage
 import ImageIO
 import UIKit
 import UniformTypeIdentifiers
@@ -65,7 +66,9 @@ nonisolated enum PhotoProcessing {
         return UIImage(cgImage: try downscaled(source, maxPixelSize: maxPixelSize))
     }
 
-    /// Keeps only `normalizedRect` (0…1 of the upright image), then processes as usual.
+    /// Keeps only `normalizedRect` (relative to the upright image), then processes as usual.
+    /// A rectangle reaching beyond the image (photo zoomed out in the crop screen) is
+    /// filled around the photo with a blurred, enlarged copy of it.
     @concurrent
     static func process(_ data: Data, cropping normalizedRect: CGRect) async throws -> ProcessedPhoto {
         try processSynchronously(data, cropping: normalizedRect)
@@ -77,14 +80,21 @@ nonisolated enum PhotoProcessing {
         }
         let full = try downscaled(source, maxPixelSize: maxPixelSize)
         let bounds = CGRect(x: 0, y: 0, width: full.width, height: full.height)
-        let rect = CGRect(
+        let requested = CGRect(
             x: normalizedRect.minX * bounds.width,
             y: normalizedRect.minY * bounds.height,
             width: normalizedRect.width * bounds.width,
             height: normalizedRect.height * bounds.height
-        ).integral.intersection(bounds)
-        guard !rect.isEmpty, let cropped = full.cropping(to: rect) else {
+        ).integral
+        guard !requested.isEmpty, requested.intersects(bounds) else {
             throw ProcessingError.unreadableImage
+        }
+        let cropped: CGImage
+        if bounds.contains(requested) {
+            guard let image = full.cropping(to: requested) else { throw ProcessingError.unreadableImage }
+            cropped = image
+        } else {
+            cropped = try padded(full, in: requested)
         }
         return ProcessedPhoto(
             imageData: try encode(cropped, quality: 0.8),
@@ -92,6 +102,43 @@ nonisolated enum PhotoProcessing {
             pixelWidth: cropped.width,
             pixelHeight: cropped.height
         )
+    }
+
+    /// Draws `image` where it sits inside `rect` (pixel coordinates of the image, top-left
+    /// origin, partly outside it) over a blurred copy that fills the whole rectangle.
+    private static func padded(_ image: CGImage, in rect: CGRect) throws -> CGImage {
+        let scale = min(Double(maxPixelSize) / Double(max(rect.width, rect.height)), 1)
+        let width = max(Int((rect.width * scale).rounded()), 1)
+        let height = max(Int((rect.height * scale).rounded()), 1)
+        let output = CGRect(x: 0, y: 0, width: width, height: height)
+        guard let context = CGContext(
+            data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0,
+            space: CGColorSpace(name: CGColorSpace.sRGB) ?? CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue
+        ) else { throw ProcessingError.encodingFailed }
+        context.interpolationQuality = .high
+
+        // Background: the photo enlarged to cover everything, then blurred.
+        let source = CIImage(cgImage: image)
+        let cover = max(Double(width) / Double(image.width), Double(height) / Double(image.height))
+        let enlarged = source.transformed(by: CGAffineTransform(scaleX: cover, y: cover))
+        let centered = enlarged.transformed(by: CGAffineTransform(
+            translationX: (Double(width) - enlarged.extent.width) / 2,
+            y: (Double(height) - enlarged.extent.height) / 2
+        ))
+        let blurred = centered.clampedToExtent().applyingGaussianBlur(sigma: Double(max(width, height)) / 30).cropped(to: output)
+        if let background = CIContext(options: [.cacheIntermediates: false]).createCGImage(blurred, from: output) {
+            context.draw(background, in: output)
+        }
+
+        // The photo itself, at its place. Core Graphics draws from the bottom-left corner.
+        let photoWidth = Double(image.width) * scale
+        let photoHeight = Double(image.height) * scale
+        let left = -rect.minX * scale
+        let top = -rect.minY * scale
+        context.draw(image, in: CGRect(x: left, y: Double(height) - top - photoHeight, width: photoWidth, height: photoHeight))
+        guard let result = context.makeImage() else { throw ProcessingError.encodingFailed }
+        return result
     }
 
     /// Redraws an already decoded image so its longest side is at most `maxPixelSize`.

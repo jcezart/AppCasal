@@ -6,7 +6,8 @@
 import CoreData
 import SwiftUI
 
-/// Memórias: the couple's timeline, newest first, grouped by month.
+/// Memórias: the couple's timeline for one year at a time (most recent year first),
+/// newest first, grouped by month.
 struct MemoriesView: View {
     let environment: AppEnvironment
     @ObservedObject var space: CoupleSpace
@@ -15,6 +16,8 @@ struct MemoriesView: View {
     @FetchRequest private var memories: FetchedResults<Memory>
     @State private var isCreating = false
     @State private var isShowingDeleted = false
+    /// Nil: the most recent year with memories.
+    @State private var selectedYear: Int?
 
     init(environment: AppEnvironment, space: CoupleSpace, userRecordName: String) {
         self.environment = environment
@@ -43,7 +46,8 @@ struct MemoriesView: View {
                 .padding(.top, Spacing.xxxl)
             } else {
                 LazyVStack(alignment: .leading, spacing: Spacing.m, pinnedViews: []) {
-                    ForEach(MonthSection.group(Array(memories))) { section in
+                    yearPicker
+                    ForEach(MonthSection.group(memoriesOfYear)) { section in
                         Text(section.title)
                             .font(.sectionTitle)
                             .foregroundStyle(Palette.textPrimary)
@@ -65,6 +69,10 @@ struct MemoriesView: View {
             }
         }
         .canvasBackground()
+        .onChange(of: years) {
+            // The chosen year lost its last memory: back to the most recent one.
+            if let selectedYear, !years.contains(selectedYear) { self.selectedYear = nil }
+        }
         .navigationTitle("Memórias")
         .navigationSubtitle("Nossos momentos, para sempre.")
         .toolbar {
@@ -98,6 +106,47 @@ struct MemoriesView: View {
                     }
             }
         }
+    }
+
+    private var years: [Int] {
+        Array(Set(memories.map { Calendar.current.component(.year, from: $0.date ?? .distantPast) })).sorted(by: >)
+    }
+
+    private var year: Int? {
+        selectedYear.flatMap { years.contains($0) ? $0 : nil } ?? years.first
+    }
+
+    private var memoriesOfYear: [Memory] {
+        guard let year else { return [] }
+        return memories.filter { Calendar.current.component(.year, from: $0.date ?? .distantPast) == year }
+    }
+
+    /// One chip per year with memories, most recent first.
+    private var yearPicker: some View {
+        ScrollView(.horizontal) {
+            HStack(spacing: Spacing.xs) {
+                ForEach(years, id: \.self) { option in
+                    let isSelected = option == year
+                    Button {
+                        selectedYear = option
+                    } label: {
+                        Text(String(option))
+                            .font(.subheadline.weight(.semibold))
+                            .monospacedDigit()
+                            .foregroundStyle(isSelected ? Palette.onAccent : Palette.textPrimary)
+                            .padding(.horizontal, Spacing.m)
+                            .frame(minHeight: 44)
+                            .background(isSelected ? Palette.accent : Palette.surfaceMuted, in: .capsule)
+                    }
+                    .buttonStyle(.tile)
+                    .accessibilityLabel(Text("Ano \(String(option))"))
+                    .accessibilityAddTraits(isSelected ? .isSelected : [])
+                    .accessibilityIdentifier("memories.year.\(option)")
+                }
+            }
+            .padding(.vertical, Spacing.xxs)
+        }
+        .scrollIndicators(.hidden)
     }
 }
 

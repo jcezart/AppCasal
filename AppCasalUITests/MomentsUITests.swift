@@ -14,7 +14,8 @@ final class MomentsUITests: XCTestCase {
     }
 
     /// Answer today's question from Início; the sent answer waits for the partner, never
-    /// shows theirs, and survives a relaunch.
+    /// shows theirs, and survives a relaunch. Once answered, the card leaves Início and
+    /// stays in "Hoje, nós dois" (bottom bar button).
     @MainActor
     func testAnswerDailyQuestionWaitsForPartnerAfterRelaunch() {
         let app = XCUIApplication()
@@ -42,6 +43,9 @@ final class MomentsUITests: XCTestCase {
         let reopened = XCUIApplication()
         reopened.launchArguments = baseArguments
         reopened.launch()
+        XCTAssertTrue(reopened.tabBars.buttons["Início"].waitForExistence(timeout: 10))
+        XCTAssertFalse(reopened.buttons["moments.home.action"].exists, "answered: not on Início")
+        openMoments(in: reopened)
         let again = reopened.buttons["moments.home.action"]
         scrollTo(again, in: reopened)
         XCTAssertEqual(again.label, "Ver pergunta")
@@ -56,9 +60,7 @@ final class MomentsUITests: XCTestCase {
         app.launchArguments = baseArguments + ["-AppCasalDemoReset", "YES"]
         app.launch()
 
-        let explore = app.buttons["moments.home.explore"]
-        scrollTo(explore, in: app)
-        explore.tap()
+        openMoments(in: app)
         let dates = app.buttons["moments.explore.dates"]
         XCTAssertTrue(dates.waitForExistence(timeout: 5))
         dates.tap()
@@ -70,6 +72,14 @@ final class MomentsUITests: XCTestCase {
         scrollTo(plan, in: app)
         plan.tap()
         XCTAssertTrue(app.staticTexts["Combinado! O plano está em Planos e convites."].waitForExistence(timeout: 5))
+    }
+
+    @MainActor
+    private func openMoments(in app: XCUIApplication) {
+        // Its own button in the bottom bar (tab bar accessory), on every tab.
+        let button = app.buttons["moments.open"]
+        XCTAssertTrue(button.waitForExistence(timeout: 10))
+        button.tap()
     }
 
     @MainActor

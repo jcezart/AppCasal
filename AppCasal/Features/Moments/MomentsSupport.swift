@@ -94,7 +94,7 @@ struct MomentsObserver<Content: View>: View {
             }
     }
 
-    private static func touchesArea(_ notification: Notification) -> Bool {
+    static func touchesArea(_ notification: Notification) -> Bool {
         let keys = [NSInsertedObjectsKey, NSUpdatedObjectsKey, NSDeletedObjectsKey, NSRefreshedObjectsKey]
         return keys.contains { key in
             (notification.userInfo?[key] as? Set<NSManagedObject>)?.contains { object in

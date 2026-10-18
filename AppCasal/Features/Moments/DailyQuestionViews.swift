@@ -26,9 +26,18 @@ enum DailyStatus: Equatable {
 
 // MARK: - Início card
 
-/// "Hoje, nós dois" on Início: today's question, its real state and the way in.
+/// Today's question with its real state, on Início (until answered) and at the top of
+/// "Hoje, nós dois".
 struct MomentsHomeCard: View {
     let context: MomentsContext
+
+    /// Início shows the card only while today's question waits for the current user's
+    /// answer; afterwards it lives in "Hoje, nós dois" (bottom bar button).
+    static func showsOnHome(_ context: MomentsContext) -> Bool {
+        guard let key = context.repository.todayKey(in: context.space),
+              let session = context.repository.session(for: key, in: context.space) else { return true }
+        return context.repository.state(of: session, for: context.userRecordName)?.mine == nil
+    }
 
     var body: some View {
         MomentsObserver(context: context.environment.persistence.viewContext) {
@@ -78,11 +87,6 @@ struct MomentsHomeCard: View {
                     .font(.subheadline)
                     .foregroundStyle(Palette.textSecondary)
             }
-            NavigationLink(value: MomentsRoute.explore) {
-                Text("Explorar momentos")
-            }
-            .buttonStyle(.text)
-            .accessibilityIdentifier("moments.home.explore")
         }
         .surfaceCard()
     }

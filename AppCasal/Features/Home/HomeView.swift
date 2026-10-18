@@ -21,6 +21,8 @@ struct HomeView: View {
     @State private var topInset: CGFloat = 0
     @State private var isCreatingMemory = false
     @State private var errorMessage: String?
+    /// Bumped when answers arrive or are sent, so the question card hides once answered.
+    @State private var momentsRevision = 0
 
     init(
         environment: AppEnvironment,
@@ -59,6 +61,7 @@ struct HomeView: View {
     }
 
     var body: some View {
+        let _ = momentsRevision
         ScrollView {
             VStack(spacing: 0) {
                 CoupleHeroHeader(
@@ -75,7 +78,9 @@ struct HomeView: View {
                     if InvitePartner.isPending(environment, space: space, userRecordName: userRecordName) {
                         InvitePartnerCard(environment: environment, space: space)
                     }
-                    MomentsHomeCard(context: momentsContext)
+                    if MomentsHomeCard.showsOnHome(momentsContext) {
+                        MomentsHomeCard(context: momentsContext)
+                    }
                     latestNote
                     goalSummary
                     SectionLabel(title: "Última memória")
@@ -100,6 +105,9 @@ struct HomeView: View {
             MomentsDestination(context: momentsContext, route: route)
         }
         .onAppear { environment.prepareMoments() }
+        .onReceive(NotificationCenter.default.publisher(for: .NSManagedObjectContextObjectsDidChange, object: environment.persistence.viewContext)) { notification in
+            if MomentsObserver<EmptyView>.touchesArea(notification) { momentsRevision &+= 1 }
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: showSpace) {

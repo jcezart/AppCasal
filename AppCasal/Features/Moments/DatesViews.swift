@@ -147,8 +147,6 @@ struct DatesView: View {
             Picker("Duração", selection: $filters.duration) {
                 ForEach(DurationFilter.allCases, id: \.self) { Text($0.title).tag($0) }
             }
-            Toggle("Dá para fazer à distância", isOn: $filters.remoteOnly)
-                .tint(Palette.accent)
         }
         .pickerStyle(.menu)
         .tint(Palette.accentText)

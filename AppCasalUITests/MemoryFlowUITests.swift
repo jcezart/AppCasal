@@ -88,4 +88,23 @@ final class MemoryFlowUITests: XCTestCase {
     private func card(containing text: String, in app: XCUIApplication) -> XCUIElement {
         app.buttons.matching(NSPredicate(format: "label CONTAINS %@", text)).firstMatch
     }
+
+    /// Demo memories span two years; choosing a year shows only that year's memories.
+    @MainActor
+    func testYearPickerShowsOnlyTheChosenYear() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-AppCasalDemo", "YES", "-AppCasalDemoReset", "YES"]
+        app.launch()
+        app.tabBars.buttons["Memórias"].tap()
+
+        let lastYear = Calendar.current.component(.year, from: .now) - 1
+        let chip = app.buttons["memories.year.\(lastYear)"]
+        XCTAssertTrue(chip.waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["O primeiro encontro"].exists, "most recent year first")
+        XCTAssertFalse(app.staticTexts["Piquenique no parque"].exists)
+
+        chip.tap()
+        XCTAssertTrue(app.staticTexts["Piquenique no parque"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.staticTexts["O primeiro encontro"].exists)
+    }
 }

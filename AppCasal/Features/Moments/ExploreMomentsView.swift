@@ -17,7 +17,6 @@ struct ExploreMomentsView: View {
         }
         .canvasBackground()
         .navigationTitle("Hoje, nós dois")
-        .navigationBarTitleDisplayMode(.inline)
         .onAppear { context.environment.prepareMoments() }
     }
 

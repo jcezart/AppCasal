@@ -51,6 +51,16 @@ struct MemoryTests {
         }
     }
 
+    /// Zoomed out to the whole landscape photo: the square keeps the full width and is
+    /// filled above and below.
+    @Test func photoCropZoomedOutKeepsTheWholePhotoInASquare() async throws {
+        let data = Self.sampleImageData(width: 1200, height: 800)
+        let cropped = try await PhotoProcessing.process(data, cropping: CGRect(x: 0, y: -0.25, width: 1, height: 1.5))
+        #expect(cropped.pixelWidth == 1200)
+        #expect(cropped.pixelHeight == 1200)
+        #expect(cropped.thumbnailData.count < cropped.imageData.count)
+    }
+
     @Test func photoProcessingRejectsGarbage() async {
         await #expect(throws: PhotoProcessing.ProcessingError.self) {
             try await PhotoProcessing.process(Data("not an image".utf8))
