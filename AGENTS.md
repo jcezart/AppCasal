@@ -23,6 +23,7 @@ Referência comum para todos os agentes (Claude, Codex e outros) que trabalham n
 
 - **App completo em uso local:** todas as funcionalidades previstas, mais Lembretes (anuais e mensais) e notificações (permissão, tela de Notificações, push de recadinho), estão implementadas e validadas localmente (build, 60 testes unitários, 4 testes de UI de ponta a ponta).
 - **Primeiro teste com dois iPhones (2026-10-18, relato do usuário):** convite pelo WhatsApp chegou e foi aceito, mas o WhatsApp demorou a abrir, a folha de compartilhamento mostrava um ícone de documento e a participante só viu o espaço após reabrir o app. Os três problemas foram corrigidos e **precisam ser revalidados** (S1, S2).
+- **Hoje, nós dois (branch `feature/hoje-nos-dois`, commits locais, sem push):** pergunta do dia com revelação, histórico, Escolhe por nós (catálogo, Queremos ir, ideias próprias, planos e convites internos), Pequeno gesto, Vamos reviver?, Quem conhece melhor?, lembretes locais opcionais e rotas diretas. Validado localmente (101 testes unitários, 6 de UI, Debug e Release); nada validado entre duas contas (H1–H10).
 - **Pendente:** apenas o que exige o segundo celular (convite, aceitação, sincronização entre parceiros, avisos, conflitos, sair/encerrar/apagar com o parceiro conectado).
 - **Commits:** `71bfd68` (design system, navegação, demonstração, ícone, abertura). Memórias e o restante das funcionalidades estão **sem commit** (aguardando autorização do usuário).
 - **Última atualização:** 2026-10-18.
@@ -41,6 +42,7 @@ Referência comum para todos os agentes (Claude, Codex e outros) que trabalham n
 | Xcode / SDK | 27.0 (27A266a) / iPhoneOS 27.0 |
 | iOS mínimo | 26.0 |
 | Dispositivos | iPhone (`TARGETED_DEVICE_FAMILY = 1`) |
+| Modelo Core Data | `AppCasal 2` (atual, aditiva) + `AppCasal` (v1, mantida para migração leve automática) |
 | Swift | 6.0; `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` no app e nos testes unitários; approachable concurrency |
 | Idioma | `developmentRegion = pt-BR`; `Localizable.xcstrings` (fonte pt-BR, sincronizado pelo Xcode) |
 | Targets | `AppCasal`, `AppCasalTests` (Swift Testing, hospedado), `AppCasalUITests` (XCTest UI; sem isolamento padrão, métodos `@MainActor`), `NoteNotificationService` (Notification Service Extension embutida no app; `jc.app.dev.AppCasal.NoteNotificationService`; entitlements próprios com o container CloudKit; sem isolamento padrão; compila também `AppCasal/Data/Notifications/NoteAlertContent.swift` e `NoteTimestamp.swift` por exceção de pasta sincronizada) |
@@ -66,6 +68,7 @@ SwiftUI (Liquid Glass do iOS 26), Core Data + `NSPersistentCloudKitContainer` (s
 - **MainTabView:** `TabView` nativo com Início, Mapa, Memórias, Recados, Metas; um `NavigationStack` por aba; "Nosso espaço" em sheet pelo avatar; abre a aba pedida por `AppEnvironment.pendingTab` (toque em aviso de recadinho → Recados); logo após "Criar nosso espaço" (`AppEnvironment.offersInvitation`) abre `InvitePartnerPromptView` ("Convidar seu par" salva o share com progresso e, ao fechar, abre a folha de compartilhamento; "Agora não"); depois oferece uma vez, só em produção, `NotificationPromptView` antes do pedido de permissão do sistema.
 - **AppEnvironment** (`RunMode`): `.production` (CloudKit), `.demo` (só DEBUG, `-AppCasalDemo YES`, stores em `Application Support/DemoStores/`, sem CloudKit, identidade local, dados fictícios por `DemoData` usando os repositórios de produção; `-AppCasalDemoReset YES` e `-AppCasalDemoEmpty YES` para testes de UI), `.preview` (só DEBUG, em memória), `.tests` (em memória). Nunca ativado automaticamente.
 - **PersistenceController:** `Private.sqlite` (`.private`) e `Shared.sqlite` (`.shared`) no mesmo container; histórico persistente e notificação remota; `viewContext` com `NSMergeByPropertyObjectTrumpMergePolicy`, `automaticallyMergesChangesFromParent`, `transactionAuthor = "app"`.
+- **Hoje, nós dois:** `MomentsRepository` (pergunta do dia, respostas, jogo, planos, ideias próprias), `MomentsCatalog` (JSONs do bundle, validados, carregados no primeiro uso), regras puras em `Data/Moments` (`DailyQuestionPlanner`, `MomentsCalendar`, `Canonical`, `DateDraw`/`DateFilters`, `GameRules`, `GestureRules`, `ReviveRules`), `MomentsLocalStore` (rascunhos e históricos pessoais em `UserDefaults`, por espaço), `MomentNotifications` + `MomentReminderPlanner` (lembretes locais). Telas em `Features/Moments`, empilhadas no `NavigationStack(path:)` do Início por `MomentsRoute` (também alvo dos toques em notificações via `AppEnvironment.pendingRoute`). `MomentsObserver` redesenha quando registros da área mudam no contexto (inclusive vindos do par). `AppEnvironment.prepareMoments()` (dono) e `syncMomentNotifications()` rodam ao abrir e a cada mudança remota.
 - **Repositórios:** `SpaceRepository` (espaço, membros, fotos, data, arquivar), `NoteRepository` (só o autor edita/exclui), `FavoriteRepository` (favoritos pessoais), `MemoryRepository` (+ `MemoryDraft`, `PlaceLink`), `GoalRepository` (+ `GoalDraft`), `PlaceRepository` (+ `PlaceDraft`), `ReminderRepository` (+ `ReminderDraft`). Atribuem o store do objeto relacionado; preenchem autoria e datas; exclusão lógica.
 - **ShareService:** cria share (com título e miniatura: foto do casal ou logo), convite por `presentInvitation` (salva o share antes, se ainda não existe, com indicador de progresso; depois abre `UIActivityViewController` com `NSItemProvider.registerCKShare`, `specifiedRecipientsOnly` + `readWrite`, e `LPLinkMetadata` com título e miniatura; `ShareThumbnail` em `SpaceInvitation.swift`), `UICloudSharingController` só para gerenciar (participantes, parar de compartilhar; `itemThumbnailData` com a miniatura), aceita convites com `CoupleLimit`, marca `sharingEndedAt` ao parar de compartilhar, `leave` (participante) e `deletePermanently` (dono).
 - **Serviços:** `AccountService` (estado iCloud; `userRecordName` guardado em `UserDefaults` para abrir sem rede; só "sem conta"/"restrito" bloqueiam), `SyncMonitor` (eventos de espelhamento + contagem de alterações pendentes pelo histórico persistente após o último envio bem-sucedido da sessão), `NetworkMonitor`, `LocationService` (permissão "durante o uso", pedida ao abrir o Mapa; uma leitura para distâncias), `PhotoProcessing` (ImageIO, ≤ 2048 px + miniatura 600 px, HEIC, sem metadados), `PlaceSearch` (`MKLocalSearch`), `Directions` (Mapas), `ReminderNotifications` (notificações locais dos lembretes: refaz todo o conjunto `reminder-<id>` a cada sincronização — ao abrir o app, após editar e a cada mudança no store, inclusive vinda do parceiro; até 60 pedidos pendentes, mais próximos primeiro; anual = gatilho repetido; mensal = próximas 6 ocorrências avulsas, renovadas a cada sincronização; `isAllowed` é a permissão do app), `NoteAlerts` (push de recadinho, ver "Avisos de recadinhos"), `LaunchLog`.
@@ -87,10 +90,12 @@ AppCasal/
 │   │   ├── Model/           # AppCasal.xcdatamodeld, Entities/*, MemoryCategory, Categories (PlaceStatus, GoalCategory)
 │   │   ├── Persistence/     # PersistenceController, SyncMonitor
 │   │   ├── Sharing/         # ShareService, CoupleLimit, SpaceInvitation (+ ShareThumbnail)
-│   │   ├── Repositories/    # Space, Note, Favorite, Memory, Goal, Place, Reminder
+│   │   ├── Moments/         # MomentsCatalog, DailyQuestionPlanner (+ MomentsCalendar, Canonical), DateIdeas (filtros e sorteio), MomentsRules (jogo, gestos, reviver), MomentsLocalStore
+│   │   ├── Repositories/    # Space, Note, Favorite, Memory, Goal, Place, Reminder, Moments
 │   │   ├── Notifications/   # NoteAlerts (push de recadinho), NoteAlertContent e NoteTimestamp (compartilhados com a extensão)
 │   │   └── Demo/            # DemoData (só DEBUG)
-│   ├── Services/            # Account, Network, Location, PhotoProcessing, ReminderNotifications, LaunchLog
+│   ├── Services/            # Account, Network, Location, PhotoProcessing, ReminderNotifications, MomentNotifications, LaunchLog
+│   ├── Resources/Moments/   # perguntas.json, dates.json, gestos.json, jogo.json (catálogo embarcado)
 │   ├── Features/
 │   │   ├── Onboarding/      # WelcomeView, CreateSpaceView, AcceptingInvitationView, JoinSpaceView, AccountUnavailableView; InvitePartnerViews (tela "Convide seu par" e cartão do Início)
 │   │   ├── Home/            # HomeView
@@ -98,13 +103,14 @@ AppCasal/
 │   │   ├── Memories/        # MemoriesView, MemoryDetailView, MemoryEditorView (+ seletor de lugar)
 │   │   ├── Notes/           # NotesView, NoteComposerView
 │   │   ├── Goals/           # GoalsView, GoalEditorView
+│   │   ├── Moments/         # MomentsSupport (rotas, observador, contexto), MomentsDestination, ExploreMomentsView, DailyQuestionViews (cartão do Início, pergunta, descoberta, histórico), DatesViews (sorteio, planos, ideias), GestureAndReviveViews, GameViews
 │   │   ├── Notifications/   # NotificationPromptView, NotificationSettingsView
 │   │   ├── Space/           # SpaceView (perfil, foto do casal, data, lembretes, notificações, compartilhamento, apagar), RemindersView (+ editor), DeletedItemsView
 │   │   └── SharingSpike/    # diagnóstico da etapa 1, só DEBUG
 │   ├── Assets.xcassets, Localizable.xcstrings, AppCasal.entitlements, Info.plist
 ├── NoteNotificationService/ # NotificationService, PartnerNoteFetcher, Info.plist, entitlements
-├── AppCasalTests/           # 60 testes (Swift Testing)
-└── AppCasalUITests/         # MemoryFlowUITests, NotesAndGoalsUITests, RemindersUITests
+├── AppCasalTests/           # 101 testes (Swift Testing)
+└── AppCasalUITests/         # MemoryFlowUITests, NotesAndGoalsUITests, RemindersUITests, MomentsUITests
 ```
 
 ### Modelo de dados
@@ -122,7 +128,15 @@ Todos os atributos opcionais ou com padrão, relacionamentos opcionais com inver
 | `Place` | casal | `name`, `address`, `category`, `latitude`, `longitude`, `status`, `note`, `visitedAt`, `memoryID` | ambos |
 | `Goal` | casal | `title`, `category`, `dueDate`, `completedAt`, `completedBy`, `coverPhotoData` | ambos |
 | `GoalStep` | casal | `title`, `sortIndex`, `doneAt`, `doneBy` | ambos; um registro por etapa |
+| `DailyQuestion` (v2) | casal | `dayKey`, `questionID`, `questionText`, `category`, `catalogVersion`, `cycle`, `memoryID` | dono cria; `memoryID` qualquer um (primeiro vence) |
+| `DailyAnswer` (v2) | casal | `dayKey`, `questionID`, `questionText`, `text`, `authorID`, `submittedAt`, `reaction` | só o autor; texto imutável após envio |
+| `GameRound` (v2) | casal | `questionsJSON` (snapshot com alternativas), `catalogVersion`, `createdBy`, `cancelledAt` | quem cria |
+| `GameAnswer` (v2) | casal | `roundID`, `authorID`, `entriesJSON` (escolha + palpite por pergunta) | só o autor; uma vez |
+| `DatePlan` (v2) | casal | `sourceKind`, `sourceID`, `title`, `details`, `invitation`, `completedAt`, `memoryID`, exclusão lógica | ambos; convite respondido pelo par |
+| `DateIdea` (v2) | casal | `title`, `details`, `location`, `costTier`, `durationMinutes`, `remoteFriendly`, `authorID`, exclusão lógica | só o autor |
 | `Reminder` | casal | `title`, `date`, `daysBefore` (0–60; mensal 0–27), `notifies`, `repeatInterval` (`none`/`monthly`/`yearly`), `repeatsYearly` (legado, ainda gravado; usado quando `repeatInterval` é nulo) | ambos; `notifies` vale para os dois aparelhos |
+
+Também na v2: `CoupleSpace.momentsTimeZone` (fuso do dia da pergunta) e `Memory.revisitOfMemoryID` (memória revivida).
 
 Categorias: memória/lugar (Encontro, Viagem, Praia, Restaurante, Comemoração, Especial, Dia a dia, Outro); meta (Viagem, Relacionamento, Casa, Finanças, Saúde, Comemoração, Outro); situação do lugar (Queremos ir, Visitado).
 
@@ -145,6 +159,10 @@ Legenda: **validado localmente** = build + testes automatizados (unitários e/ou
 | Excluídos recentemente (memórias, metas, recados próprios, lugares, lembretes) | sim | sim (restauração testada nos repositórios) | — |
 | Rede e alterações pendentes ("Sem conexão · N alterações aguardando envio") | sim | parcial (estado offline testado; contagem depende de envio real) | sim |
 | Notificações: explicação + pedido de permissão uma vez; tela Nosso espaço > Notificações (estado, ativar, abrir Ajustes, preferência "Recadinhos do seu par") | sim | parcial (preferência testada; pedido do sistema não automatizado) | — |
+| Hoje, nós dois: cartão no Início, Explorar momentos, pergunta do dia (rascunho local, envio com confirmação, espera, revelação, reação, guardar como memória), histórico | sim | sim (unitários: planejador, fuso, horário de verão, revelação, idempotência, duplicatas, isolamento; UI: responder, reabrir) | H1–H4 |
+| Escolhe por nós (filtros, três fontes, sem repetir), ideias próprias, planos e convites internos, guardar memória do date | sim | sim (unitários: filtros, sorteio, deduplicação, planos, convites, lugar não vira visitado; UI: sortear e combinar) | H5–H6 |
+| Pequeno gesto, Vamos reviver?, Quem conhece melhor? | sim | sim (unitários: gestos recentes, aniversários com 29/2, rodada, pontuação com pulos) | H7–H8 |
+| Lembretes locais de Hoje, nós dois (opt-in; um por dia; rotas diretas) | sim | sim (planejador e rotas testados; entrega só no aparelho) | H9 |
 | Push de recadinho com o texto do recado (`CKDatabaseSubscription` + `recordType` + `NoteNotificationService`) | sim | parcial (assinatura, banco por papel, escolha do recado e texto testados) | N1–N9 |
 
 ## Compartilhamento
@@ -185,7 +203,7 @@ Legenda: **validado localmente** = build + testes automatizados (unitários e/ou
 
 **Riscos a medir (N1–N6):** aviso das próprias notas no outro aparelho do mesmo usuário, aviso em edições/exclusões/restaurações, atraso e agrupamento. Nada é prometido como imediato na interface.
 
-## Hoje, nós dois (em implementação, branch `feature/hoje-nos-dois`)
+## Hoje, nós dois (implementado na branch `feature/hoje-nos-dois`; validado localmente)
 
 **Origem:** pedido do usuário (2026-10-18) com especificação e catálogo em `~/Downloads/AppCasal-Hoje-Nos-Dois/` (`PROMPT_CLAUDE.md`). Decisões aprovadas ali: catálogo embarcado, dados do casal no CloudKit pelos serviços atuais, sem sexta aba, sem backend, sem push nem deploy de esquema. Linha de base: `b6b3c86`, árvore limpa, 60 testes unitários + 4 de UI passando.
 
@@ -195,7 +213,21 @@ Legenda: **validado localmente** = build + testes automatizados (unitários e/ou
 
 **Pergunta do dia:** o dono prepara hoje + 13 dias (`DailyQuestionPlanner`, determinístico: temas alternados, sem repetir até esgotar, depois novo ciclo); o participante só lê. Dia = data no fuso do espaço (`momentsTimeZone`, gravado pelo dono na primeira preparação); vira à meia-noite desse fuso; horário de verão não muda a chave; relógio divergente ou dia não preparado = "ainda não disponível". Duplicatas (dois aparelhos do dono offline): vence a criada primeiro, depois o menor ID (`Canonical`), sem apagar nada; respostas a outra pergunta ficam guardadas fora daquela descoberta. Resposta enviada é final (reenviar o mesmo texto devolve a existente; texto diferente é recusado); rascunho fica só no aparelho (`MomentsLocalStore`). Revelação só quando os dois enviaram: regra de interface, não sigilo técnico (a resposta do par pode já estar no aparelho).
 
-**Jogo, dates, ideias:** rodada de 5 perguntas sem repetir, preferindo as não usadas; snapshot fixo; comparação por ID de pergunta + alternativa; pular não entra no denominador. "Vamos fazer" reaproveita o plano aberto da mesma ideia; convite (`invitation`: pending/accepted/declined/cancelled) respondido no mesmo registro; concluir não cria memória nem marca lugar como visitado. Ideias próprias: só o autor edita/exclui (logicamente). Filtros independentes; valores desconhecidos nunca passam em filtros restritivos; "Qualquer custo" aceita custo variável/a confirmar.
+**Interface:** cartão discreto no Início (pergunta de hoje, estado real, Responder/Continuar/Ver pergunta/Ver respostas, "Explorar momentos"); cinco abas mantidas. Explorar: a pergunta do dia como ação principal, depois Quem conhece melhor?, Escolhe por nós, Pequeno gesto, Vamos reviver?, Perguntas anteriores, Planos e convites. Componentes e tokens existentes; sem roleta, moedas, ranking ou sequência que zera. Linhas horizontais viram verticais em tamanhos de acessibilidade (`AdaptiveStack`); reações são símbolos com rótulo para VoiceOver.
+
+**Pessoal, só no aparelho (`MomentsLocalStore`):** rascunhos de resposta e do jogo, gestos sugeridos e feitos (para não revelar surpresas ao par), memórias já sugeridas em "Vamos reviver?". Chaves incluem o ID do espaço.
+
+**Jogo, dates, ideias:** rodada de 5 perguntas sem repetir, preferindo as não usadas; snapshot fixo; comparação por ID de pergunta + alternativa; pular não entra no denominador. "Vamos fazer" reaproveita o plano aberto da mesma ideia; convite (`invitation`: pending/accepted/declined/cancelled) respondido no mesmo registro; concluir não cria memória nem marca lugar como visitado. Ideias próprias: só o autor edita/exclui (logicamente). Filtros independentes; valores desconhecidos nunca passam em filtros restritivos; "Qualquer custo" aceita custo variável/a confirmar. Lugares "Queremos ir" entram como fonte (sem preço e duração: "a confirmar"); selecionar não marca visitado; "Registrar visita e guardar" usa o fluxo existente do editor de memória (marca visitado só ao salvar). Fontes próprias ligadas por padrão quando têm itens. Sem localização: o sorteio não pede permissão.
+
+**Gestos e reviver:** gesto evita os 30 últimos; "Escrever um recadinho" abre o editor existente vazio (a pessoa escreve e envia). Reviver: aniversário de hoje primeiro (≥ 1 ano; 29/2 lembrado em 28/2 nos anos comuns), senão a memória mais antiga com ≥ 30 dias não sugerida recentemente; "Reviver esse momento" abre o editor com sugestões e grava `revisitOfMemoryID` só ao salvar; a original não muda.
+
+**Memória a partir da área:** "Guardar como memória" (descoberta) e "Guardar esse momento" (date feito) abrem o editor existente preenchido; nada é gravado sem "Salvar"; o editor ignora toque duplo; o vínculo (`memoryID`) guarda só o primeiro.
+
+**Notificações (locais, opt-in em Nosso espaço > Notificações):** lembrete da pergunta do dia no horário escolhido (padrão 20h), ideia de encontro às sextas, aniversário de memórias. No máximo uma por dia (prioridade: pergunta > aniversário > ideia), janela de 7 dias (`moments-*`), refeita ao abrir, após responder e a cada mudança remota; dia já respondido não recebe lembrete. Texto da pergunta só se aquele dia já estiver no aparelho; nunca respostas. `ReminderNotifications.maximumPending` passou de 60 para 56 (56 + 7 < 64). Toque abre a tela certa (`MomentsRoute`); dado ausente (apagado, outro espaço, não sincronizado) mostra indisponível.
+
+**Avisos remotos (par respondeu, convite de date/jogo): não implementados, de propósito.** A única via sem servidor é `CKDatabaseSubscription` por tipo de registro, que dispara em qualquer alteração da zona daquele tipo (inclusive reações, cancelamentos e exclusão do espaço, como visto em N9) e não pode ser escondida pela extensão sem o entitlement de filtragem. Resultado provável: avisos falsos ("seu par respondeu" quando só reagiu). Até haver o entitlement `com.apple.developer.usernotifications.filtering` (pedido à Apple) ou outra aprovação, o estado aparece só dentro do app (cartão, Explorar, Planos). Sem push silencioso + notificação local.
+
+**Limites conhecidos:** a revelação é regra de interface, não sigilo; controle de autoria é no cliente (o compartilhamento atual não dá autorização por registro no servidor); duas rodadas iniciadas offline pelos dois: vale a mais antiga e a outra fica incompleta no histórico; relógio errado mostra "ainda não disponível"; o participante depende do dono ter aberto o app nos últimos 14 dias; o String Catalog só recebe os textos novos quando o projeto é aberto no Xcode (CLI não sincroniza); preços nunca são prometidos.
 
 ## Design system (aprovado pelo usuário; não alterar cores)
 
@@ -242,6 +274,16 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 | N7 | O aviso mostra o texto do recadinho e o dia e hora no subtítulo (dono→participante e participante→dono) | não testado |
 | N8 | Tocar o aviso na tela bloqueada (app fechado e em segundo plano) abre o app em Recados | falhou no primeiro teste; corrigido, revalidar |
 | N9 | Dono apaga o espaço: a parceira recebe "O espaço compartilhado foi encerrado", não um recadinho | falhou no segundo teste; corrigido, revalidar |
+| H1 | Dono e participante veem a mesma pergunta do dia (inclusive com fusos diferentes nos aparelhos) | não testado |
+| H2 | Resposta de A não aparece em B antes de B responder; depois os dois veem as duas | não testado |
+| H3 | Participante sem a pergunta sincronizada vê "ainda não disponível", nunca outra pergunta | não testado |
+| H4 | Reação e "Guardar como memória" aparecem nos dois sem duplicar | não testado |
+| H5 | Convite de date: A convida, B aceita/recusa; o mesmo plano muda nos dois | não testado |
+| H6 | Ideia própria de A aparece em B com o autor; B não edita | não testado |
+| H7 | Rodada do jogo: mesmas 5 perguntas nos dois; resultado só após os dois terminarem | não testado |
+| H8 | "Vamos reviver?" e gestos não mostram nada ao par | não testado |
+| H9 | Lembrete local do dia chega no horário e some após responder; toque abre a pergunta | não testado |
+| H10 | Atualização do app nos iPhones atuais: migração v1 → v2 preserva memórias, fotos, recados, metas, lugares e o vínculo | não testado (coberto por teste local com store v1) |
 | C1–C4 | Conflitos: mesmo campo offline, exclusão × edição, exclusão física × edição, criação offline | não testado |
 
 ## Decisões vigentes
@@ -265,13 +307,19 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 | Barras das telas de edição com símbolos do iOS 26: X (`role: .cancel`), ✓ (`role: .confirm`; "Enviar" com avião de papel), lixeira em "Apagar"; títulos mantidos para VoiceOver; peças com forma própria usam `.tile` | com "Formatos dos Botões" ativado (visto no iPhone da parceira), os textos "Cancelar"/"Salvar" ficavam sublinhados dentro da cápsula de vidro e o bloco "Adicionar" ganhava um segundo fundo |
 | ✓ das barras com `confirmationButtonStyle()` | o botão `role: .confirm` usa vidro proeminente azul do sistema, e o `.tint` da tela não o alcança |
 | Telas de pedido ("Convide seu par", notificações) em `PromptScaffold`: ícone, título e texto centralizados; ação principal `.primary` em largura total no rodapé; alternativa ("Agora não", "Remover foto") em `.text` (só texto, centralizado, mesma largura) | regra `primary-action` (Apple HIG, também no `ui-ux-pro-max`): uma ação principal, a secundária visualmente subordinada; antes o "Agora não" era um `.soft` estreito à esquerda |
+| Hoje, nós dois: catálogo embarcado; dados do casal no espaço (CloudKit pelo espelhamento atual); modelo v2 aditivo com v1 mantida | pedido aprovado; sem copiar 625 itens por espaço; migração leve sem apagar dados |
+| Pergunta do dia preparada pelo dono (14 dias), dia no fuso do espaço, duplicatas resolvidas por criação + ID | mesma pergunta para os dois sem servidor; offline sem inventar pergunta |
+| Resposta enviada imutável; revelação quando os dois enviaram | evita mudança silenciosa depois de revelar |
+| Avisos de Hoje, nós dois só locais; remotos adiados | assinatura de banco não distingue eventos e a extensão não esconde avisos |
 | Modo demonstração só DEBUG, por argumento explícito, stores próprios | nunca misturar com dados reais |
 
 ## Pendências do usuário
 
 - Autorizar commit das memórias e das demais funcionalidades.
 - Com os dois iPhones: revalidar S1–S2 (convite e entrada) e executar S3–S8, M1–M2, G1, R1–R2, P1, N1–N6, depois C1–C4. Em cada aparelho: iCloud ativo, Modo de Desenvolvedor, rodar pelo Xcode.
-- Antes do TestFlight: publicar o esquema CloudKit em Production no CloudKit Console.
+- Antes do TestFlight: publicar o esquema CloudKit em Production no CloudKit Console (agora com os tipos `CD_DailyQuestion`, `CD_DailyAnswer`, `CD_GameRound`, `CD_GameAnswer`, `CD_DatePlan`, `CD_DateIdea` e os campos novos; criados no ambiente de desenvolvimento ao usar o app).
+- Hoje, nós dois: abrir o projeto no Xcode uma vez (sincroniza o String Catalog), revisar a branch `feature/hoje-nos-dois`, decidir merge/push e executar H1–H10.
+- Para avisos remotos de "seu par respondeu": decidir se pede à Apple o entitlement de filtragem de notificações.
 
 ## Problemas conhecidos
 
@@ -299,6 +347,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 | 2026-10-17 | Suíte completa após todas as funcionalidades | 35 testes unitários em 8 suítes e 3 testes de UI passaram: `MemoryFlowUITests` (criar, editar, fechar e reabrir), `NotesAndGoalsUITests` (escrever recadinho, criar meta com etapa, marcar, fechar e reabrir), capturas de memórias |
 | 2026-10-17 | Lembretes | 42 testes unitários e 4 de UI passaram (`RemindersUITests`: criar pela tela, fechar e reabrir); Release BUILD SUCCEEDED |
 | 2026-10-18 | Progresso das metas e texto do recadinho no aviso (extensão) | 56 testes unitários e 4 de UI passaram (UI: marcar, desmarcar e marcar etapa com progresso na hora); Release BUILD SUCCEEDED com a extensão embutida |
+| 2026-10-18 | Hoje, nós dois — incrementos 3 a 8 (telas, dates, gestos, reviver, jogo, lembretes, rotas, acessibilidade) | 101 testes unitários e 6 de UI passaram (`MomentsUITests`: responder e reabrir; sortear e combinar date); Debug e Release BUILD SUCCEEDED; Release sem conteúdo de demonstração; sem capturas (preferência do usuário) |
 | 2026-10-18 | Hoje, nós dois — incremento 2 (catálogo, modelo v2, regras, repositório) | 94 testes unitários passaram (34 novos: contagens do catálogo, migração v1→v2 com dados, planejador, reconciliação de duplicatas, revelação, idempotência, isolamento entre espaços, jogo, filtros, ideias) |
 | 2026-10-18 | Convite logo após criar o espaço ("Agora não") e cartão no Início; ✓ das barras na cor do app | 60 testes unitários e 4 de UI passaram |
 | 2026-10-18 | Aviso de espaço encerrado em vez de recadinho falso; assinatura removida sem espaço | 59 testes unitários e 4 de UI passaram; só validável com dois iPhones (N9) |
@@ -321,7 +370,8 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 - **2026-10-18:** aviso "Compartilhe o link no app WhatsApp" identificado como do sistema (manter "Continuar"); dica na linha do convite; ✓ das barras ficava azul (o `.tint` da tela não chega à barra): agora `confirmationButtonStyle()` (`.glassProminent` + `Palette.accent`) em cada botão `role: .confirm`. WhatsApp abriu direto depois de "Continuar", com alguma demora (o iOS prepara o link de uso único no iCloud nesse momento).
 - **2026-10-18:** ao criar o espaço, tela "Convide seu par" com "Agora não"; cartão de convite no Início até o par entrar; opção em Nosso espaço mantida.
 - **2026-10-18:** telas de pedido refeitas no padrão da Apple (`PromptScaffold`, botão de texto `.text`); "Remover foto" e o botão do cartão de convite alinhados.
-- **Retomar em:** commit (aguardando autorização) e revalidação com dois aparelhos.
+- **2026-10-18:** Hoje, nós dois implementado na branch `feature/hoje-nos-dois` (commits locais `c9b4373`, `f507a36` e seguintes; sem push).
+- **Retomar em:** usuário revisa a branch de Hoje, nós dois, decide merge/push e testa H1–H10 com os dois iPhones; revalidação dos testes S/N pendentes.
 
 ## Próximos passos
 
