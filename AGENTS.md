@@ -21,7 +21,7 @@ Referência comum para todos os agentes (Claude, Codex e outros) que trabalham n
 
 ## Resumo atual
 
-- **App completo em uso local:** todas as funcionalidades previstas, mais Lembretes (anuais e mensais) e notificações (permissão, tela de Notificações, push de recadinho), estão implementadas e validadas localmente (build, 59 testes unitários, 4 testes de UI de ponta a ponta).
+- **App completo em uso local:** todas as funcionalidades previstas, mais Lembretes (anuais e mensais) e notificações (permissão, tela de Notificações, push de recadinho), estão implementadas e validadas localmente (build, 60 testes unitários, 4 testes de UI de ponta a ponta).
 - **Primeiro teste com dois iPhones (2026-10-18, relato do usuário):** convite pelo WhatsApp chegou e foi aceito, mas o WhatsApp demorou a abrir, a folha de compartilhamento mostrava um ícone de documento e a participante só viu o espaço após reabrir o app. Os três problemas foram corrigidos e **precisam ser revalidados** (S1, S2).
 - **Pendente:** apenas o que exige o segundo celular (convite, aceitação, sincronização entre parceiros, avisos, conflitos, sair/encerrar/apagar com o parceiro conectado).
 - **Commits:** `71bfd68` (design system, navegação, demonstração, ícone, abertura). Memórias e o restante das funcionalidades estão **sem commit** (aguardando autorização do usuário).
@@ -63,7 +63,7 @@ SwiftUI (Liquid Glass do iOS 26), Core Data + `NSPersistentCloudKitContainer` (s
 **Padrão:** MVVM + Repository, proporcional. Views leem com `@FetchRequest`; toda escrita passa por repositórios; ViewModels só se surgir lógica que justifique (hoje nenhum).
 
 - **RootView:** erro do store → boas-vindas (carregando) → iCloud indisponível → convite aceito aguardando o espaço (`AcceptingInvitationView`, sem formulário; recarrega a cada 2 s e a cada mudança remota) → criar espaço → entrar no espaço (participante sem `Member`) → `MainTabView`. A participação (`isMember`) fica em `@State` e é recalculada em `reload()`: o objeto do espaço é o mesmo antes e depois de entrar, então ler no `body` não atualizava a tela (causa do "Entrar no espaço" que não avançava).
-- **MainTabView:** `TabView` nativo com Início, Mapa, Memórias, Recados, Metas; um `NavigationStack` por aba; "Nosso espaço" em sheet pelo avatar; abre a aba pedida por `AppEnvironment.pendingTab` (toque em aviso de recadinho → Recados); oferece uma vez, só em produção, `NotificationPromptView` antes do pedido de permissão do sistema.
+- **MainTabView:** `TabView` nativo com Início, Mapa, Memórias, Recados, Metas; um `NavigationStack` por aba; "Nosso espaço" em sheet pelo avatar; abre a aba pedida por `AppEnvironment.pendingTab` (toque em aviso de recadinho → Recados); logo após "Criar nosso espaço" (`AppEnvironment.offersInvitation`) abre `InvitePartnerPromptView` ("Convidar seu par" salva o share com progresso e, ao fechar, abre a folha de compartilhamento; "Agora não"); depois oferece uma vez, só em produção, `NotificationPromptView` antes do pedido de permissão do sistema.
 - **AppEnvironment** (`RunMode`): `.production` (CloudKit), `.demo` (só DEBUG, `-AppCasalDemo YES`, stores em `Application Support/DemoStores/`, sem CloudKit, identidade local, dados fictícios por `DemoData` usando os repositórios de produção; `-AppCasalDemoReset YES` e `-AppCasalDemoEmpty YES` para testes de UI), `.preview` (só DEBUG, em memória), `.tests` (em memória). Nunca ativado automaticamente.
 - **PersistenceController:** `Private.sqlite` (`.private`) e `Shared.sqlite` (`.shared`) no mesmo container; histórico persistente e notificação remota; `viewContext` com `NSMergeByPropertyObjectTrumpMergePolicy`, `automaticallyMergesChangesFromParent`, `transactionAuthor = "app"`.
 - **Repositórios:** `SpaceRepository` (espaço, membros, fotos, data, arquivar), `NoteRepository` (só o autor edita/exclui), `FavoriteRepository` (favoritos pessoais), `MemoryRepository` (+ `MemoryDraft`, `PlaceLink`), `GoalRepository` (+ `GoalDraft`), `PlaceRepository` (+ `PlaceDraft`), `ReminderRepository` (+ `ReminderDraft`). Atribuem o store do objeto relacionado; preenchem autoria e datas; exclusão lógica.
@@ -92,7 +92,7 @@ AppCasal/
 │   │   └── Demo/            # DemoData (só DEBUG)
 │   ├── Services/            # Account, Network, Location, PhotoProcessing, ReminderNotifications, LaunchLog
 │   ├── Features/
-│   │   ├── Onboarding/      # WelcomeView, CreateSpaceView, AcceptingInvitationView, JoinSpaceView, AccountUnavailableView
+│   │   ├── Onboarding/      # WelcomeView, CreateSpaceView, AcceptingInvitationView, JoinSpaceView, AccountUnavailableView; InvitePartnerViews (tela "Convide seu par" e cartão do Início)
 │   │   ├── Home/            # HomeView
 │   │   ├── Map/             # MapTabView, PlaceDetailView, PlaceSearch(+View)
 │   │   ├── Memories/        # MemoriesView, MemoryDetailView, MemoryEditorView (+ seletor de lugar)
@@ -103,7 +103,7 @@ AppCasal/
 │   │   └── SharingSpike/    # diagnóstico da etapa 1, só DEBUG
 │   ├── Assets.xcassets, Localizable.xcstrings, AppCasal.entitlements, Info.plist
 ├── NoteNotificationService/ # NotificationService, PartnerNoteFetcher, Info.plist, entitlements
-├── AppCasalTests/           # 59 testes (Swift Testing)
+├── AppCasalTests/           # 60 testes (Swift Testing)
 └── AppCasalUITests/         # MemoryFlowUITests, NotesAndGoalsUITests, RemindersUITests
 ```
 
@@ -134,7 +134,7 @@ Legenda: **validado localmente** = build + testes automatizados (unitários e/ou
 |---|---|---|---|
 | Abertura com marca, boas-vindas, abertura sem rede | sim | sim (medição ~120 ms; testes de conta) | — |
 | Onboarding: criar espaço, entrar como participante, iCloud indisponível | sim | parcial (repositórios testados) | aceitar convite (S2) |
-| Início: foto do casal, nomes (na linha da barra, ao lado do avatar), dias juntos, último recadinho, meta em andamento (com miniatura da foto da meta), última memória, nova memória | sim | sim (testes de repositório; fluxos de UI relacionados) | ver dados do parceiro |
+| Início: foto do casal, nomes (na linha da barra, ao lado do avatar), dias juntos, cartão "Seu par ainda não está aqui" com "Convidar seu par" enquanto o dono está sem par (`InvitePartner.isPending`, testado), último recadinho, meta em andamento (com miniatura da foto da meta), última memória, nova memória | sim | sim (testes de repositório; fluxos de UI relacionados) | ver dados do parceiro |
 | Nosso espaço: perfil com foto e foto do casal (ambas ajustáveis antes de salvar: arrastar e pinça; recorte quadrado, `PhotoProcessing.process(_:cropping:)` testado), data de início, lembretes, notificações, excluídos recentemente, banner de sincronização | sim | sim (repositórios testados) | — |
 | Convite, gerenciar/parar de compartilhar, sair do espaço, começar novo espaço, apagar o espaço | sim | parcial (`CoupleLimit`, arquivar testados) | S1–S8 |
 | Memórias: criar, editar, linha do tempo por mês, detalhe, até 10 fotos, lugar, excluir/restaurar | sim | sim (unitários + UI: criar, editar, reabrir) | M1–M2 |
@@ -212,7 +212,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 
 | ID | Teste | Estado |
 |---|---|---|
-| S1 | Dono cria espaço e envia convite | parcial (2026-10-18): convite pelo WhatsApp chegou; ícone de documento corrigido; segundo teste: aviso "Continuar" + tocar de novo no WhatsApp + demora; agora o share é salvo antes de abrir a folha, revalidar (anotar o texto do aviso se ele continuar) |
+| S1 | Dono cria espaço e envia convite | parcial (2026-10-18): convite pelo WhatsApp chegou; ícone de documento corrigido; share agora salvo antes de abrir a folha. O aviso do sistema "Compartilhe o link no app WhatsApp" (opções "Permitir a Qualquer Pessoa com o Link" e "Continuar") é do iOS para `specifiedRecipientsOnly` em apps de terceiros e não pode ser removido sem link público; "Continuar" mantém o convite privado (só a primeira pessoa a abrir entra). A linha "Convidar seu par" orienta a tocar em Continuar. Terceiro teste: WhatsApp abriu direto depois de "Continuar" (com demora do sistema) |
 | S2 | Participante aceita (app fechado e aberto) e entra com o nome | parcial (2026-10-18): aceitou, mas só entrou após reabrir o app; corrigido, revalidar |
 | S3 | Recadinho de A aparece em B e vice-versa | não testado |
 | S4 | Edição, exclusão lógica e restauração propagam | não testado |
@@ -251,6 +251,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 | Permissão de notificação: tela de explicação uma vez + Nosso espaço > Notificações | o iOS não permite instalar com notificações já ativas; pedir com contexto |
 | Convite: share salvo antes, depois folha do sistema com `registerCKShare`; `UICloudSharingController` só para gerenciar | o app escolhido abre no primeiro toque; mesmas restrições (privado, leitura e escrita) |
 | Barras das telas de edição com símbolos do iOS 26: X (`role: .cancel`), ✓ (`role: .confirm`; "Enviar" com avião de papel), lixeira em "Apagar"; títulos mantidos para VoiceOver; peças com forma própria usam `.tile` | com "Formatos dos Botões" ativado (visto no iPhone da parceira), os textos "Cancelar"/"Salvar" ficavam sublinhados dentro da cápsula de vidro e o bloco "Adicionar" ganhava um segundo fundo |
+| ✓ das barras com `confirmationButtonStyle()` | o botão `role: .confirm` usa vidro proeminente azul do sistema, e o `.tint` da tela não o alcança |
 | Modo demonstração só DEBUG, por argumento explícito, stores próprios | nunca misturar com dados reais |
 
 ## Pendências do usuário
@@ -285,6 +286,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 | 2026-10-17 | Suíte completa após todas as funcionalidades | 35 testes unitários em 8 suítes e 3 testes de UI passaram: `MemoryFlowUITests` (criar, editar, fechar e reabrir), `NotesAndGoalsUITests` (escrever recadinho, criar meta com etapa, marcar, fechar e reabrir), capturas de memórias |
 | 2026-10-17 | Lembretes | 42 testes unitários e 4 de UI passaram (`RemindersUITests`: criar pela tela, fechar e reabrir); Release BUILD SUCCEEDED |
 | 2026-10-18 | Progresso das metas e texto do recadinho no aviso (extensão) | 56 testes unitários e 4 de UI passaram (UI: marcar, desmarcar e marcar etapa com progresso na hora); Release BUILD SUCCEEDED com a extensão embutida |
+| 2026-10-18 | Convite logo após criar o espaço ("Agora não") e cartão no Início; ✓ das barras na cor do app | 60 testes unitários e 4 de UI passaram |
 | 2026-10-18 | Aviso de espaço encerrado em vez de recadinho falso; assinatura removida sem espaço | 59 testes unitários e 4 de UI passaram; só validável com dois iPhones (N9) |
 | 2026-10-18 | Botões com "Formatos dos Botões" ativado (símbolos na barra, `.tile` no "Adicionar") | 59 testes unitários e 4 de UI passaram; aparência com a opção ligada só conferida no iPhone |
 | 2026-10-18 | Ajuste de foto (perfil e casal) e convite com share salvo antes | 59 testes unitários e 4 de UI passaram (recorte testado); convite pelo WhatsApp só validável no iPhone (S1) |
@@ -302,6 +304,8 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 - **2026-10-18:** ajuste da foto de perfil e do casal antes de salvar; convite salva o share antes de abrir a folha (WhatsApp no primeiro toque).
 - **2026-10-18:** botões das barras de edição viram X / ✓ (iOS 26), sem sublinhado com "Formatos dos Botões"; bloco "Adicionar" sem fundo duplicado.
 - **2026-10-18:** apagar o espaço não gera mais "recadinho" na parceira: a extensão detecta a zona apagada e avisa que o espaço foi encerrado.
+- **2026-10-18:** aviso "Compartilhe o link no app WhatsApp" identificado como do sistema (manter "Continuar"); dica na linha do convite; ✓ das barras ficava azul (o `.tint` da tela não chega à barra): agora `confirmationButtonStyle()` (`.glassProminent` + `Palette.accent`) em cada botão `role: .confirm`. WhatsApp abriu direto depois de "Continuar", com alguma demora (o iOS prepara o link de uso único no iCloud nesse momento).
+- **2026-10-18:** ao criar o espaço, tela "Convide seu par" com "Agora não"; cartão de convite no Início até o par entrar; opção em Nosso espaço mantida.
 - **Retomar em:** commit (aguardando autorização) e revalidação com dois aparelhos.
 
 ## Próximos passos

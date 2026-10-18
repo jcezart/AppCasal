@@ -74,11 +74,13 @@ struct SpaceView: View {
             .canvasBackground()
             .disabled(isWorking)
             .overlay { if isWorking { ProgressView() } }
+            .tint(Palette.accentText)
             .navigationTitle("Nosso espaço")
             .navigationSubtitle("Aqui é onde a nossa história continua.")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Concluído", systemImage: "checkmark", role: .confirm) { dismiss() }
+                        .confirmationButtonStyle()
                 }
             }
             .confirmationDialog(confirmationTitle, isPresented: Binding(
@@ -224,7 +226,11 @@ struct SpaceView: View {
                             reloadShare()
                         }
                     } label: {
-                        SettingsRow(systemImage: "person.badge.plus", title: "Convidar seu par")
+                        SettingsRow(
+                            systemImage: "person.badge.plus",
+                            title: "Convidar seu par",
+                            subtitle: String(localized: "No WhatsApp, toque em Continuar: só quem abrir o link primeiro entra.")
+                        )
                     }
                     .buttonStyle(.plain)
                     if let share {
@@ -393,6 +399,7 @@ private struct ProfileView: View {
                         dismiss()
                     }
                 }
+                    .confirmationButtonStyle()
                 .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
@@ -504,6 +511,7 @@ private struct RelationshipStartView: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Salvar", systemImage: "checkmark", role: .confirm) { save(date) }
+                    .confirmationButtonStyle()
             }
         }
     }

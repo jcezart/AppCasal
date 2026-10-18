@@ -14,6 +14,9 @@ struct MainTabView: View {
     @State private var selection = AppTab.initial
     @State private var isShowingSpace = false
     @State private var isShowingNotificationPrompt = false
+    @State private var isShowingInvitePrompt = false
+    /// The prompt saved the share; the share sheet opens once the prompt has closed.
+    @State private var invitesAfterPrompt = false
 
     var body: some View {
         TabView(selection: $selection) {
@@ -62,12 +65,16 @@ struct MainTabView: View {
         .sheet(isPresented: $isShowingNotificationPrompt) {
             NotificationPromptView(environment: environment)
         }
+        .sheet(isPresented: $isShowingInvitePrompt, onDismiss: afterInvitePrompt) {
+            InvitePartnerPromptView(environment: environment, space: space) { invitesAfterPrompt = true }
+        }
         .task {
-            // Asked once, after the space is ready, with an explanation first.
-            guard NotificationPromptView.shouldOffer(environment) else { return }
-            await environment.reminderNotifications.refreshAuthorization()
-            if environment.reminderNotifications.authorization == .notDetermined {
-                isShowingNotificationPrompt = true
+            // Right after creating the space, inviting comes first; notifications after.
+            if environment.offersInvitation {
+                environment.offersInvitation = false
+                isShowingInvitePrompt = true
+            } else {
+                await offerNotificationsIfNeeded()
             }
         }
         #if DEBUG
@@ -77,5 +84,24 @@ struct MainTabView: View {
             }
         }
         #endif
+    }
+
+    private func afterInvitePrompt() {
+        if invitesAfterPrompt {
+            invitesAfterPrompt = false
+            // The share was saved by the prompt; failures show again from the Início card.
+            Task { try? await environment.sharing.presentInvitation(for: space) }
+        } else {
+            Task { await offerNotificationsIfNeeded() }
+        }
+    }
+
+    /// Asked once, after the space is ready, with an explanation first.
+    private func offerNotificationsIfNeeded() async {
+        guard NotificationPromptView.shouldOffer(environment) else { return }
+        await environment.reminderNotifications.refreshAuthorization()
+        if environment.reminderNotifications.authorization == .notDetermined {
+            isShowingNotificationPrompt = true
+        }
     }
 }

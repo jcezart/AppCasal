@@ -77,16 +77,19 @@ final class ShareService {
         allowedParticipantAccessOptions: .specifiedRecipientsOnly
     )
 
+    /// The space's saved share, created when it does not exist yet.
+    func ensureShare(for space: CoupleSpace) async throws -> CKShare {
+        if let existing = existingShare(for: space) {
+            return existing
+        }
+        return try await createShare(for: space)
+    }
+
     /// Saves the share first when needed, then opens the share sheet with it. With the
     /// share already saved, the app picked in the sheet (WhatsApp, Mensagens…) opens on
     /// the first tap; letting the sheet prepare the share sent the person back to it.
     func presentInvitation(for space: CoupleSpace) async throws {
-        let share: CKShare
-        if let existing = existingShare(for: space) {
-            share = existing
-        } else {
-            share = try await createShare(for: space)
-        }
+        let share = try await ensureShare(for: space)
         let provider = NSItemProvider()
         provider.registerCKShare(share, container: persistence.cloudKitContainer, allowedSharingOptions: Self.invitationOptions)
         let configuration = UIActivityItemsConfiguration(itemProviders: [provider])

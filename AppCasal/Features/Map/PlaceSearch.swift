@@ -222,6 +222,7 @@ private struct AddPlaceView: View {
                         errorMessage = error.localizedDescription
                     }
                 }
+                    .confirmationButtonStyle()
             }
         }
     }

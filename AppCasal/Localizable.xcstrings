@@ -263,6 +263,9 @@
     "Convidar seu par" : {
 
     },
+    "Convide seu par" : {
+
+    },
     "Convite aceito" : {
 
     },
@@ -600,6 +603,9 @@
     "No dia" : {
 
     },
+    "No WhatsApp, toque em Continuar: só quem abrir o link primeiro entra." : {
+
+    },
     "Nosso espaço" : {
 
     },
@@ -646,6 +652,12 @@
 
     },
     "O compartilhamento deste espaço foi encerrado. Um novo relacionamento começa em um novo espaço." : {
+
+    },
+    "O espaço compartilhado foi encerrado. Abra o app para ver." : {
+
+    },
+    "O espaço fica completo com vocês dois. Envie o convite pelo WhatsApp, por Mensagens ou como preferir." : {
 
     },
     "O iCloud está temporariamente indisponível. Tente de novo em instantes." : {
@@ -730,6 +742,9 @@
 
     },
     "Precisamos do iCloud" : {
+
+    },
+    "Preparando convite" : {
 
     },
     "Preparando o espaço de vocês…" : {
@@ -820,6 +835,9 @@
 
     },
     "Seu par" : {
+
+    },
+    "Seu par ainda não está aqui" : {
 
     },
     "Sincronizando" : {
@@ -925,6 +943,9 @@
 
     },
     "Você pode continuar usando o app normalmente." : {
+
+    },
+    "Você também pode convidar depois, pelo Início ou em Nosso espaço." : {
 
     }
   },

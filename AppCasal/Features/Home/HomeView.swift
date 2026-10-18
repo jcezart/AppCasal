@@ -72,6 +72,9 @@ struct HomeView: View {
                     if let errorMessage {
                         ErrorBanner(message: errorMessage)
                     }
+                    if InvitePartner.isPending(environment, space: space, userRecordName: userRecordName) {
+                        InvitePartnerCard(environment: environment, space: space)
+                    }
                     latestNote
                     goalSummary
                     SectionLabel(title: "Última memória")

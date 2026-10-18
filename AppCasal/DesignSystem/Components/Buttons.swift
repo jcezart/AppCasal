@@ -51,6 +51,15 @@ struct TileButtonStyle: ButtonStyle {
     }
 }
 
+extension View {
+    /// The ✓ of a sheet's toolbar (`role: .confirm`). The system draws it in prominent
+    /// glass with its own blue: the tint of the screen does not reach the toolbar,
+    /// so the app color goes on the button itself.
+    func confirmationButtonStyle() -> some View {
+        buttonStyle(.glassProminent).tint(Palette.accent)
+    }
+}
+
 extension ButtonStyle where Self == PrimaryButtonStyle {
     static var primary: PrimaryButtonStyle { PrimaryButtonStyle() }
 }

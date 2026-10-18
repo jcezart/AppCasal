@@ -280,6 +280,7 @@ struct ReminderEditorView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Salvar", systemImage: "checkmark", role: .confirm) { Task { await save() } }
+                        .confirmationButtonStyle()
                         .disabled(!draft.isValid)
                         .accessibilityIdentifier("reminderEditor.save")
                 }

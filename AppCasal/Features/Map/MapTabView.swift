@@ -340,6 +340,7 @@ private struct EditPlaceView: View {
                             errorMessage = error.localizedDescription
                         }
                     }
+                        .confirmationButtonStyle()
                 }
             }
         }

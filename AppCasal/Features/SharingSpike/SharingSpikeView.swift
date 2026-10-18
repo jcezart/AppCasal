@@ -385,6 +385,7 @@ private struct EditNoteView: View {
                             onError(error.localizedDescription)
                         }
                     }
+                        .confirmationButtonStyle()
                 }
             }
         }

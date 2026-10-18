@@ -242,6 +242,7 @@ struct GoalEditorView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Salvar", systemImage: "checkmark", role: .confirm, action: save)
+                        .confirmationButtonStyle()
                         .disabled(!draft.isValid)
                         .accessibilityIdentifier("goalEditor.save")
                 }

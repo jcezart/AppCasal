@@ -55,6 +55,8 @@ final class AppEnvironment {
     let noteAlerts = NoteAlerts()
     /// Tab to open next, set when a notification is tapped.
     var pendingTab: AppTab?
+    /// Set when this person just created the space: the invitation is offered first.
+    var offersInvitation = false
 
     /// Local fictitious data that is never synced.
     var isDemo: Bool { runMode == .demo || runMode == .preview }

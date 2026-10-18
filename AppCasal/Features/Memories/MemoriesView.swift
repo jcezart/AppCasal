@@ -89,9 +89,11 @@ struct MemoriesView: View {
         .sheet(isPresented: $isShowingDeleted) {
             NavigationStack {
                 DeletedItemsView(environment: environment, space: space, userRecordName: userRecordName)
+                    .tint(Palette.accentText)
                     .toolbar {
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Concluído", systemImage: "checkmark", role: .confirm) { isShowingDeleted = false }
+                                .confirmationButtonStyle()
                         }
                     }
             }

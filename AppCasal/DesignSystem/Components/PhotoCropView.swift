@@ -53,6 +53,7 @@ struct PhotoCropView: View {
             }
             .padding(.vertical, Spacing.l)
             .canvasBackground()
+            .tint(Palette.accentText)
             .navigationTitle(shape.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -64,6 +65,7 @@ struct PhotoCropView: View {
                         onCrop(normalizedCrop(side: side))
                         dismiss()
                     }
+                        .confirmationButtonStyle()
                     .accessibilityIdentifier("photoCrop.use")
                 }
             }

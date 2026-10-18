@@ -41,6 +41,23 @@ struct DesignSupportTests {
         #expect(spaces.partner(of: "_partner", in: space)?.displayName == "Ana")
     }
 
+    @Test func invitationIsPendingUntilThePartnerJoins() throws {
+        let environment = AppEnvironment(runMode: .tests)
+        let space = try environment.spaces.createSpace(ownerName: "Ana", userRecordName: owner)
+        #expect(InvitePartner.isPending(environment, space: space, userRecordName: owner))
+
+        try environment.spaces.ensureMember(named: "Lucas", userRecordName: "_partner", in: space)
+        #expect(!InvitePartner.isPending(environment, space: space, userRecordName: owner))
+
+        let ended = try environment.spaces.createSpace(ownerName: "Ana", userRecordName: owner)
+        ended.sharingEndedAt = .now
+        #expect(!InvitePartner.isPending(environment, space: ended, userRecordName: owner))
+
+        let demo = AppEnvironment(runMode: .preview)
+        let demoSpace = try demo.spaces.createSpace(ownerName: "Ana", userRecordName: owner)
+        #expect(!InvitePartner.isPending(demo, space: demoSpace, userRecordName: owner))
+    }
+
     @Test func syncStateReflectsDemoAndAccount() {
         let monitor = SyncMonitor()
         #expect(monitor.displayState(isDemo: true, accountStatus: .available) == .demo)

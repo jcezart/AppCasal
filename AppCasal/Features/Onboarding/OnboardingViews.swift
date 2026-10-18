@@ -104,6 +104,7 @@ struct CreateSpaceView: View {
                 ownerName: name.trimmingCharacters(in: .whitespaces),
                 userRecordName: userRecordName
             )
+            environment.offersInvitation = !environment.isDemo
             onCreated()
         } catch {
             errorMessage = error.localizedDescription

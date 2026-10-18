@@ -227,6 +227,7 @@ struct NoteComposerView: View {
             }
             .padding(Spacing.screen)
             .canvasBackground()
+            .tint(Palette.accentText)
             .navigationTitle(isEditing ? "Editar recadinho" : "Novo recadinho")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -235,6 +236,7 @@ struct NoteComposerView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(isEditing ? "Salvar" : "Enviar", systemImage: isEditing ? "checkmark" : "paperplane.fill", role: .confirm, action: send)
+                        .confirmationButtonStyle()
                         .disabled(trimmed.isEmpty)
                         .accessibilityIdentifier("noteComposer.send")
                 }

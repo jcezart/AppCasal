@@ -149,6 +149,7 @@ struct MemoryEditorView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Salvar", systemImage: "checkmark", role: .confirm, action: save)
+                        .confirmationButtonStyle()
                         .disabled(!draft.isValid || processingCount > 0)
                         .accessibilityIdentifier("memoryEditor.save")
                 }
