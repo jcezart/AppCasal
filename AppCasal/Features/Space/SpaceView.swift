@@ -78,7 +78,7 @@ struct SpaceView: View {
             .navigationSubtitle("Aqui é onde a nossa história continua.")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("OK") { dismiss() }
+                    Button("Concluído", systemImage: "checkmark", role: .confirm) { dismiss() }
                 }
             }
             .confirmationDialog(confirmationTitle, isPresented: Binding(
@@ -218,10 +218,12 @@ struct SpaceView: View {
                 } else if let share, !CoupleLimit.canInvite(CoupleLimit.summaries(of: share)) {
                     manageSharingButton(share, title: "Gerenciar compartilhamento")
                 } else {
-                    ShareLink(
-                        item: environment.sharing.invitation(for: space),
-                        preview: SharePreview("Nosso espaço", image: Image(uiImage: ShareThumbnail.image(for: space)))
-                    ) {
+                    Button {
+                        run {
+                            try await environment.sharing.presentInvitation(for: space)
+                            reloadShare()
+                        }
+                    } label: {
                         SettingsRow(systemImage: "person.badge.plus", title: "Convidar seu par")
                     }
                     .buttonStyle(.plain)
@@ -315,10 +317,10 @@ private struct DeleteSpaceView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar", role: .cancel) { dismiss() }
+                    Button("Cancelar", systemImage: "xmark", role: .cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Apagar", role: .destructive) {
+                    Button("Apagar", systemImage: "trash", role: .destructive) {
                         dismiss()
                         onConfirm()
                     }
@@ -353,7 +355,7 @@ private struct ProfileView: View {
                         HStack(spacing: Spacing.s) {
                             PhotoPickerButton(onPicked: { photo in
                                 save { try environment.spaces.setAvatar(photo.thumbnailData, for: member) }
-                            }, onFailure: { errorMessage = $0 }) {
+                            }, onFailure: { errorMessage = $0 }, crop: .circle) {
                                 Text(member.avatarData == nil ? "Escolher foto" : "Trocar foto")
                             }
                             if member.avatarData != nil {
@@ -385,7 +387,7 @@ private struct ProfileView: View {
         .navigationTitle("Meu perfil")
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button("Salvar") {
+                Button("Salvar", systemImage: "checkmark", role: .confirm) {
                     save {
                         try environment.spaces.updateDisplayName(member, to: name.trimmingCharacters(in: .whitespaces))
                         dismiss()
@@ -422,12 +424,12 @@ private struct CouplePhotoView: View {
                         .background(Palette.surfaceMuted)
                 }
                 .frame(maxWidth: .infinity)
-                .aspectRatio(4 / 5, contentMode: .fit)
+                .aspectRatio(1, contentMode: .fit)
                 .clipShape(.rect(cornerRadius: Radius.card, style: .continuous))
                 .accessibilityLabel(Text("Foto do casal"))
                 PhotoPickerButton(onPicked: { photo in
                     save { try environment.spaces.setCoverPhoto(photo.imageData, in: space) }
-                }, onFailure: { errorMessage = $0 }) {
+                }, onFailure: { errorMessage = $0 }, crop: .square) {
                     Label(space.coverPhotoData == nil ? "Escolher foto" : "Trocar foto", systemImage: "photo.on.rectangle")
                 }
                 .buttonStyle(.primary)
@@ -501,7 +503,7 @@ private struct RelationshipStartView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button("Salvar") { save(date) }
+                Button("Salvar", systemImage: "checkmark", role: .confirm) { save(date) }
             }
         }
     }

@@ -7,14 +7,24 @@ import PhotosUI
 import SwiftUI
 
 /// Picks a single photo from the library and hands back a processed (downscaled) copy.
+/// With `crop`, the person first positions the photo in that frame.
 struct PhotoPickerButton<Label: View>: View {
     let onPicked: (ProcessedPhoto) -> Void
     var onFailure: ((String) -> Void)?
+    var crop: PhotoCropShape?
     @ViewBuilder let label: Label
 
     @State private var item: PhotosPickerItem?
     @State private var isPresented = false
     @State private var isProcessing = false
+    @State private var pendingCrop: PendingCrop?
+
+    private struct PendingCrop: Identifiable {
+        let id = UUID()
+        let data: Data
+        let preview: UIImage
+        let shape: PhotoCropShape
+    }
 
     var body: some View {
         // A plain button plus the picker modifier keeps the label on the main actor.
@@ -38,10 +48,31 @@ struct PhotoPickerButton<Label: View>: View {
                     guard let data = try await item.loadTransferable(type: Data.self) else {
                         throw PhotoProcessing.ProcessingError.unreadableImage
                     }
-                    onPicked(try await PhotoProcessing.process(data))
+                    if let crop {
+                        pendingCrop = PendingCrop(data: data, preview: try await PhotoProcessing.preview(data), shape: crop)
+                    } else {
+                        onPicked(try await PhotoProcessing.process(data))
+                    }
                 } catch {
                     onFailure?(error.localizedDescription)
                 }
+            }
+        }
+        .fullScreenCover(item: $pendingCrop) { pending in
+            PhotoCropView(image: pending.preview, shape: pending.shape) { rect in
+                finishCrop(pending.data, rect)
+            }
+        }
+    }
+
+    private func finishCrop(_ data: Data, _ rect: CGRect) {
+        isProcessing = true
+        Task {
+            defer { isProcessing = false }
+            do {
+                onPicked(try await PhotoProcessing.process(data, cropping: rect))
+            } catch {
+                onFailure?(error.localizedDescription)
             }
         }
     }

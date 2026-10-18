@@ -112,7 +112,7 @@ struct HomeView: View {
                 } catch {
                     errorMessage = error.localizedDescription
                 }
-            }, onFailure: { errorMessage = $0 }) {
+            }, onFailure: { errorMessage = $0 }, crop: .square) {
                 Label("Foto do casal", systemImage: "camera")
                     .font(.subheadline.weight(.medium))
                     .padding(.horizontal, Spacing.m)

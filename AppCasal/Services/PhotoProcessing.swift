@@ -5,6 +5,7 @@
 
 import Foundation
 import ImageIO
+import UIKit
 import UniformTypeIdentifiers
 
 /// A photo ready to store: downscaled full image and a small thumbnail.
@@ -52,6 +53,65 @@ nonisolated enum PhotoProcessing {
             pixelWidth: full.width,
             pixelHeight: full.height
         )
+    }
+
+    /// Downscaled, upright image for the crop screen. Same pixels `process(_:cropping:)`
+    /// crops, so a rectangle normalized on it maps exactly.
+    @concurrent
+    static func preview(_ data: Data) async throws -> UIImage {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
+            throw ProcessingError.unreadableImage
+        }
+        return UIImage(cgImage: try downscaled(source, maxPixelSize: maxPixelSize))
+    }
+
+    /// Keeps only `normalizedRect` (0…1 of the upright image), then processes as usual.
+    @concurrent
+    static func process(_ data: Data, cropping normalizedRect: CGRect) async throws -> ProcessedPhoto {
+        try processSynchronously(data, cropping: normalizedRect)
+    }
+
+    static func processSynchronously(_ data: Data, cropping normalizedRect: CGRect) throws -> ProcessedPhoto {
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
+            throw ProcessingError.unreadableImage
+        }
+        let full = try downscaled(source, maxPixelSize: maxPixelSize)
+        let bounds = CGRect(x: 0, y: 0, width: full.width, height: full.height)
+        let rect = CGRect(
+            x: normalizedRect.minX * bounds.width,
+            y: normalizedRect.minY * bounds.height,
+            width: normalizedRect.width * bounds.width,
+            height: normalizedRect.height * bounds.height
+        ).integral.intersection(bounds)
+        guard !rect.isEmpty, let cropped = full.cropping(to: rect) else {
+            throw ProcessingError.unreadableImage
+        }
+        return ProcessedPhoto(
+            imageData: try encode(cropped, quality: 0.8),
+            thumbnailData: try encode(try resized(cropped, maxPixelSize: thumbnailPixelSize), quality: 0.7),
+            pixelWidth: cropped.width,
+            pixelHeight: cropped.height
+        )
+    }
+
+    /// Redraws an already decoded image so its longest side is at most `maxPixelSize`.
+    private static func resized(_ image: CGImage, maxPixelSize: Int) throws -> CGImage {
+        let scale = min(Double(maxPixelSize) / Double(max(image.width, image.height)), 1)
+        let width = max(Int((Double(image.width) * scale).rounded()), 1)
+        let height = max(Int((Double(image.height) * scale).rounded()), 1)
+        guard let context = CGContext(
+            data: nil,
+            width: width,
+            height: height,
+            bitsPerComponent: 8,
+            bytesPerRow: 0,
+            space: CGColorSpace(name: CGColorSpace.sRGB) ?? CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue
+        ) else { throw ProcessingError.encodingFailed }
+        context.interpolationQuality = .high
+        context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
+        guard let output = context.makeImage() else { throw ProcessingError.encodingFailed }
+        return output
     }
 
     private static func downscaled(_ source: CGImageSource, maxPixelSize: Int) throws -> CGImage {

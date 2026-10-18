@@ -9,7 +9,9 @@ import UserNotifications
 
 /// Replaces the generic note alert ("Chegou um carinho pra você") with the text of the
 /// partner's note, with its day and time as the subtitle. The CloudKit push carries no fields, so the note is fetched here.
-/// When it cannot be found in time (no network, an edit of an old note, a deletion),
+/// When the push came from the shared space being deleted or no longer shared, says so
+/// instead (an extension cannot hide a push without Apple's filtering entitlement).
+/// When nothing can be found in time (no network, an edit of an old note, a deletion),
 /// the generic alert is shown unchanged.
 final class NotificationService: UNNotificationServiceExtension {
     private let delivery = Delivery()
@@ -26,13 +28,13 @@ final class NotificationService: UNNotificationServiceExtension {
         delivery.start(content: content, handler: contentHandler)
         let delivery = delivery
         Task {
-            let note = await PartnerNoteFetcher.latestNote(in: scope)
-            delivery.finish(note: note)
+            let outcome = await PartnerNoteFetcher.outcome(in: scope)
+            delivery.finish(outcome)
         }
     }
 
     override func serviceExtensionTimeWillExpire() {
-        delivery.finish(note: nil)
+        delivery.finish(.unknown)
     }
 }
 
@@ -56,11 +58,17 @@ private final class Delivery: @unchecked Sendable {
         lock.withLock { pending = Pending(handler: handler, content: content) }
     }
 
-    func finish(note: NoteAlertContent.Note?) {
+    func finish(_ outcome: NoteAlertOutcome) {
         guard let taken = take() else { return }
-        if let note {
+        switch outcome {
+        case .note(let note):
             taken.content.subtitle = NoteAlertContent.subtitle(for: note)
             taken.content.body = NoteAlertContent.body(for: note)
+        case .spaceEnded:
+            taken.content.title = NoteAlertContent.spaceEndedTitle
+            taken.content.body = NoteAlertContent.spaceEndedBody
+        case .unknown:
+            break
         }
         taken.handler(taken.content)
     }

@@ -3,35 +3,7 @@
 //  AppCasal
 //
 
-import CloudKit
-import CoreTransferable
-import SwiftUI
 import UIKit
-
-/// The couple space as a `ShareLink` item. The system share sheet sends the CloudKit
-/// invitation through any app (WhatsApp, Mensagens…), restricted to invited people
-/// with read-write access, the same rules as `UICloudSharingController`.
-nonisolated struct SpaceInvitation: Transferable {
-    let container: CKContainer
-    /// Saved share, when the space was already shared. The sheet then only sends its link.
-    let existing: CKShare?
-    /// Creates the share when the person picks where to send it.
-    let prepare: @Sendable () async throws -> CKShare
-
-    static let sharingOptions = CKAllowedSharingOptions(
-        allowedParticipantPermissionOptions: .readWrite,
-        allowedParticipantAccessOptions: .specifiedRecipientsOnly
-    )
-
-    static var transferRepresentation: some TransferRepresentation {
-        CKShareTransferRepresentation { invitation in
-            if let share = invitation.existing {
-                return .existing(share, container: invitation.container, allowedSharingOptions: sharingOptions)
-            }
-            return .prepareShare(container: invitation.container, allowedSharingOptions: sharingOptions, preparationHandler: invitation.prepare)
-        }
-    }
-}
 
 /// Square picture shown for the invitation: the couple photo, or the app logo on the
 /// launch background. Replaces the generic document icon of the sharing screens.

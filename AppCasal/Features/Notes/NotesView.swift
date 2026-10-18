@@ -231,10 +231,10 @@ struct NoteComposerView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar", role: .cancel) { dismiss() }
+                    Button("Cancelar", systemImage: "xmark", role: .cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(isEditing ? "Salvar" : "Enviar", action: send)
+                    Button(isEditing ? "Salvar" : "Enviar", systemImage: isEditing ? "checkmark" : "paperplane.fill", role: .confirm, action: send)
                         .disabled(trimmed.isEmpty)
                         .accessibilityIdentifier("noteComposer.send")
                 }

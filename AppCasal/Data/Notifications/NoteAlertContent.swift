@@ -21,6 +21,10 @@ nonisolated enum NoteAlertContent {
     static let recentWindow: TimeInterval = 15 * 60
     static let maximumBodyLength = 240
 
+    /// Alert text when the push came from the shared space ending, not from a note.
+    static var spaceEndedTitle: String { String(localized: "Nosso espaço") }
+    static var spaceEndedBody: String { String(localized: "O espaço compartilhado foi encerrado. Abra o app para ver.") }
+
     struct Note: Equatable, Sendable {
         var text: String
         var authorID: String

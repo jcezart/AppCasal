@@ -146,6 +146,12 @@
     "Aguardando seu par" : {
 
     },
+    "Ajustar foto de perfil" : {
+
+    },
+    "Ajustar foto do casal" : {
+
+    },
     "Algo deu errado" : {
 
     },
@@ -165,6 +171,9 @@
 
     },
     "Aqui é onde a nossa história continua." : {
+
+    },
+    "Arraste para posicionar e use dois dedos para aproximar." : {
 
     },
     "As metas que vocês concluírem ficam guardadas aqui." : {
@@ -236,6 +245,9 @@
     "Concluídas" : {
 
     },
+    "Concluído" : {
+
+    },
     "Concluir" : {
 
     },
@@ -294,6 +306,9 @@
 
     },
     "Descrição" : {
+
+    },
+    "Deslize para cima ou para baixo para aproximar ou afastar." : {
 
     },
     "Dia a dia" : {
@@ -651,9 +666,6 @@
     "O uso do iCloud está restrito neste iPhone." : {
 
     },
-    "OK" : {
-
-    },
     "Ontem às %@" : {
 
     },
@@ -877,6 +889,9 @@
 
     },
     "Usada para contar os dias juntos no Início." : {
+
+    },
+    "Usar foto" : {
 
     },
     "Ver memória" : {

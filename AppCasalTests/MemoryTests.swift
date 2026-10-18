@@ -38,6 +38,19 @@ struct MemoryTests {
         #expect(processed.thumbnailData.count < processed.imageData.count)
     }
 
+    @Test func photoCropKeepsTheChosenSquare() async throws {
+        let data = Self.sampleImageData(width: 1200, height: 800)
+        let preview = try await PhotoProcessing.preview(data)
+        #expect(preview.size == CGSize(width: 1200, height: 800))
+        // Right-hand square of the landscape photo.
+        let cropped = try await PhotoProcessing.process(data, cropping: CGRect(x: 1.0 / 3, y: 0, width: 2.0 / 3, height: 1))
+        #expect(cropped.pixelWidth == 800)
+        #expect(cropped.pixelHeight == 800)
+        await #expect(throws: PhotoProcessing.ProcessingError.self) {
+            try await PhotoProcessing.process(data, cropping: CGRect(x: 2, y: 2, width: 1, height: 1))
+        }
+    }
+
     @Test func photoProcessingRejectsGarbage() async {
         await #expect(throws: PhotoProcessing.ProcessingError.self) {
             try await PhotoProcessing.process(Data("not an image".utf8))

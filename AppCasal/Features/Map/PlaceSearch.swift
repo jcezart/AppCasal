@@ -123,7 +123,7 @@ struct PlaceSearchView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar", role: .cancel) { dismiss() }
+                    Button("Cancelar", systemImage: "xmark", role: .cancel) { dismiss() }
                 }
             }
         }
@@ -210,7 +210,7 @@ private struct AddPlaceView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
-                Button("Salvar") {
+                Button("Salvar", systemImage: "checkmark", role: .confirm) {
                     do {
                         let place = try environment.places.create(
                             PlaceDraft(name: result.name, address: result.address, latitude: result.latitude, longitude: result.longitude, category: category, status: status, note: note),

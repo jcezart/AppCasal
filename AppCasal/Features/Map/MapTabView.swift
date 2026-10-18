@@ -329,10 +329,10 @@ private struct EditPlaceView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar", role: .cancel) { dismiss() }
+                    Button("Cancelar", systemImage: "xmark", role: .cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Salvar") {
+                    Button("Salvar", systemImage: "checkmark", role: .confirm) {
                         do {
                             try environment.places.update(place, category: category, status: status, note: note, by: userRecordName)
                             dismiss()

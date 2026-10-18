@@ -21,7 +21,7 @@ Referência comum para todos os agentes (Claude, Codex e outros) que trabalham n
 
 ## Resumo atual
 
-- **App completo em uso local:** todas as funcionalidades previstas, mais Lembretes (anuais e mensais) e notificações (permissão, tela de Notificações, push de recadinho), estão implementadas e validadas localmente (build, 58 testes unitários, 4 testes de UI de ponta a ponta).
+- **App completo em uso local:** todas as funcionalidades previstas, mais Lembretes (anuais e mensais) e notificações (permissão, tela de Notificações, push de recadinho), estão implementadas e validadas localmente (build, 59 testes unitários, 4 testes de UI de ponta a ponta).
 - **Primeiro teste com dois iPhones (2026-10-18, relato do usuário):** convite pelo WhatsApp chegou e foi aceito, mas o WhatsApp demorou a abrir, a folha de compartilhamento mostrava um ícone de documento e a participante só viu o espaço após reabrir o app. Os três problemas foram corrigidos e **precisam ser revalidados** (S1, S2).
 - **Pendente:** apenas o que exige o segundo celular (convite, aceitação, sincronização entre parceiros, avisos, conflitos, sair/encerrar/apagar com o parceiro conectado).
 - **Commits:** `71bfd68` (design system, navegação, demonstração, ícone, abertura). Memórias e o restante das funcionalidades estão **sem commit** (aguardando autorização do usuário).
@@ -56,7 +56,7 @@ Referência comum para todos os agentes (Claude, Codex e outros) que trabalham n
 
 ## Tecnologias
 
-SwiftUI (Liquid Glass do iOS 26), Core Data + `NSPersistentCloudKitContainer` (sem SwiftData), CloudKit (espelhamento e `CKShare` pelo framework), MapKit (iOS 26: `MKMapItem.location`/`address`), CoreLocation (`CLLocationUpdate`), PhotosUI, ImageIO, Network (`NWPathMonitor`), UserNotifications (lembretes locais; push de recadinho por `CKDatabaseSubscription`), CoreTransferable (`ShareLink` + `CKShareTransferRepresentation`). Nenhuma dependência externa.
+SwiftUI (Liquid Glass do iOS 26), Core Data + `NSPersistentCloudKitContainer` (sem SwiftData), CloudKit (espelhamento e `CKShare` pelo framework), MapKit (iOS 26: `MKMapItem.location`/`address`), CoreLocation (`CLLocationUpdate`), PhotosUI, ImageIO, Network (`NWPathMonitor`), UserNotifications (lembretes locais; push de recadinho por `CKDatabaseSubscription`), LinkPresentation (prévia do convite na folha de compartilhamento). Nenhuma dependência externa.
 
 ## Arquitetura
 
@@ -67,7 +67,7 @@ SwiftUI (Liquid Glass do iOS 26), Core Data + `NSPersistentCloudKitContainer` (s
 - **AppEnvironment** (`RunMode`): `.production` (CloudKit), `.demo` (só DEBUG, `-AppCasalDemo YES`, stores em `Application Support/DemoStores/`, sem CloudKit, identidade local, dados fictícios por `DemoData` usando os repositórios de produção; `-AppCasalDemoReset YES` e `-AppCasalDemoEmpty YES` para testes de UI), `.preview` (só DEBUG, em memória), `.tests` (em memória). Nunca ativado automaticamente.
 - **PersistenceController:** `Private.sqlite` (`.private`) e `Shared.sqlite` (`.shared`) no mesmo container; histórico persistente e notificação remota; `viewContext` com `NSMergeByPropertyObjectTrumpMergePolicy`, `automaticallyMergesChangesFromParent`, `transactionAuthor = "app"`.
 - **Repositórios:** `SpaceRepository` (espaço, membros, fotos, data, arquivar), `NoteRepository` (só o autor edita/exclui), `FavoriteRepository` (favoritos pessoais), `MemoryRepository` (+ `MemoryDraft`, `PlaceLink`), `GoalRepository` (+ `GoalDraft`), `PlaceRepository` (+ `PlaceDraft`), `ReminderRepository` (+ `ReminderDraft`). Atribuem o store do objeto relacionado; preenchem autoria e datas; exclusão lógica.
-- **ShareService:** cria share (com título e miniatura: foto do casal ou logo), convite por `ShareLink` com `SpaceInvitation` (`CKShareTransferRepresentation`: `.existing` se o share já existe, `.prepareShare` se não; `specifiedRecipientsOnly` + `readWrite`; `SharePreview` com a miniatura), `UICloudSharingController` só para gerenciar (participantes, parar de compartilhar; `itemThumbnailData` com a miniatura), aceita convites com `CoupleLimit`, marca `sharingEndedAt` ao parar de compartilhar, `leave` (participante) e `deletePermanently` (dono).
+- **ShareService:** cria share (com título e miniatura: foto do casal ou logo), convite por `presentInvitation` (salva o share antes, se ainda não existe, com indicador de progresso; depois abre `UIActivityViewController` com `NSItemProvider.registerCKShare`, `specifiedRecipientsOnly` + `readWrite`, e `LPLinkMetadata` com título e miniatura; `ShareThumbnail` em `SpaceInvitation.swift`), `UICloudSharingController` só para gerenciar (participantes, parar de compartilhar; `itemThumbnailData` com a miniatura), aceita convites com `CoupleLimit`, marca `sharingEndedAt` ao parar de compartilhar, `leave` (participante) e `deletePermanently` (dono).
 - **Serviços:** `AccountService` (estado iCloud; `userRecordName` guardado em `UserDefaults` para abrir sem rede; só "sem conta"/"restrito" bloqueiam), `SyncMonitor` (eventos de espelhamento + contagem de alterações pendentes pelo histórico persistente após o último envio bem-sucedido da sessão), `NetworkMonitor`, `LocationService` (permissão "durante o uso", pedida ao abrir o Mapa; uma leitura para distâncias), `PhotoProcessing` (ImageIO, ≤ 2048 px + miniatura 600 px, HEIC, sem metadados), `PlaceSearch` (`MKLocalSearch`), `Directions` (Mapas), `ReminderNotifications` (notificações locais dos lembretes: refaz todo o conjunto `reminder-<id>` a cada sincronização — ao abrir o app, após editar e a cada mudança no store, inclusive vinda do parceiro; até 60 pedidos pendentes, mais próximos primeiro; anual = gatilho repetido; mensal = próximas 6 ocorrências avulsas, renovadas a cada sincronização; `isAllowed` é a permissão do app), `NoteAlerts` (push de recadinho, ver "Avisos de recadinhos"), `LaunchLog`.
 - **Isolamento (Swift 6):** `MainActor` padrão. Única marcação insegura: `Delivery` na extensão é `@unchecked Sendable` (handler e conteúdo do sistema não são `Sendable`; todo acesso sob `NSLock`, entregue uma única vez; justificativa no código). Subclasses de `NSManagedObject` são `nonisolated` (o espelhamento usa filas próprias; o isolamento real é o do contexto). Todo acesso do app é no `viewContext`. Trabalho pesado (`PhotoProcessing`, `ImageDecoder`, `PlaceSearch`) é `@concurrent` e só troca tipos `Sendable`. Contagem de histórico em contexto de fundo com `perform`.
 
@@ -82,7 +82,7 @@ AppCasal/
 │   │   ├── Tokens/          # Palette, Metrics, Typography
 │   │   └── Components/      # cartões, chips, segmentado, botões, avatares, estados, progresso, NoteCards, MemoryCards,
 │   │                        # GoalCard, GoalSummaryRow, InfoCard, CoupleHeroHeader, SettingsRow, AdaptiveStack,
-│   │                        # PhotoView, PhotoPickerButton (+ DecodedImage, ImageDecoder), GoalStepsObserver
+│   │                        # PhotoView, PhotoPickerButton (+ DecodedImage, ImageDecoder; `crop:` abre PhotoCropView), PhotoCropView (arrastar e pinça antes de salvar; quadro circular para perfil, quadrado para foto do casal), GoalStepsObserver
 │   ├── Data/
 │   │   ├── Model/           # AppCasal.xcdatamodeld, Entities/*, MemoryCategory, Categories (PlaceStatus, GoalCategory)
 │   │   ├── Persistence/     # PersistenceController, SyncMonitor
@@ -103,7 +103,7 @@ AppCasal/
 │   │   └── SharingSpike/    # diagnóstico da etapa 1, só DEBUG
 │   ├── Assets.xcassets, Localizable.xcstrings, AppCasal.entitlements, Info.plist
 ├── NoteNotificationService/ # NotificationService, PartnerNoteFetcher, Info.plist, entitlements
-├── AppCasalTests/           # 58 testes (Swift Testing)
+├── AppCasalTests/           # 59 testes (Swift Testing)
 └── AppCasalUITests/         # MemoryFlowUITests, NotesAndGoalsUITests, RemindersUITests
 ```
 
@@ -135,7 +135,7 @@ Legenda: **validado localmente** = build + testes automatizados (unitários e/ou
 | Abertura com marca, boas-vindas, abertura sem rede | sim | sim (medição ~120 ms; testes de conta) | — |
 | Onboarding: criar espaço, entrar como participante, iCloud indisponível | sim | parcial (repositórios testados) | aceitar convite (S2) |
 | Início: foto do casal, nomes (na linha da barra, ao lado do avatar), dias juntos, último recadinho, meta em andamento (com miniatura da foto da meta), última memória, nova memória | sim | sim (testes de repositório; fluxos de UI relacionados) | ver dados do parceiro |
-| Nosso espaço: perfil com foto, foto do casal, data de início, lembretes, notificações, excluídos recentemente, banner de sincronização | sim | sim (repositórios testados) | — |
+| Nosso espaço: perfil com foto e foto do casal (ambas ajustáveis antes de salvar: arrastar e pinça; recorte quadrado, `PhotoProcessing.process(_:cropping:)` testado), data de início, lembretes, notificações, excluídos recentemente, banner de sincronização | sim | sim (repositórios testados) | — |
 | Convite, gerenciar/parar de compartilhar, sair do espaço, começar novo espaço, apagar o espaço | sim | parcial (`CoupleLimit`, arquivar testados) | S1–S8 |
 | Memórias: criar, editar, linha do tempo por mês, detalhe, até 10 fotos, lugar, excluir/restaurar | sim | sim (unitários + UI: criar, editar, reabrir) | M1–M2 |
 | Recados: escrever, recebidos/enviados, editar/excluir os próprios, favoritos pessoais | sim | sim (unitários + UI: escrever, reabrir) | S3–S5, N1–N6 |
@@ -145,13 +145,13 @@ Legenda: **validado localmente** = build + testes automatizados (unitários e/ou
 | Excluídos recentemente (memórias, metas, recados próprios, lugares, lembretes) | sim | sim (restauração testada nos repositórios) | — |
 | Rede e alterações pendentes ("Sem conexão · N alterações aguardando envio") | sim | parcial (estado offline testado; contagem depende de envio real) | sim |
 | Notificações: explicação + pedido de permissão uma vez; tela Nosso espaço > Notificações (estado, ativar, abrir Ajustes, preferência "Recadinhos do seu par") | sim | parcial (preferência testada; pedido do sistema não automatizado) | — |
-| Push de recadinho com o texto do recado (`CKDatabaseSubscription` + `recordType` + `NoteNotificationService`) | sim | parcial (assinatura, banco por papel, escolha do recado e texto testados) | N1–N8 |
+| Push de recadinho com o texto do recado (`CKDatabaseSubscription` + `recordType` + `NoteNotificationService`) | sim | parcial (assinatura, banco por papel, escolha do recado e texto testados) | N1–N9 |
 
 ## Compartilhamento
 
 **Documentado pela Apple (headers do SDK):** `share(_:to:)` compartilha o grafo relacionado; `acceptShareInvitations(from:into:)` aceita no store compartilhado; `purgeObjectsAndRecordsInZone(with:in:)` "remove a zona do banco associado ao store"; `CKSharingSupported` necessário para receber convites; `publicPermission = .none`; `UICloudSharingController.availablePermissions = [.allowPrivate, .allowReadWrite]`.
 
-**Implementado:** dono convida por `ShareLink` (folha de compartilhamento do sistema com título e miniatura; o share é criado ao escolher o destino ou reaproveitado); gerencia pelo `UICloudSharingController`; aceitação a frio e com app aberto (`SceneDelegate`); recusa de convite com mais de um parceiro e de quem já é dono de um espaço; participante cria o próprio `Member`; objetos novos no store do espaço.
+**Implementado:** dono convida pela folha de compartilhamento do sistema (título e miniatura); o share é salvo antes de abrir a folha (ou reaproveitado), para o app escolhido abrir no primeiro toque. No primeiro teste, com o share preparado pela própria folha (`.prepareShare`), o WhatsApp mostrava um aviso com "Continuar", voltava à folha, exigia tocar de novo no WhatsApp e demorava; gerencia pelo `UICloudSharingController`; aceitação a frio e com app aberto (`SceneDelegate`); recusa de convite com mais de um parceiro e de quem já é dono de um espaço; participante cria o próprio `Member`; objetos novos no store do espaço.
 
 **Hipóteses a verificar com dois aparelhos:** objetos criados depois do share entram na zona compartilhada (S5); "Sair do espaço" com `purge` no store compartilhado remove o participante do share sem apagar os dados do dono (S8); "Apagar o espaço" com `purge` no store privado remove tudo para os dois; o participante perde a cópia local quando o share é encerrado (sem promessa para aparelho offline).
 
@@ -181,7 +181,7 @@ Legenda: **validado localmente** = build + testes automatizados (unitários e/ou
 
 **Documentado (CKSubscription.h):** `CKDatabaseSubscription` funciona nos bancos privado e compartilhado e aceita `recordType`; `CKQuerySubscription` não funciona no compartilhado; o servidor exclui o aparelho de origem "quando apropriado"; notificações podem ser agrupadas. A existência da API não comprova o funcionamento no servidor.
 
-**Implementado em produção (pedido do usuário, 2026-10-18; substitui o experimento DEBUG):** `NoteAlerts` salva `CKDatabaseSubscription` `note-alerts-v1` com `recordType = CD_Note`: dono no banco privado, participante no compartilhado. Título "Recadinho de <nome do par>". A assinatura de banco não traz campos, então usa `shouldSendMutableContent` e a extensão `NoteNotificationService` troca o corpo pelo texto do recado: busca as zonas alteradas (`databaseChanges`) e os registros alterados (`recordZoneChanges`, só `CD_text`, `CD_authorID`, `CD_createdAt`, `CD_modifiedAt`, `CD_deletedAt`; tokens próprios nos `UserDefaults` da extensão, independentes do espelhamento), escolhe o recado mais recente do parceiro alterado nos últimos 15 min e não excluído (`NoteAlertContent`, testado), corta em 240 caracteres e prefixa "Editado:" em edições. Subtítulo com dia e hora do recado (`NoteTimestamp`: "Hoje às 14:32", "Ontem às 09:05", "12 de out. às 14:32"; em edições, a hora da edição); os cartões de recado no app usam o mesmo formato. Sem rede, sem recado elegível ou no limite de tempo do sistema: corpo genérico "Chegou um carinho pra você. Toque para ler." A primeira execução sem token lê os metadados de todos os registros da zona (sem fotos). Só é salva com permissão concedida, preferência ligada e parceiro já no espaço; removida ao desligar a preferência ou perder a permissão. Ao salvar, apaga o ID antigo do experimento (`note-alerts-experiment-v1`) para não duplicar. Sincronizada ao abrir o app e a cada mudança remota (uma vez por sessão para a mesma combinação papel + nome). Toque no aviso abre Recados: o delegate de `UNUserNotificationCenter` usa as variantes com completion handler no main actor (as variantes `async` nonisolated retomavam fora da main thread; no primeiro teste, tocar o aviso na tela bloqueada não abriu o app). Não toca nas assinaturas do `NSPersistentCloudKitContainer`. Banco público continua não aprovado.
+**Implementado em produção (pedido do usuário, 2026-10-18; substitui o experimento DEBUG):** `NoteAlerts` salva `CKDatabaseSubscription` `note-alerts-v1` com `recordType = CD_Note`: dono no banco privado, participante no compartilhado. Título "Recadinho de <nome do par>". A assinatura de banco não traz campos, então usa `shouldSendMutableContent` e a extensão `NoteNotificationService` troca o corpo pelo texto do recado: busca as zonas alteradas (`databaseChanges`) e os registros alterados (`recordZoneChanges`, só `CD_text`, `CD_authorID`, `CD_createdAt`, `CD_modifiedAt`, `CD_deletedAt`; tokens próprios nos `UserDefaults` da extensão, independentes do espelhamento), escolhe o recado mais recente do parceiro alterado nos últimos 15 min e não excluído (`NoteAlertContent`, testado), corta em 240 caracteres e prefixa "Editado:" em edições. Subtítulo com dia e hora do recado (`NoteTimestamp`: "Hoje às 14:32", "Ontem às 09:05", "12 de out. às 14:32"; em edições, a hora da edição); os cartões de recado no app usam o mesmo formato. Se a zona do espaço foi apagada (dono apagou o espaço ou parou de compartilhar; a assinatura de banco também dispara nisso) ou, no banco compartilhado, não resta zona: "Nosso espaço" / "O espaço compartilhado foi encerrado. Abra o app para ver." (no segundo teste, apagar o espaço gerava "Chegou um carinho" no iPhone da parceira). Sem rede, sem recado elegível ou no limite de tempo do sistema: corpo genérico "Chegou um carinho pra você. Toque para ler." A extensão não esconde avisos: isso exige o entitlement `com.apple.developer.usernotifications.filtering`, concedido pela Apple sob pedido. Sem espaço ativo, o app remove a assinatura dos dois bancos (`removeEverywhere`). A primeira execução sem token lê os metadados de todos os registros da zona (sem fotos). Só é salva com permissão concedida, preferência ligada e parceiro já no espaço; removida ao desligar a preferência ou perder a permissão. Ao salvar, apaga o ID antigo do experimento (`note-alerts-experiment-v1`) para não duplicar. Sincronizada ao abrir o app e a cada mudança remota (uma vez por sessão para a mesma combinação papel + nome). Toque no aviso abre Recados: o delegate de `UNUserNotificationCenter` usa as variantes com completion handler no main actor (as variantes `async` nonisolated retomavam fora da main thread; no primeiro teste, tocar o aviso na tela bloqueada não abriu o app). Não toca nas assinaturas do `NSPersistentCloudKitContainer`. Banco público continua não aprovado.
 
 **Riscos a medir (N1–N6):** aviso das próprias notas no outro aparelho do mesmo usuário, aviso em edições/exclusões/restaurações, atraso e agrupamento. Nada é prometido como imediato na interface.
 
@@ -212,7 +212,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 
 | ID | Teste | Estado |
 |---|---|---|
-| S1 | Dono cria espaço e envia convite | parcial (2026-10-18): convite pelo WhatsApp chegou; abertura lenta e ícone de documento corrigidos (`ShareLink`), revalidar |
+| S1 | Dono cria espaço e envia convite | parcial (2026-10-18): convite pelo WhatsApp chegou; ícone de documento corrigido; segundo teste: aviso "Continuar" + tocar de novo no WhatsApp + demora; agora o share é salvo antes de abrir a folha, revalidar (anotar o texto do aviso se ele continuar) |
 | S2 | Participante aceita (app fechado e aberto) e entra com o nome | parcial (2026-10-18): aceitou, mas só entrou após reabrir o app; corrigido, revalidar |
 | S3 | Recadinho de A aparece em B e vice-versa | não testado |
 | S4 | Edição, exclusão lógica e restauração propagam | não testado |
@@ -229,6 +229,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 | N1–N6 | Avisos: dono↔participante, estados do app (aberto, fundo, fechado), próprio aviso, edição/exclusão, tempo, duplicação | não testado |
 | N7 | O aviso mostra o texto do recadinho e o dia e hora no subtítulo (dono→participante e participante→dono) | não testado |
 | N8 | Tocar o aviso na tela bloqueada (app fechado e em segundo plano) abre o app em Recados | falhou no primeiro teste; corrigido, revalidar |
+| N9 | Dono apaga o espaço: a parceira recebe "O espaço compartilhado foi encerrado", não um recadinho | falhou no segundo teste; corrigido, revalidar |
 | C1–C4 | Conflitos: mesmo campo offline, exclusão × edição, exclusão física × edição, criação offline | não testado |
 
 ## Decisões vigentes
@@ -246,9 +247,10 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 | Identidade iCloud guardada no aparelho | abrir rápido e offline |
 | Permissão de localização só ao abrir o Mapa | pedir no momento da necessidade |
 | Lembretes do casal (compartilhados); notificação local às 9h, `daysBefore` dias antes; anual por gatilho repetido, mensal por 6 ocorrências avulsas renovadas | o lembrete é do casal; cada aparelho agenda a própria notificação, sem servidor; gatilho repetido não expressa "N dias antes do dia 31" |
-| Push de recadinho por `CKDatabaseSubscription` + `recordType` em produção, com preferência pessoal; texto do recado preenchido por Notification Service Extension | pedido do usuário; sem servidor próprio nem banco público; validar N1–N8 |
+| Push de recadinho por `CKDatabaseSubscription` + `recordType` em produção, com preferência pessoal; texto do recado preenchido por Notification Service Extension | pedido do usuário; sem servidor próprio nem banco público; validar N1–N9 |
 | Permissão de notificação: tela de explicação uma vez + Nosso espaço > Notificações | o iOS não permite instalar com notificações já ativas; pedir com contexto |
-| Convite por `ShareLink` + `CKShareTransferRepresentation`; `UICloudSharingController` só para gerenciar | folha do sistema com miniatura e título, share reaproveitado; mesmas restrições (privado, leitura e escrita) |
+| Convite: share salvo antes, depois folha do sistema com `registerCKShare`; `UICloudSharingController` só para gerenciar | o app escolhido abre no primeiro toque; mesmas restrições (privado, leitura e escrita) |
+| Barras das telas de edição com símbolos do iOS 26: X (`role: .cancel`), ✓ (`role: .confirm`; "Enviar" com avião de papel), lixeira em "Apagar"; títulos mantidos para VoiceOver; peças com forma própria usam `.tile` | com "Formatos dos Botões" ativado (visto no iPhone da parceira), os textos "Cancelar"/"Salvar" ficavam sublinhados dentro da cápsula de vidro e o bloco "Adicionar" ganhava um segundo fundo |
 | Modo demonstração só DEBUG, por argumento explícito, stores próprios | nunca misturar com dados reais |
 
 ## Pendências do usuário
@@ -262,7 +264,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 - Validações entre contas bloqueadas até haver dois aparelhos.
 - Entrega real das notificações de lembrete e do push de recadinho não é coberta por teste automatizado (cálculo de datas e configuração da assinatura são testados); conferir no iPhone. No modo demonstração a permissão não é pedida e a tela de explicação não aparece.
 - Push de recadinho também dispara em edições, exclusões e restaurações de recados (limitação da assinatura de banco).
-- O convite por `ShareLink` com `specifiedRecipientsOnly` precisa ser revalidado pelo WhatsApp (S1).
+- O convite com `specifiedRecipientsOnly` precisa ser revalidado pelo WhatsApp (S1); o aviso com "Continuar" pode ser do próprio sistema.
 - A extensão de notificação precisa de perfil de provisionamento próprio (novo bundle ID com iCloud); a assinatura automática do Xcode cria ao rodar no iPhone. Não validado em aparelho.
 - Metas: o progresso dependia de observar só a meta; marcar uma etapa altera só a etapa. Corrigido com `GoalStepsObserver` (escuta `NSManagedObjectContextObjectsDidChange` do contexto, inclusive mesclas vindas do parceiro).
 - Seletor de fotos do sistema, busca do MapKit e GPS não são cobertos por testes automatizados (dependem de UI do sistema, rede e localização).
@@ -283,6 +285,9 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 | 2026-10-17 | Suíte completa após todas as funcionalidades | 35 testes unitários em 8 suítes e 3 testes de UI passaram: `MemoryFlowUITests` (criar, editar, fechar e reabrir), `NotesAndGoalsUITests` (escrever recadinho, criar meta com etapa, marcar, fechar e reabrir), capturas de memórias |
 | 2026-10-17 | Lembretes | 42 testes unitários e 4 de UI passaram (`RemindersUITests`: criar pela tela, fechar e reabrir); Release BUILD SUCCEEDED |
 | 2026-10-18 | Progresso das metas e texto do recadinho no aviso (extensão) | 56 testes unitários e 4 de UI passaram (UI: marcar, desmarcar e marcar etapa com progresso na hora); Release BUILD SUCCEEDED com a extensão embutida |
+| 2026-10-18 | Aviso de espaço encerrado em vez de recadinho falso; assinatura removida sem espaço | 59 testes unitários e 4 de UI passaram; só validável com dois iPhones (N9) |
+| 2026-10-18 | Botões com "Formatos dos Botões" ativado (símbolos na barra, `.tile` no "Adicionar") | 59 testes unitários e 4 de UI passaram; aparência com a opção ligada só conferida no iPhone |
+| 2026-10-18 | Ajuste de foto (perfil e casal) e convite com share salvo antes | 59 testes unitários e 4 de UI passaram (recorte testado); convite pelo WhatsApp só validável no iPhone (S1) |
 | 2026-10-18 | Dia e hora do recado (aviso e cartões) e toque no aviso | 58 testes unitários e 4 de UI passaram; toque na tela bloqueada só validável no iPhone (N8) |
 | 2026-10-18 | Lembretes mensais, notificações, push de recadinho, convite por `ShareLink`, correção da entrada do participante, Início | 51 testes unitários e 4 de UI passaram; Release BUILD SUCCEEDED |
 | 2026-10-17 | Release após todas as funcionalidades | BUILD SUCCEEDED; sem conteúdo fictício, sem `AppCasalDemo`, sem experimento de avisos; `NSLocationWhenInUseUsageDescription` presente |
@@ -294,13 +299,16 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 - **2026-10-18:** retorno do primeiro teste com dois iPhones: lembretes mensais; explicação e pedido de permissão + tela de Notificações; push de recadinho em produção (experimento DEBUG removido); convite por `ShareLink` (mais rápido, com miniatura); participante entra sem reabrir o app; Início com miniatura da meta e nome do casal mais acima.
 - **2026-10-18:** progresso das metas atualiza na hora; aviso de recadinho mostra o texto do recado (Notification Service Extension).
 - **2026-10-18:** dia e hora do recado no subtítulo do aviso e nos cartões; toque no aviso (tela bloqueada) corrigido no delegate, revalidar N8.
+- **2026-10-18:** ajuste da foto de perfil e do casal antes de salvar; convite salva o share antes de abrir a folha (WhatsApp no primeiro toque).
+- **2026-10-18:** botões das barras de edição viram X / ✓ (iOS 26), sem sublinhado com "Formatos dos Botões"; bloco "Adicionar" sem fundo duplicado.
+- **2026-10-18:** apagar o espaço não gera mais "recadinho" na parceira: a extensão detecta a zona apagada e avisa que o espaço foi encerrado.
 - **Retomar em:** commit (aguardando autorização) e revalidação com dois aparelhos.
 
 ## Próximos passos
 
 1. Usuário testa no próprio iPhone e autoriza o commit.
 2. Testes com dois aparelhos (ordem acima).
-3. Ajustar o push de recadinho com base em N1–N8 (ex.: avisos de edição).
+3. Ajustar o push de recadinho com base em N1–N9 (ex.: avisos de edição).
 4. Endurecimento e revisão para App Store.
 
 ## Histórico
@@ -316,4 +324,4 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 - **2026-10-17 (substituído):** tela de teste da etapa 1 como tela inicial → diagnóstico só em DEBUG; recadinho editável pelos dois → só pelo autor; lista de excluídos só de memórias → unificada.
 - **2026-10-17:** memórias, depois todas as funcionalidades locais (foto do casal, recados, metas, mapa, gestão do espaço, rede/pendências).
 - **2026-10-17:** Lembretes.
-- **2026-10-18 (substituído):** experimento DEBUG de avisos → push de recadinho em produção; convite por `UICloudSharingController` → `ShareLink` (gerenciar continua no controller); lembrete só anual → não repetir, mensal, anual.
+- **2026-10-18 (substituído):** experimento DEBUG de avisos → push de recadinho em produção; convite por `UICloudSharingController` → `ShareLink` (gerenciar continua no controller) → share salvo antes + `UIActivityViewController` (o `.prepareShare` do `ShareLink` exigia tocar duas vezes no WhatsApp); lembrete só anual → não repetir, mensal, anual.

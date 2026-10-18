@@ -91,7 +91,7 @@ struct MemoriesView: View {
                 DeletedItemsView(environment: environment, space: space, userRecordName: userRecordName)
                     .toolbar {
                         ToolbarItem(placement: .confirmationAction) {
-                            Button("OK") { isShowingDeleted = false }
+                            Button("Concluído", systemImage: "checkmark", role: .confirm) { isShowingDeleted = false }
                         }
                     }
             }

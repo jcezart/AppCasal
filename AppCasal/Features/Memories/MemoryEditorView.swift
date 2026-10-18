@@ -143,12 +143,12 @@ struct MemoryEditorView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar", role: .cancel) {
+                    Button("Cancelar", systemImage: "xmark", role: .cancel) {
                         if hasChanges { isConfirmingDiscard = true } else { dismiss() }
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Salvar", action: save)
+                    Button("Salvar", systemImage: "checkmark", role: .confirm, action: save)
                         .disabled(!draft.isValid || processingCount > 0)
                         .accessibilityIdentifier("memoryEditor.save")
                 }
@@ -208,6 +208,7 @@ struct MemoryEditorView: View {
                         .frame(width: 88, height: 88)
                         .background(fill, in: .rect(cornerRadius: Radius.photo, style: .continuous))
                     }
+                    .buttonStyle(.tile)
                     .accessibilityLabel(Text("Adicionar fotos"))
                 }
             }

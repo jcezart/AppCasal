@@ -7,26 +7,54 @@ import CloudKit
 import Foundation
 import OSLog
 
+/// What a push from the note alert subscription turned out to be.
+enum NoteAlertOutcome: Sendable {
+    /// The partner wrote or edited this note.
+    case note(NoteAlertContent.Note)
+    /// The shared space is gone (deleted by the owner, or sharing stopped). The database
+    /// subscription also fires when the zone is deleted.
+    case spaceEnded
+    /// Nothing to name (no network, an edit of an old note, a deletion).
+    case unknown
+}
+
 /// Fetches the notes changed since the last push and returns the partner's latest one. Uses its own change tokens (kept in this extension's defaults),
 /// independent from the app's `NSPersistentCloudKitContainer` mirroring.
 enum PartnerNoteFetcher {
     private static let log = Logger(subsystem: "jc.app.dev.AppCasal.NoteNotificationService", category: "fetch")
 
-    static func latestNote(in scope: CKDatabase.Scope, now: Date = .now) async -> NoteAlertContent.Note? {
+    static func outcome(in scope: CKDatabase.Scope, now: Date = .now) async -> NoteAlertOutcome {
         let container = CKContainer(identifier: NoteAlertContent.containerIdentifier)
         let database = container.database(with: scope)
         let tokens = TokenStore(scope: scope)
         do {
             let me = try await currentUserRecordName(in: container)
+            let changes = try await changedZones(in: database, tokens: tokens)
             var notes: [NoteAlertContent.Note] = []
-            for zoneID in try await changedZones(in: database, tokens: tokens) where zoneID != CKRecordZone.default().zoneID {
+            for zoneID in changes.modified {
                 notes += try await changedNotes(in: zoneID, of: database, tokens: tokens)
             }
-            return NoteAlertContent.latestFromPartner(notes, me: me, now: now)
+            if let note = NoteAlertContent.latestFromPartner(notes, me: me, now: now) {
+                return .note(note)
+            }
+            // A deleted zone is reported once, with a change token; without one (first
+            // push handled here), an empty database means the same thing.
+            if !changes.deleted.isEmpty {
+                return .spaceEnded
+            }
+            if scope == .shared, try await spaceZones(in: database).isEmpty {
+                return .spaceEnded
+            }
+            return .unknown
         } catch {
             log.error("Note fetch failed: \(error.localizedDescription, privacy: .public)")
-            return nil
+            return .unknown
         }
+    }
+
+    /// The participant's shared database holds only the couple space zone.
+    private static func spaceZones(in database: CKDatabase) async throws -> [CKRecordZone] {
+        try await database.allRecordZones().filter { $0.zoneID != CKRecordZone.default().zoneID }
     }
 
     private static func currentUserRecordName(in container: CKContainer) async throws -> String {
@@ -39,18 +67,27 @@ enum PartnerNoteFetcher {
         return name
     }
 
-    private static func changedZones(in database: CKDatabase, tokens: TokenStore) async throws -> [CKRecordZone.ID] {
+    private static func changedZones(
+        in database: CKDatabase,
+        tokens: TokenStore
+    ) async throws -> (modified: [CKRecordZone.ID], deleted: [CKRecordZone.ID]) {
         var token = tokens.databaseToken
-        var zones: [CKRecordZone.ID] = []
+        var modified: [CKRecordZone.ID] = []
+        var deleted: [CKRecordZone.ID] = []
         var moreComing = true
         while moreComing {
             let changes = try await database.databaseChanges(since: token)
-            zones += changes.modifications.map(\.zoneID)
+            modified += changes.modifications.map(\.zoneID)
+            deleted += changes.deletions.map(\.zoneID)
             token = changes.changeToken
             moreComing = changes.moreComing
         }
         tokens.databaseToken = token
-        return zones
+        for zoneID in deleted {
+            tokens.setZoneToken(nil, for: zoneID)
+        }
+        let isSpaceZone = { (zoneID: CKRecordZone.ID) in zoneID != CKRecordZone.default().zoneID }
+        return (modified.filter(isSpaceZone), deleted.filter(isSpaceZone))
     }
 
     private static func changedNotes(

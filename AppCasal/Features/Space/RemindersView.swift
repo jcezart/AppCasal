@@ -276,10 +276,10 @@ struct ReminderEditorView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar", role: .cancel) { dismiss() }
+                    Button("Cancelar", systemImage: "xmark", role: .cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Salvar") { Task { await save() } }
+                    Button("Salvar", systemImage: "checkmark", role: .confirm) { Task { await save() } }
                         .disabled(!draft.isValid)
                         .accessibilityIdentifier("reminderEditor.save")
                 }

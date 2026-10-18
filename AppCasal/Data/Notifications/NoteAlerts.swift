@@ -93,6 +93,19 @@ final class NoteAlerts {
         }
     }
 
+    /// Removes the subscription from both databases, for when there is no space.
+    func removeEverywhere(container: CKContainer) async {
+        guard registered != "removed" else { return }
+        do {
+            for database in [container.privateCloudDatabase, container.sharedCloudDatabase] {
+                _ = try await database.modifySubscriptions(saving: [], deleting: [Self.subscriptionID])
+            }
+            registered = "removed"
+        } catch {
+            lastError = error.localizedDescription
+        }
+    }
+
     /// True when a remote notification came from this subscription.
     nonisolated static func isNoteAlert(_ userInfo: [AnyHashable: Any]) -> Bool {
         CKNotification(fromRemoteNotificationDictionary: userInfo)?.subscriptionID == subscriptionID

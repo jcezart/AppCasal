@@ -238,10 +238,10 @@ struct GoalEditorView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancelar", role: .cancel) { dismiss() }
+                    Button("Cancelar", systemImage: "xmark", role: .cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Salvar", action: save)
+                    Button("Salvar", systemImage: "checkmark", role: .confirm, action: save)
                         .disabled(!draft.isValid)
                         .accessibilityIdentifier("goalEditor.save")
                 }

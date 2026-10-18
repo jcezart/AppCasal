@@ -69,7 +69,12 @@ final class AppEnvironment {
     /// Keeps the partner-note push subscription in line with permission and preference.
     /// Production only: demo, previews and tests never talk to CloudKit.
     func syncNoteAlerts() async {
-        guard runMode == .production, let space = spaces.activeSpace(), let me = account.userRecordName else { return }
+        guard runMode == .production, let me = account.userRecordName else { return }
+        guard let space = spaces.activeSpace() else {
+            // The space was deleted or left: no more note alerts until a new one is shared.
+            await noteAlerts.removeEverywhere(container: persistence.cloudKitContainer)
+            return
+        }
         await reminderNotifications.refreshAuthorization()
         let partner = spaces.partner(of: me, in: space)
         await noteAlerts.update(

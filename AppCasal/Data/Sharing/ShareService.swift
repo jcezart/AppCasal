@@ -5,6 +5,7 @@
 
 import CloudKit
 import CoreData
+import LinkPresentation
 import Observation
 import UIKit
 
@@ -69,20 +70,37 @@ final class ShareService {
         return saved
     }
 
-    /// Item for `ShareLink`: sends the existing share, or creates it when the person
-    /// picks where to send the invitation.
-    func invitation(for space: CoupleSpace) -> SpaceInvitation {
-        let spaceID = space.objectID
-        return SpaceInvitation(
-            container: persistence.cloudKitContainer,
-            existing: existingShare(for: space),
-            prepare: { @MainActor [self] in
-                guard let space = try persistence.viewContext.existingObject(with: spaceID) as? CoupleSpace else {
-                    throw ShareError.storeUnavailable
-                }
-                return try await createShare(for: space)
+    /// Invitations reach only the people it is sent to, with read-write access: the
+    /// same rules as `UICloudSharingController`.
+    static let invitationOptions = CKAllowedSharingOptions(
+        allowedParticipantPermissionOptions: .readWrite,
+        allowedParticipantAccessOptions: .specifiedRecipientsOnly
+    )
+
+    /// Saves the share first when needed, then opens the share sheet with it. With the
+    /// share already saved, the app picked in the sheet (WhatsApp, Mensagens…) opens on
+    /// the first tap; letting the sheet prepare the share sent the person back to it.
+    func presentInvitation(for space: CoupleSpace) async throws {
+        let share: CKShare
+        if let existing = existingShare(for: space) {
+            share = existing
+        } else {
+            share = try await createShare(for: space)
+        }
+        let provider = NSItemProvider()
+        provider.registerCKShare(share, container: persistence.cloudKitContainer, allowedSharingOptions: Self.invitationOptions)
+        let configuration = UIActivityItemsConfiguration(itemProviders: [provider])
+        let metadata = LPLinkMetadata()
+        metadata.title = String(localized: "Nosso espaço")
+        metadata.imageProvider = NSItemProvider(object: ShareThumbnail.image(for: space))
+        configuration.metadataProvider = { key in
+            switch key {
+            case .title: metadata.title
+            case .linkPresentationMetadata: metadata
+            default: nil
             }
-        )
+        }
+        Self.topViewController()?.present(UIActivityViewController(activityItemsConfiguration: configuration), animated: true)
     }
 
     /// Presents the system sharing UI, restricted to private, read-write invitations.
