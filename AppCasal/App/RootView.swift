@@ -39,8 +39,10 @@ struct RootView: View {
                 await account.refresh()
                 LaunchLog.mark("account resolved")
                 reload()
+                environment.prepareMoments()
                 await environment.syncReminderNotifications()
                 await environment.syncNoteAlerts()
+                await environment.syncMomentNotifications()
             }
             .task { await account.observeAccountChanges() }
             .task { await environment.sync.observe(environment.persistence.container) }
@@ -53,6 +55,9 @@ struct RootView: View {
                     await environment.syncReminderNotifications()
                     // Registers the note alert once the partner joins.
                     await environment.syncNoteAlerts()
+                    // New days for the owner; today's reminder off once answered elsewhere.
+                    environment.prepareMoments()
+                    await environment.syncMomentNotifications()
                 }
             }
             .task(id: isWaitingForSharedSpace) {

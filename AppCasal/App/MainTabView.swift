@@ -12,6 +12,7 @@ struct MainTabView: View {
     let userRecordName: String
 
     @State private var selection = AppTab.initial
+    @State private var homePath = NavigationPath()
     @State private var isShowingSpace = false
     @State private var isShowingNotificationPrompt = false
     @State private var isShowingInvitePrompt = false
@@ -21,7 +22,7 @@ struct MainTabView: View {
     var body: some View {
         TabView(selection: $selection) {
             Tab("Início", systemImage: "house", value: AppTab.home) {
-                NavigationStack {
+                NavigationStack(path: $homePath) {
                     HomeView(
                         environment: environment,
                         space: space,
@@ -60,6 +61,16 @@ struct MainTabView: View {
             if let tab = environment.pendingTab {
                 selection = tab
                 environment.pendingTab = nil
+            }
+        }
+        .onChange(of: environment.pendingRoute, initial: true) {
+            // A "Hoje, nós dois" notification: Início, then that screen (once, even if
+            // the same notification is opened again).
+            if let route = environment.pendingRoute {
+                environment.pendingRoute = nil
+                selection = .home
+                isShowingSpace = false
+                homePath = NavigationPath([route])
             }
         }
         .sheet(isPresented: $isShowingNotificationPrompt) {

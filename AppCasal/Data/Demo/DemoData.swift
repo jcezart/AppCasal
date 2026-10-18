@@ -116,6 +116,29 @@ enum DemoData {
                 in: space, by: ownerID, now: now
             )
         }
+        try seedMoments(environment, space: space, now: now)
+    }
+
+    /// "Hoje, nós dois": today's question already answered by the partner, one own idea,
+    /// a memory from a year ago (its anniversary is today) for "Vamos reviver?".
+    private static func seedMoments(_ environment: AppEnvironment, space: CoupleSpace, now: Date) throws {
+        guard case .success(let catalog) = environment.catalog else { return }
+        try environment.moments.prepareDays(in: space, questions: catalog.questions, catalogVersion: catalog.questionsVersion, by: ownerID, now: now)
+        if let key = environment.moments.todayKey(in: space, now: now), let session = environment.moments.session(for: key, in: space) {
+            try environment.moments.submitAnswer("Acho que seria “Dois perdidos no supermercado”.", to: session, by: partnerID, now: now)
+        }
+        try environment.moments.createIdea(
+            DateIdeaDraft(title: "Noite de fondue", details: "Fondue em casa com a playlist do nosso primeiro ano.", location: .casa, cost: .baixo, durationMinutes: 120),
+            in: space, by: partnerID, now: now
+        )
+        let calendar = Calendar.current
+        let lastYear = calendar.date(byAdding: .year, value: -1, to: now) ?? now
+        let photo = try PhotoProcessing.processSynchronously(placeholderPhoto([
+            UIColor(red: 0.42, green: 0.56, blue: 0.68, alpha: 1), UIColor(red: 0.95, green: 0.84, blue: 0.70, alpha: 1),
+        ]))
+        var picnic = MemoryDraft(title: "Piquenique no parque", details: "Sanduíches, sol e uma tarde inteira de conversa.", date: lastYear, category: .date)
+        picnic.place = PlaceLink(placeID: nil, name: "Parque da Luz", latitude: -27.5867, longitude: -48.5531)
+        try environment.memories.create(picnic, photos: [photo], in: space, by: ownerID, now: lastYear)
     }
 
     /// Fictitious "photo": a warm gradient with a sun. Demo and previews only.

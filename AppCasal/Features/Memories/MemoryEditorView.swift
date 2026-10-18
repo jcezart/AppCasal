@@ -26,6 +26,8 @@ struct MemoryEditorView: View {
     let userRecordName: String
     /// Saved place whose visit this new memory registers.
     let visit: Place?
+    /// Called once the memory is saved (links it to a discovery, a date or a revisit).
+    let onSaved: ((Memory) -> Void)?
 
     static let maximumPhotos = 10
 
@@ -38,17 +40,28 @@ struct MemoryEditorView: View {
     @State private var processingCount = 0
     @State private var errorMessage: String?
     @State private var isConfirmingDiscard = false
+    /// Blocks a second save from a double tap before the sheet closes.
+    @State private var isSaving = false
     @FocusState private var focusedField: Field?
 
     private enum Field { case title, details }
 
     private let initialDraft: MemoryDraft
 
-    init(environment: AppEnvironment, mode: Mode, userRecordName: String, visit: Place? = nil) {
+    /// `prefill` starts a new memory with suggested values; nothing is saved until "Salvar".
+    init(
+        environment: AppEnvironment,
+        mode: Mode,
+        userRecordName: String,
+        visit: Place? = nil,
+        prefill: MemoryDraft? = nil,
+        onSaved: ((Memory) -> Void)? = nil
+    ) {
         self.environment = environment
         self.mode = mode
         self.userRecordName = userRecordName
         self.visit = visit
+        self.onSaved = onSaved
         var draft = MemoryDraft()
         var photos: [MemoryPhoto] = []
         if case .edit(let memory) = mode {
@@ -64,6 +77,11 @@ struct MemoryEditorView: View {
             draft.title = visit.name ?? ""
             draft.category = visit.placeCategory
             draft.place = PlaceLink(placeID: visit.id, name: visit.name ?? "", latitude: visit.latitude, longitude: visit.longitude)
+        }
+        if case .create = mode, let prefill {
+            let place = draft.place
+            draft = prefill
+            draft.place = prefill.place ?? place
         }
         initialDraft = draft
         _draft = State(initialValue: draft)
@@ -150,7 +168,7 @@ struct MemoryEditorView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Salvar", systemImage: "checkmark", role: .confirm, action: save)
                         .confirmationButtonStyle()
-                        .disabled(!draft.isValid || processingCount > 0)
+                        .disabled(!draft.isValid || processingCount > 0 || isSaving)
                         .accessibilityIdentifier("memoryEditor.save")
                 }
             }
@@ -263,6 +281,8 @@ struct MemoryEditorView: View {
     }
 
     private func save() {
+        guard !isSaving else { return }
+        isSaving = true
         do {
             switch mode {
             case .create(let space):
@@ -275,6 +295,7 @@ struct MemoryEditorView: View {
                 if let visit {
                     try environment.places.markVisited(visit, memoryID: memory.id, on: draft.date, by: userRecordName)
                 }
+                onSaved?(memory)
             case .edit(let memory):
                 try environment.memories.update(
                     memory,
@@ -286,6 +307,7 @@ struct MemoryEditorView: View {
             }
             dismiss()
         } catch {
+            isSaving = false
             errorMessage = error.localizedDescription
         }
     }

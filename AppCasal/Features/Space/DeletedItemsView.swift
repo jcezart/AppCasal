@@ -6,7 +6,8 @@
 import CoreData
 import SwiftUI
 
-/// "Excluídos recentemente": logically deleted memories, goals, notes and places.
+/// "Excluídos recentemente": logically deleted memories, goals, notes, places, reminders,
+/// own date ideas and date plans.
 /// Either partner restores shared items; notes only by their author. Nothing is purged
 /// automatically.
 struct DeletedItemsView: View {
@@ -19,6 +20,8 @@ struct DeletedItemsView: View {
     @FetchRequest private var notes: FetchedResults<Note>
     @FetchRequest private var places: FetchedResults<Place>
     @FetchRequest private var reminders: FetchedResults<Reminder>
+    @FetchRequest private var ideas: FetchedResults<DateIdea>
+    @FetchRequest private var plans: FetchedResults<DatePlan>
     @State private var errorMessage: String?
 
     init(environment: AppEnvironment, space: CoupleSpace, userRecordName: String) {
@@ -34,10 +37,16 @@ struct DeletedItemsView: View {
         )
         _places = FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Place.deletedAt, ascending: false)], predicate: deleted)
         _reminders = FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Reminder.deletedAt, ascending: false)], predicate: deleted)
+        // Ideas: only their author restores them, like notes.
+        _ideas = FetchRequest(
+            sortDescriptors: [NSSortDescriptor(keyPath: \DateIdea.deletedAt, ascending: false)],
+            predicate: NSPredicate(format: "space == %@ AND deletedAt != nil AND authorID == %@", space, userRecordName)
+        )
+        _plans = FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \DatePlan.deletedAt, ascending: false)], predicate: deleted)
     }
 
     private var isEmpty: Bool {
-        memories.isEmpty && goals.isEmpty && notes.isEmpty && places.isEmpty && reminders.isEmpty
+        memories.isEmpty && goals.isEmpty && notes.isEmpty && places.isEmpty && reminders.isEmpty && ideas.isEmpty && plans.isEmpty
     }
 
     var body: some View {
@@ -78,6 +87,16 @@ struct DeletedItemsView: View {
                     row(title: reminder.title, systemImage: "bell", deletedAt: reminder.deletedAt) {
                         try environment.reminders.restore(reminder, by: userRecordName)
                         Task { await environment.syncReminderNotifications() }
+                    }
+                }
+                section("Ideias de encontro", items: Array(ideas)) { idea in
+                    row(title: idea.title, systemImage: "lightbulb", deletedAt: idea.deletedAt) {
+                        try environment.moments.restoreIdea(idea, by: userRecordName)
+                    }
+                }
+                section("Planos de encontro", items: Array(plans)) { plan in
+                    row(title: plan.title, systemImage: "calendar", deletedAt: plan.deletedAt) {
+                        try environment.moments.restore(plan, by: userRecordName)
                     }
                 }
             }

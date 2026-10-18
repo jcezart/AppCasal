@@ -52,10 +52,12 @@ struct NotificationSettingsView: View {
         _ = await environment.reminderNotifications.requestAuthorization()
         await environment.syncReminderNotifications()
         await environment.syncNoteAlerts()
+        await environment.syncMomentNotifications()
     }
 
     var body: some View {
         @Bindable var noteAlerts = environment.noteAlerts
+        @Bindable var moments = environment.momentNotifications
         Form {
             Section {
                 VStack(alignment: .leading, spacing: Spacing.xs) {
@@ -87,6 +89,23 @@ struct NotificationSettingsView: View {
                     Text("Os avisos chegam pelo iCloud e podem levar alguns instantes, principalmente sem internet ou com o modo de economia de bateria.")
                 }
                 .listRowBackground(Palette.surface)
+            }
+            Section {
+                Toggle("Lembrete da pergunta do dia", isOn: momentToggle($moments.preferences.dailyQuestion))
+                    .accessibilityIdentifier("notifications.dailyQuestion")
+                if moments.preferences.dailyQuestion || moments.preferences.weeklyIdea || moments.preferences.memoryAnniversaries {
+                    DatePicker("Horário", selection: timeBinding($moments.preferences.minutes), displayedComponents: .hourAndMinute)
+                }
+                Toggle("Ideia de encontro às sextas", isOn: momentToggle($moments.preferences.weeklyIdea))
+                Toggle("Aniversário das memórias", isOn: momentToggle($moments.preferences.memoryAnniversaries))
+            } header: {
+                Text("Hoje, nós dois")
+            } footer: {
+                Text("No máximo um lembrete por dia, só neste iPhone; a pergunta do dia vem primeiro. O lembrete some quando você responde. Avisos de que seu par respondeu ainda não estão disponíveis: vocês veem isso no app.")
+            }
+            .listRowBackground(Palette.surface)
+            .onChange(of: moments.preferences) {
+                Task { await environment.syncMomentNotifications() }
             }
             if let error = environment.noteAlerts.lastError, notifications.isAllowed {
                 Section { Text(error).foregroundStyle(Palette.accentText) }
@@ -127,9 +146,31 @@ struct NotificationSettingsView: View {
         }
     }
 
+    /// Turning a reminder on asks for permission first, in context, when never asked.
+    private func momentToggle(_ binding: Binding<Bool>) -> Binding<Bool> {
+        Binding {
+            binding.wrappedValue
+        } set: { isOn in
+            binding.wrappedValue = isOn
+            if isOn, notifications.authorization == .notDetermined {
+                Task { await Self.enable(environment) }
+            }
+        }
+    }
+
+    private func timeBinding(_ minutes: Binding<Int>) -> Binding<Date> {
+        Binding {
+            Calendar.current.date(byAdding: .minute, value: minutes.wrappedValue, to: Calendar.current.startOfDay(for: .now)) ?? .now
+        } set: { date in
+            let parts = Calendar.current.dateComponents([.hour, .minute], from: date)
+            minutes.wrappedValue = (parts.hour ?? 20) * 60 + (parts.minute ?? 0)
+        }
+    }
+
     private static func enableIfAllowed(_ environment: AppEnvironment) async {
         await environment.reminderNotifications.refreshAuthorization()
         await environment.syncReminderNotifications()
         await environment.syncNoteAlerts()
+        await environment.syncMomentNotifications()
     }
 }

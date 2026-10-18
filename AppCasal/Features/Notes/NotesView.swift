@@ -179,6 +179,8 @@ struct NoteComposerView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var text: String
     @State private var errorMessage: String?
+    /// Blocks a second note from a double tap before the sheet closes.
+    @State private var isSending = false
     @FocusState private var isFocused: Bool
 
     init(environment: AppEnvironment, space: CoupleSpace, userRecordName: String, mode: Mode) {
@@ -252,6 +254,8 @@ struct NoteComposerView: View {
     }
 
     private func send() {
+        guard !isSending else { return }
+        isSending = true
         do {
             switch mode {
             case .new:
@@ -262,6 +266,7 @@ struct NoteComposerView: View {
             }
             dismiss()
         } catch {
+            isSending = false
             errorMessage = error.localizedDescription
         }
     }

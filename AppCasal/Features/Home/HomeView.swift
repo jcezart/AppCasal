@@ -75,6 +75,7 @@ struct HomeView: View {
                     if InvitePartner.isPending(environment, space: space, userRecordName: userRecordName) {
                         InvitePartnerCard(environment: environment, space: space)
                     }
+                    MomentsHomeCard(context: momentsContext)
                     latestNote
                     goalSummary
                     SectionLabel(title: "Última memória")
@@ -95,6 +96,10 @@ struct HomeView: View {
         .sheet(isPresented: $isCreatingMemory) {
             MemoryEditorView(environment: environment, mode: .create(space), userRecordName: userRecordName)
         }
+        .navigationDestination(for: MomentsRoute.self) { route in
+            MomentsDestination(context: momentsContext, route: route)
+        }
+        .onAppear { environment.prepareMoments() }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: showSpace) {
@@ -168,6 +173,10 @@ struct HomeView: View {
     }
 
     private var me: Member? { environment.spaces.member(for: userRecordName, in: space) }
+
+    private var momentsContext: MomentsContext {
+        MomentsContext(environment: environment, space: space, userRecordName: userRecordName)
+    }
 
     private var coupleTitle: String {
         let myName = me?.displayName ?? ""

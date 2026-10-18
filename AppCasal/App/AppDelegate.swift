@@ -38,8 +38,11 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
-        if NoteAlerts.isNoteAlert(response.notification.request.content.userInfo) {
+        let userInfo = response.notification.request.content.userInfo
+        if NoteAlerts.isNoteAlert(userInfo) {
             AppEnvironment.shared.pendingTab = .notes
+        } else if let route = MomentNotifications.route(from: userInfo) {
+            AppEnvironment.shared.pendingRoute = route
         }
         completionHandler()
     }

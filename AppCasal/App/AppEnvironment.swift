@@ -54,8 +54,11 @@ final class AppEnvironment {
     let location = LocationService()
     let reminderNotifications = ReminderNotifications()
     let noteAlerts = NoteAlerts()
+    let momentNotifications = MomentNotifications()
     /// Tab to open next, set when a notification is tapped.
     var pendingTab: AppTab?
+    /// "Hoje, nós dois" screen to open next, set when its notification is tapped.
+    var pendingRoute: MomentsRoute?
     /// Set when this person just created the space: the invitation is offered first.
     var offersInvitation = false
 
@@ -139,6 +142,45 @@ final class AppEnvironment {
             return .failure(.unreadable("catalog", String(describing: error)))
         }
     }()
+
+    /// Reschedules this device's "Hoje, nós dois" notifications (at most one a day).
+    func syncMomentNotifications(now: Date = .now) async {
+        guard runMode != .tests, runMode != .preview else { return }
+        await reminderNotifications.refreshAuthorization()
+        guard let space = spaces.activeSpace(), let me = account.userRecordName else {
+            await momentNotifications.sync([], allowed: false)
+            return
+        }
+        let zone = moments.timeZone(of: space)
+        let sessions = moments.allSessions(in: space)
+        var questions: [String: String] = [:]
+        var answered = Set<String>()
+        for key in Set(sessions.compactMap(\.dayKey)) {
+            guard let session = moments.session(for: key, in: space) else { continue }
+            questions[key] = session.questionText
+            if moments.state(of: session, for: me)?.mine != nil { answered.insert(key) }
+        }
+        let memories = (space.memories ?? []).compactMap { memory -> (id: UUID, title: String, date: Date)? in
+            guard memory.deletedAt == nil, let id = memory.id, let date = memory.date else { return nil }
+            return (id, memory.title ?? "", date)
+        }
+        let plan = MomentReminderPlanner.plan(.init(
+            now: now,
+            calendar: .current,
+            preferences: momentNotifications.preferences,
+            spaceTimeZone: zone,
+            questions: questions,
+            answered: answered,
+            memories: memories
+        ))
+        await momentNotifications.sync(plan, allowed: reminderNotifications.isAllowed)
+    }
+
+    /// After a local change in "Hoje, nós dois" (an answer sent): today's reminder is
+    /// cancelled on this device. The partner's device updates when the change syncs.
+    func momentsDidChange() {
+        Task { await syncMomentNotifications() }
+    }
 
     /// Owner's device: gives a question to today and the next days. Runs at launch and
     /// after every sync; does nothing for the participant or when all days have one.

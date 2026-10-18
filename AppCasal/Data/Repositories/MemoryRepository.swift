@@ -90,6 +90,13 @@ final class MemoryRepository {
         try persistence.save()
     }
 
+    /// Marks `memory` as reliving the memory `originalID` ("Vamos reviver?"). The original
+    /// memory is not changed.
+    func setRevisit(of originalID: UUID?, on memory: Memory) throws {
+        memory.revisitOfMemoryID = originalID
+        try persistence.save()
+    }
+
     func softDelete(_ memory: Memory, by userRecordName: String, now: Date = .now) throws {
         memory.deletedAt = now
         memory.deletedBy = userRecordName

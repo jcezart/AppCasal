@@ -11,7 +11,8 @@ import UserNotifications
 @Observable
 final class ReminderNotifications {
     static let identifierPrefix = "reminder-"
-    static let maximumPending = 60
+    /// With the 7 days of `MomentNotifications`, stays under the system limit of 64.
+    static let maximumPending = 56
 
     private(set) var authorization: UNAuthorizationStatus = .notDetermined
     /// App-wide notification permission; reminders and note alerts both depend on it.
