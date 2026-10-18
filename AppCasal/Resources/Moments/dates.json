@@ -1,0 +1,1516 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "1.0.0",
+  "locale": "pt-BR",
+  "dates": [
+    {
+      "id": "date-001",
+      "editorialGroup": "gratuitas",
+      "title": "Trilha sonora de nós",
+      "description": "Cada um escolhe três músicas que lembram o relacionamento e conta as histórias por trás delas.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 40,
+      "materials": [
+        "Celular e músicas disponíveis"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-002",
+      "editorialGroup": "gratuitas",
+      "title": "Passeio das cores",
+      "description": "Escolham uma cor e caminhem por um trajeto conhecido procurando detalhes nessa cor.",
+      "location": "fora",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 40,
+      "materials": [
+        "Nenhum"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-003",
+      "editorialGroup": "gratuitas",
+      "title": "Museu de fotos do celular",
+      "description": "Cada um separa cinco fotos antigas e faz uma pequena visita guiada pela própria história.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 35,
+      "materials": [
+        "Fotos no celular"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-004",
+      "editorialGroup": "gratuitas",
+      "title": "Pôr do sol a dois",
+      "description": "Escolham um ponto público seguro e acessível e observem o fim da tarde sem pressa.",
+      "location": "fora",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 45,
+      "materials": [
+        "Nenhum"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-005",
+      "editorialGroup": "gratuitas",
+      "title": "Cartas para o próximo mês",
+      "description": "Escrevam uma carta curta para abrir juntos daqui a um mês.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 30,
+      "materials": [
+        "Papel e caneta ou notas no celular"
+      ],
+      "remoteFriendly": true,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-006",
+      "editorialGroup": "gratuitas",
+      "title": "Entrevista de boas histórias",
+      "description": "Alternem cinco perguntas sobre histórias leves da infância e escutem sem interromper.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 30,
+      "materials": [
+        "Nenhum"
+      ],
+      "remoteFriendly": true,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-007",
+      "editorialGroup": "gratuitas",
+      "title": "Dança na sala",
+      "description": "Cada um escolhe duas músicas e ensina ao outro um passo, mesmo que inventado.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 25,
+      "materials": [
+        "Música e espaço livre"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-008",
+      "editorialGroup": "gratuitas",
+      "title": "Mapa dos sonhos próximos",
+      "description": "Listem lugares próximos que gostariam de visitar e escolham um primeiro passeio.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 30,
+      "materials": [
+        "Papel ou celular"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-009",
+      "editorialGroup": "gratuitas",
+      "title": "Observatório de nuvens",
+      "description": "Sentem num espaço público confortável e inventem histórias para as formas das nuvens.",
+      "location": "fora",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 25,
+      "materials": [
+        "Nenhum"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-010",
+      "editorialGroup": "gratuitas",
+      "title": "Sessão de elogios concretos",
+      "description": "Cada um conta três atitudes recentes do outro que admirou e o motivo.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 20,
+      "materials": [
+        "Nenhum"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-011",
+      "editorialGroup": "gratuitas",
+      "title": "Caminhada das histórias",
+      "description": "Façam uma caminhada curta e contem uma lembrança em cada parada escolhida.",
+      "location": "fora",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 40,
+      "materials": [
+        "Nenhum"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-012",
+      "editorialGroup": "gratuitas",
+      "title": "Desenho sem cobrança",
+      "description": "Desenhem um ao outro em cinco minutos e deem títulos carinhosos às obras.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 25,
+      "materials": [
+        "Papel e lápis disponíveis"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-013",
+      "editorialGroup": "gratuitas",
+      "title": "Leitura de favoritos",
+      "description": "Cada um lê um pequeno texto próprio ou de acesso gratuito e conta por que o escolheu.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 30,
+      "materials": [
+        "Textos disponíveis"
+      ],
+      "remoteFriendly": true,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-014",
+      "editorialGroup": "gratuitas",
+      "title": "Caça aos detalhes de casa",
+      "description": "Cada um escolhe cinco detalhes bonitos da casa para mostrar ao outro com uma história.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 25,
+      "materials": [
+        "Nenhum"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-015",
+      "editorialGroup": "gratuitas",
+      "title": "Cápsula de áudio",
+      "description": "Gravem uma conversa curta sobre o momento atual e combinem uma data para ouvir de novo.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 25,
+      "materials": [
+        "Gravador do celular"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-016",
+      "editorialGroup": "gratuitas",
+      "title": "Quiz das boas lembranças",
+      "description": "Cada um cria três perguntas sobre encontros que viveram e conta a história após a resposta.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 30,
+      "materials": [
+        "Nenhum"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-017",
+      "editorialGroup": "gratuitas",
+      "title": "Turismo no próprio quarteirão",
+      "description": "Percorram um caminho conhecido observando fachadas, plantas e detalhes que costumam passar despercebidos.",
+      "location": "fora",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 40,
+      "materials": [
+        "Nenhum"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-018",
+      "editorialGroup": "gratuitas",
+      "title": "Piquenique do que já tem",
+      "description": "Juntem alimentos que já estão em casa e façam um lanche em um lugar diferente do habitual.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 40,
+      "materials": [
+        "Lanche e toalha já disponíveis"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-019",
+      "editorialGroup": "gratuitas",
+      "title": "Noite de mímica afetiva",
+      "description": "Representem filmes, comidas e lugares que conhecem, sem usar palavras.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 30,
+      "materials": [
+        "Nenhum"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-020",
+      "editorialGroup": "gratuitas",
+      "title": "Roteiro de um dia imaginário",
+      "description": "Inventem um dia perfeito com tempo e orçamento limitados e comparem as escolhas.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 30,
+      "materials": [
+        "Papel ou celular"
+      ],
+      "remoteFriendly": true,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-021",
+      "editorialGroup": "gratuitas",
+      "title": "Troca de habilidades",
+      "description": "Cada um ensina ao outro uma habilidade simples que já sabe fazer.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 45,
+      "materials": [
+        "Materiais já disponíveis para a habilidade"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-022",
+      "editorialGroup": "gratuitas",
+      "title": "Janela de conversa",
+      "description": "Escolham uma vista de casa e conversem por vinte minutos sem outras telas.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 20,
+      "materials": [
+        "Nenhum"
+      ],
+      "remoteFriendly": true,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-023",
+      "editorialGroup": "gratuitas",
+      "title": "História em dupla",
+      "description": "Inventem uma história alternando uma frase por vez e gravem o final se quiserem.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 25,
+      "materials": [
+        "Nenhum"
+      ],
+      "remoteFriendly": true,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-024",
+      "editorialGroup": "gratuitas",
+      "title": "Recriar uma foto",
+      "description": "Escolham uma foto antiga de vocês e tentem repetir a pose com o que já têm.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 30,
+      "materials": [
+        "Foto e câmera do celular"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-025",
+      "editorialGroup": "gratuitas",
+      "title": "Encontro à distância",
+      "description": "Façam uma chamada e mostrem três objetos que representam o dia de cada um.",
+      "location": "flexivel",
+      "costTier": "sem_gasto_adicional",
+      "durationMinutes": 30,
+      "materials": [
+        "Conexão e aparelho já disponíveis"
+      ],
+      "remoteFriendly": true,
+      "costNote": "Sem compra necessária; use o que já tem. Deslocamentos ou consumo opcionais não estão incluídos.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-026",
+      "editorialGroup": "economicas",
+      "title": "Degustação de frutas",
+      "description": "Escolham até três frutas dentro do orçamento combinado, cortem e avaliem os sabores juntos.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 40,
+      "materials": [
+        "Frutas",
+        "utensílios e água"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-027",
+      "editorialGroup": "economicas",
+      "title": "Sorvete e caminhada",
+      "description": "Definam um limite de gasto, escolham um sorvete para cada um e passeiem por um trajeto curto.",
+      "location": "fora",
+      "costTier": "baixo",
+      "durationMinutes": 45,
+      "materials": [
+        "Sorvete"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-028",
+      "editorialGroup": "economicas",
+      "title": "Café com pergunta surpresa",
+      "description": "Escolham uma cafeteria dentro do orçamento e levem uma pergunta leve cada um para conversar.",
+      "location": "fora",
+      "costTier": "baixo",
+      "durationMinutes": 50,
+      "materials": [
+        "Consumo na cafeteria"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-029",
+      "editorialGroup": "economicas",
+      "title": "Pizza de frigideira",
+      "description": "Comprem apenas os ingredientes que faltam e preparem duas coberturas para comparar.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 60,
+      "materials": [
+        "Ingredientes e frigideira"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-030",
+      "editorialGroup": "economicas",
+      "title": "Concurso de sanduíches",
+      "description": "Com um valor combinado, cada um monta um sanduíche para o outro respeitando preferências alimentares.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 45,
+      "materials": [
+        "Pães e recheios"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-031",
+      "editorialGroup": "economicas",
+      "title": "Feira de um ingrediente",
+      "description": "Escolham um ingrediente na feira dentro do limite de gasto e inventem juntos como usar.",
+      "location": "fora",
+      "costTier": "baixo",
+      "durationMinutes": 60,
+      "materials": [
+        "Ingrediente escolhido"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-032",
+      "editorialGroup": "economicas",
+      "title": "Sessão de pipoca temática",
+      "description": "Façam pipoca com dois temperos disponíveis e assistam a algo que já possam acessar.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 100,
+      "materials": [
+        "Milho de pipoca e temperos"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-033",
+      "editorialGroup": "economicas",
+      "title": "Cartões feitos à mão",
+      "description": "Escolham materiais simples dentro do orçamento e façam cartões com uma mensagem um para o outro.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 50,
+      "materials": [
+        "Papel",
+        "canetas e materiais opcionais"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-034",
+      "editorialGroup": "economicas",
+      "title": "Café da manhã caprichado",
+      "description": "Definam um orçamento pequeno e preparem uma bandeja com os favoritos dos dois.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 60,
+      "materials": [
+        "Ingredientes escolhidos"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-035",
+      "editorialGroup": "economicas",
+      "title": "Degustação de chocolate",
+      "description": "Escolham dois chocolates dentro do orçamento e comparem aroma, textura e sabor em porções pequenas.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 35,
+      "materials": [
+        "Chocolates"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-036",
+      "editorialGroup": "economicas",
+      "title": "Jantar de uma panela",
+      "description": "Escolham uma receita econômica que os dois comam e dividam o preparo e a organização.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 60,
+      "materials": [
+        "Ingredientes e panela"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-037",
+      "editorialGroup": "economicas",
+      "title": "Fotografia impressa",
+      "description": "Selecionem uma foto do casal, imprimam dentro do orçamento e escolham onde deixá-la.",
+      "location": "fora",
+      "costTier": "baixo",
+      "durationMinutes": 50,
+      "materials": [
+        "Impressão e suporte opcional"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-038",
+      "editorialGroup": "economicas",
+      "title": "Sucos inventados",
+      "description": "Escolham frutas acessíveis e criem duas misturas, dando um nome para cada uma.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 40,
+      "materials": [
+        "Frutas",
+        "água e utensílios"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-039",
+      "editorialGroup": "economicas",
+      "title": "Lanche de padaria",
+      "description": "Cada um escolhe um item dentro do limite combinado e conta uma lembrança ligada àquele sabor.",
+      "location": "fora",
+      "costTier": "baixo",
+      "durationMinutes": 45,
+      "materials": [
+        "Lanches"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-040",
+      "editorialGroup": "economicas",
+      "title": "Noite de panquecas",
+      "description": "Preparem uma massa simples e escolham juntos recheios que caibam no orçamento.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 60,
+      "materials": [
+        "Ingredientes e frigideira"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-041",
+      "editorialGroup": "economicas",
+      "title": "Passeio de ônibus escolhido",
+      "description": "Planejem uma linha e um destino público acessível, considerando o custo de ida e volta.",
+      "location": "fora",
+      "costTier": "baixo",
+      "durationMinutes": 90,
+      "materials": [
+        "Passagens e rota conferida"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-042",
+      "editorialGroup": "economicas",
+      "title": "Mini-horta a dois",
+      "description": "Escolham uma muda barata ou sementes e plantem num recipiente que já tenham.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 50,
+      "materials": [
+        "Muda ou sementes",
+        "terra e recipiente"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-043",
+      "editorialGroup": "economicas",
+      "title": "Sobremesa em dupla",
+      "description": "Preparem uma sobremesa simples com poucos ingredientes e dividam as tarefas.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 60,
+      "materials": [
+        "Ingredientes e utensílios"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-044",
+      "editorialGroup": "economicas",
+      "title": "Mercado com missão",
+      "description": "Combinem um teto de gasto e montem um lanche com um ingrediente que nunca usam.",
+      "location": "fora",
+      "costTier": "baixo",
+      "durationMinutes": 60,
+      "materials": [
+        "Compras dentro do teto"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-045",
+      "editorialGroup": "economicas",
+      "title": "Desafio do jantar econômico",
+      "description": "Planejem uma refeição dentro do valor escolhido e contem o custo de cada ingrediente.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 75,
+      "materials": [
+        "Ingredientes e utensílios"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-046",
+      "editorialGroup": "economicas",
+      "title": "Achados de sebo",
+      "description": "Visitem um sebo, definam um teto opcional de compra e mostrem um livro que escolheriam para o outro.",
+      "location": "fora",
+      "costTier": "baixo",
+      "durationMinutes": 60,
+      "materials": [
+        "Orçamento opcional para compra"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-047",
+      "editorialGroup": "economicas",
+      "title": "Sessão de chá",
+      "description": "Preparem dois chás acessíveis e conversem sobre um plano gostoso para o mês.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 35,
+      "materials": [
+        "Chás e água"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-048",
+      "editorialGroup": "economicas",
+      "title": "Duelo de tapiocas",
+      "description": "Montem uma tapioca para cada um com recheios escolhidos dentro do orçamento.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 45,
+      "materials": [
+        "Goma e recheios"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-049",
+      "editorialGroup": "economicas",
+      "title": "Noite do caldo",
+      "description": "Escolham uma receita simples de sopa ou caldo e cozinhem ouvindo músicas escolhidas pelos dois.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 70,
+      "materials": [
+        "Ingredientes e panela"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-050",
+      "editorialGroup": "economicas",
+      "title": "Jogo de papel personalizado",
+      "description": "Comprem só o material que faltar e criem um jogo da memória com desenhos de coisas do casal.",
+      "location": "casa",
+      "costTier": "baixo",
+      "durationMinutes": 60,
+      "materials": [
+        "Papel",
+        "caneta e tesoura"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-051",
+      "editorialGroup": "em_casa",
+      "title": "Restaurante na sala",
+      "description": "Montem uma mesa diferente, criem um nome para o restaurante e preparem uma refeição que os dois gostem.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 90,
+      "materials": [
+        "Refeição",
+        "mesa e utensílios"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-052",
+      "editorialGroup": "em_casa",
+      "title": "Cinema comentado",
+      "description": "Escolham um filme já acessível e reservem dez minutos no fim para contar a cena favorita de cada um.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 140,
+      "materials": [
+        "Filme disponível"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-053",
+      "editorialGroup": "em_casa",
+      "title": "Oficina de origami",
+      "description": "Aprendam juntos uma dobradura simples com instruções que já tenham acesso e troquem as peças.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 45,
+      "materials": [
+        "Papel e instruções"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-054",
+      "editorialGroup": "em_casa",
+      "title": "Retratos com objetos",
+      "description": "Criem um retrato do outro usando objetos seguros da casa e expliquem cada escolha.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 40,
+      "materials": [
+        "Objetos disponíveis"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-055",
+      "editorialGroup": "em_casa",
+      "title": "Acampamento de sala",
+      "description": "Montem um canto com mantas e almofadas e contem histórias como se estivessem viajando.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 60,
+      "materials": [
+        "Mantas e almofadas"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-056",
+      "editorialGroup": "em_casa",
+      "title": "Playlist de capítulos",
+      "description": "Criem uma playlist com uma música para cada fase da história de vocês.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 45,
+      "materials": [
+        "Aplicativo de música disponível"
+      ],
+      "remoteFriendly": true,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-057",
+      "editorialGroup": "em_casa",
+      "title": "Aula de culinária do favorito",
+      "description": "Quem souber fazer um prato ensina o passo a passo ao outro, dividindo o preparo.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 75,
+      "materials": [
+        "Ingredientes do prato"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-058",
+      "editorialGroup": "em_casa",
+      "title": "Noite de jogos que já temos",
+      "description": "Escolham um jogo disponível e combinem uma partida sem punições nem apostas.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 60,
+      "materials": [
+        "Jogo disponível"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-059",
+      "editorialGroup": "em_casa",
+      "title": "Pintura com tema surpresa",
+      "description": "Cada um sugere um tema leve e vocês desenham ou pintam a interpretação dele.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 50,
+      "materials": [
+        "Papel e material de desenho"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-060",
+      "editorialGroup": "em_casa",
+      "title": "Museu de objetos afetivos",
+      "description": "Separem três objetos cada um e montem uma pequena exposição contando suas histórias.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 40,
+      "materials": [
+        "Objetos pessoais"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-061",
+      "editorialGroup": "em_casa",
+      "title": "Spa de descanso",
+      "description": "Preparem um ambiente confortável e façam uma pausa com música tranquila e cuidados que os dois gostem.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 45,
+      "materials": [
+        "Itens de cuidado já usados por vocês"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-062",
+      "editorialGroup": "em_casa",
+      "title": "Laboratório de temperos",
+      "description": "Experimentem pequenas combinações de temperos em uma base simples e deem notas aos resultados.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 50,
+      "materials": [
+        "Base alimentar e temperos"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-063",
+      "editorialGroup": "em_casa",
+      "title": "Leitura alternada",
+      "description": "Escolham um conto ou capítulo disponível e alternem trechos, pausando para comentar.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 50,
+      "materials": [
+        "Texto disponível"
+      ],
+      "remoteFriendly": true,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-064",
+      "editorialGroup": "em_casa",
+      "title": "Álbum com legendas",
+      "description": "Selecionem dez fotos e escrevam juntos legendas que contem a história além da imagem.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 60,
+      "materials": [
+        "Fotos e editor disponível"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-065",
+      "editorialGroup": "em_casa",
+      "title": "Vídeo para o futuro",
+      "description": "Gravem uma mensagem curta sobre o que estão vivendo e o que esperam do próximo ano.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 35,
+      "materials": [
+        "Câmera do celular"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-066",
+      "editorialGroup": "em_casa",
+      "title": "Desafio de montagem",
+      "description": "Montem um quebra-cabeça ou uma construção com materiais disponíveis, alternando quem escolhe a próxima peça.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 60,
+      "materials": [
+        "Quebra-cabeça ou peças disponíveis"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-067",
+      "editorialGroup": "em_casa",
+      "title": "Mesa de tapas do cotidiano",
+      "description": "Preparem pequenas porções de alimentos que já gostam e sirvam como um menu de degustação.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 60,
+      "materials": [
+        "Alimentos e utensílios"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-068",
+      "editorialGroup": "em_casa",
+      "title": "Viagem pela janela digital",
+      "description": "Explore uma cidade usando mapas e imagens disponíveis e planejem um roteiro imaginário.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 50,
+      "materials": [
+        "Internet e dispositivo"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-069",
+      "editorialGroup": "em_casa",
+      "title": "Ateliê de embalagens",
+      "description": "Transformem embalagens limpas em um objeto decorativo simples, sem ferramentas perigosas.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 50,
+      "materials": [
+        "Embalagens",
+        "cola e papel"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-070",
+      "editorialGroup": "em_casa",
+      "title": "Dublagem improvisada",
+      "description": "Criem vozes para uma cena curta sem som ou para uma sequência de fotos próprias.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 35,
+      "materials": [
+        "Vídeo ou fotos disponíveis"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-071",
+      "editorialGroup": "em_casa",
+      "title": "Jornal de boas notícias",
+      "description": "Escrevam uma página com pequenas coisas boas da semana e façam uma leitura de apresentação.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 40,
+      "materials": [
+        "Papel ou editor de texto"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-072",
+      "editorialGroup": "em_casa",
+      "title": "Receita de família",
+      "description": "Preparem uma receita da história de um de vocês e contem as lembranças ligadas a ela.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 90,
+      "materials": [
+        "Ingredientes e receita"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-073",
+      "editorialGroup": "em_casa",
+      "title": "Cantinho renovado",
+      "description": "Escolham um pequeno canto e reorganizem com objetos existentes para ficar mais aconchegante.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 60,
+      "materials": [
+        "Objetos disponíveis"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-074",
+      "editorialGroup": "em_casa",
+      "title": "Sessão de escuta",
+      "description": "Cada um apresenta um álbum, trecho de podcast ou gravação disponível e conta o que chamou atenção.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 45,
+      "materials": [
+        "Áudios disponíveis"
+      ],
+      "remoteFriendly": true,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-075",
+      "editorialGroup": "em_casa",
+      "title": "Noite de inventar nomes",
+      "description": "Criem nomes e pequenas histórias para pratos, plantas ou objetos da casa e escolham o mais criativo.",
+      "location": "casa",
+      "costTier": "variavel",
+      "durationMinutes": 30,
+      "materials": [
+        "Nenhum"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-076",
+      "editorialGroup": "passeios",
+      "title": "Praça desconhecida",
+      "description": "Escolham uma praça pública que ainda não conhecem, confiram o acesso e façam uma volta tranquila.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 60,
+      "materials": [
+        "Rota e condições de acesso"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-077",
+      "editorialGroup": "passeios",
+      "title": "Museu no ritmo de vocês",
+      "description": "Confiram horários e ingressos, visitem uma exposição e cada um escolha uma obra para comentar.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 120,
+      "materials": [
+        "Ingressos se necessários"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-078",
+      "editorialGroup": "passeios",
+      "title": "Jardim botânico",
+      "description": "Confiram acesso e custos e passeiem observando três plantas que chamem atenção.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 120,
+      "materials": [
+        "Água e ingresso se necessário"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-079",
+      "editorialGroup": "passeios",
+      "title": "Orla sem pressa",
+      "description": "Escolham um trecho acessível de orla ou margem urbanizada e façam uma caminhada curta.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 60,
+      "materials": [
+        "Água e rota segura"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-080",
+      "editorialGroup": "passeios",
+      "title": "Feira de artesanato",
+      "description": "Visitem uma feira e cada um escolha uma peça favorita, sem obrigação de comprar.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 90,
+      "materials": [
+        "Horários e acesso conferidos"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-081",
+      "editorialGroup": "passeios",
+      "title": "Biblioteca e descobertas",
+      "description": "Visitem uma biblioteca aberta ao público e mostrem um livro curioso um ao outro.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 60,
+      "materials": [
+        "Cadastro se exigido pelo local"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-082",
+      "editorialGroup": "passeios",
+      "title": "Centro histórico",
+      "description": "Definam um trajeto curto por uma área histórica e descubram a história de duas construções.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 90,
+      "materials": [
+        "Rota e informações disponíveis"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-083",
+      "editorialGroup": "passeios",
+      "title": "Cinema fora da rotina",
+      "description": "Escolham uma sessão e confiram preço e acessibilidade, reservando tempo depois para conversar.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 150,
+      "materials": [
+        "Ingressos e transporte"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-084",
+      "editorialGroup": "passeios",
+      "title": "Exposição de fotografia",
+      "description": "Visitem uma exposição disponível e escolham uma imagem que lembre um plano de vocês.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 90,
+      "materials": [
+        "Ingresso se necessário"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-085",
+      "editorialGroup": "passeios",
+      "title": "Parque para observar aves",
+      "description": "Caminhem num parque aberto ao público e observem aves sem alimentar nem perturbar os animais.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 75,
+      "materials": [
+        "Água e condições do local"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-086",
+      "editorialGroup": "passeios",
+      "title": "Mercado municipal",
+      "description": "Explorem um mercado e comparem produtos e aromas, combinando antes se haverá consumo.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 90,
+      "materials": [
+        "Orçamento opcional"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-087",
+      "editorialGroup": "passeios",
+      "title": "Rota dos murais",
+      "description": "Escolham murais em áreas públicas e façam um passeio curto para conhecer os desenhos.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 75,
+      "materials": [
+        "Rota segura"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-088",
+      "editorialGroup": "passeios",
+      "title": "Mirante acessível",
+      "description": "Confiram o acesso, o clima e as condições do lugar e visitem um mirante com percurso adequado aos dois.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 90,
+      "materials": [
+        "Transporte e ingresso se necessário"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-089",
+      "editorialGroup": "passeios",
+      "title": "Agenda cultural do bairro",
+      "description": "Escolham uma apresentação local, confiram horários e valores e conversem depois sobre a experiência.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 120,
+      "materials": [
+        "Ingresso se necessário"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-090",
+      "editorialGroup": "passeios",
+      "title": "Pedalada tranquila",
+      "description": "Se ambos se sentirem confortáveis, façam um percurso curto em ciclovia com equipamentos adequados.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 75,
+      "materials": [
+        "Bicicletas e capacetes"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-091",
+      "editorialGroup": "passeios",
+      "title": "Passeio gastronômico curto",
+      "description": "Escolham dois lugares próximos para provar um item em cada, respeitando orçamento e restrições alimentares.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 120,
+      "materials": [
+        "Orçamento e rota"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-092",
+      "editorialGroup": "passeios",
+      "title": "Praia com estrutura",
+      "description": "Escolham uma praia com acesso adequado e estrutura disponível e passem um tempo na areia ou no calçadão.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 120,
+      "materials": [
+        "Água",
+        "proteção solar e transporte"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-093",
+      "editorialGroup": "passeios",
+      "title": "Visita a uma livraria",
+      "description": "Explorem seções diferentes e apresentem um título que gostariam de ler, sem precisar comprar.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 60,
+      "materials": [
+        "Horário de funcionamento"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-094",
+      "editorialGroup": "passeios",
+      "title": "Passeio por bairro novo",
+      "description": "Escolham uma área segura e acessível e planejem três pequenas paradas de interesse.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 90,
+      "materials": [
+        "Rota e transporte"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-095",
+      "editorialGroup": "passeios",
+      "title": "Galeria de arte",
+      "description": "Confiram acesso e valores e visitem uma galeria, conversando sobre as obras sem precisar entender de arte.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 75,
+      "materials": [
+        "Ingresso se necessário"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-096",
+      "editorialGroup": "passeios",
+      "title": "Sessão de planetário",
+      "description": "Se houver um na região, confiram agenda e ingressos e escolham uma sessão para assistir juntos.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 120,
+      "materials": [
+        "Ingressos e transporte"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-097",
+      "editorialGroup": "passeios",
+      "title": "Café com vista",
+      "description": "Escolham um local com uma vista agradável, confiram preços e façam uma pausa para conversar.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 75,
+      "materials": [
+        "Consumo e transporte"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-098",
+      "editorialGroup": "passeios",
+      "title": "Evento de comida local",
+      "description": "Confiram a programação de uma feira gastronômica e escolham um limite de gasto antes de sair.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 120,
+      "materials": [
+        "Orçamento e transporte"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-099",
+      "editorialGroup": "passeios",
+      "title": "Passeio com fotos temáticas",
+      "description": "Escolham um percurso público e fotografem três temas combinados, evitando expor desconhecidos.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 75,
+      "materials": [
+        "Câmera do celular"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    },
+    {
+      "id": "date-100",
+      "editorialGroup": "passeios",
+      "title": "Bate-volta planejado",
+      "description": "Escolham uma cidade próxima e montem um roteiro curto com pausas e custos definidos antes de viajar.",
+      "location": "fora",
+      "costTier": "variavel",
+      "durationMinutes": 360,
+      "materials": [
+        "Transporte",
+        "alimentação e eventuais ingressos"
+      ],
+      "remoteFriendly": false,
+      "costNote": "Combine o orçamento antes. Preços, transporte, ingressos e disponibilidade variam.",
+      "intensity": "leve"
+    }
+  ]
+}

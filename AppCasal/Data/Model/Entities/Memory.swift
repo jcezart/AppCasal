@@ -16,6 +16,8 @@ nonisolated final class Memory: NSManagedObject {
     @NSManaged var category: String?
     /// Saved place this memory happened at, if any (by ID; no cross-record reference).
     @NSManaged var placeID: UUID?
+    /// The memory this one revisits ("Vamos reviver?"), by ID (model v2).
+    @NSManaged var revisitOfMemoryID: UUID?
     @NSManaged var locationName: String?
     @NSManaged var latitude: NSNumber?
     @NSManaged var longitude: NSNumber?

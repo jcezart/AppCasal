@@ -185,6 +185,18 @@ Legenda: **validado localmente** = build + testes automatizados (unitários e/ou
 
 **Riscos a medir (N1–N6):** aviso das próprias notas no outro aparelho do mesmo usuário, aviso em edições/exclusões/restaurações, atraso e agrupamento. Nada é prometido como imediato na interface.
 
+## Hoje, nós dois (em implementação, branch `feature/hoje-nos-dois`)
+
+**Origem:** pedido do usuário (2026-10-18) com especificação e catálogo em `~/Downloads/AppCasal-Hoje-Nos-Dois/` (`PROMPT_CLAUDE.md`). Decisões aprovadas ali: catálogo embarcado, dados do casal no CloudKit pelos serviços atuais, sem sexta aba, sem backend, sem push nem deploy de esquema. Linha de base: `b6b3c86`, árvore limpa, 60 testes unitários + 4 de UI passando.
+
+**Catálogo (`Resources/Moments/*.json`, `MomentsCatalog`):** 365 perguntas (73 por tema, alternadas), 100 dates, 100 gestos, 60 perguntas do jogo; nomes de campos mantidos; enums com os mesmos valores (`QuestionCategory`, `DateLocation`, `DateCost` + `a_confirmar` para ideias próprias e lugares). Validação ao carregar (schema 1, IDs únicos, 4 alternativas distintas); carregado na primeira utilização (`AppEnvironment.catalog`). Metadados de "à distância" revisados: os 10 marcados são viáveis por chamada; nenhum é "fora de casa".
+
+**Modelo v2 (`AppCasal 2.xcdatamodel`, atual; v1 preservada para migração leve):** `CoupleSpace.momentsTimeZone`, `Memory.revisitOfMemoryID` e as entidades `DailyQuestion`, `DailyAnswer`, `GameRound`, `GameAnswer`, `DatePlan`, `DateIdea`, todas na zona do casal (relação com o espaço), atributos opcionais, sem unicidade. Registros guardam cópia do texto do catálogo (pergunta, alternativas), então atualizar o catálogo não muda nada já criado. Migração testada: store v1 com espaço, memória, recado e lugar abre na v2 com tudo preservado (`modelV1StoreMigratesWithItsData`, cópia temporária).
+
+**Pergunta do dia:** o dono prepara hoje + 13 dias (`DailyQuestionPlanner`, determinístico: temas alternados, sem repetir até esgotar, depois novo ciclo); o participante só lê. Dia = data no fuso do espaço (`momentsTimeZone`, gravado pelo dono na primeira preparação); vira à meia-noite desse fuso; horário de verão não muda a chave; relógio divergente ou dia não preparado = "ainda não disponível". Duplicatas (dois aparelhos do dono offline): vence a criada primeiro, depois o menor ID (`Canonical`), sem apagar nada; respostas a outra pergunta ficam guardadas fora daquela descoberta. Resposta enviada é final (reenviar o mesmo texto devolve a existente; texto diferente é recusado); rascunho fica só no aparelho (`MomentsLocalStore`). Revelação só quando os dois enviaram: regra de interface, não sigilo técnico (a resposta do par pode já estar no aparelho).
+
+**Jogo, dates, ideias:** rodada de 5 perguntas sem repetir, preferindo as não usadas; snapshot fixo; comparação por ID de pergunta + alternativa; pular não entra no denominador. "Vamos fazer" reaproveita o plano aberto da mesma ideia; convite (`invitation`: pending/accepted/declined/cancelled) respondido no mesmo registro; concluir não cria memória nem marca lugar como visitado. Ideias próprias: só o autor edita/exclui (logicamente). Filtros independentes; valores desconhecidos nunca passam em filtros restritivos; "Qualquer custo" aceita custo variável/a confirmar.
+
 ## Design system (aprovado pelo usuário; não alterar cores)
 
 **Referência:** imagem "Álbum afetivo de Ana e Lucas" (`~/Downloads`). Conteúdo fictício só no modo demonstração e em previews.
@@ -287,6 +299,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 | 2026-10-17 | Suíte completa após todas as funcionalidades | 35 testes unitários em 8 suítes e 3 testes de UI passaram: `MemoryFlowUITests` (criar, editar, fechar e reabrir), `NotesAndGoalsUITests` (escrever recadinho, criar meta com etapa, marcar, fechar e reabrir), capturas de memórias |
 | 2026-10-17 | Lembretes | 42 testes unitários e 4 de UI passaram (`RemindersUITests`: criar pela tela, fechar e reabrir); Release BUILD SUCCEEDED |
 | 2026-10-18 | Progresso das metas e texto do recadinho no aviso (extensão) | 56 testes unitários e 4 de UI passaram (UI: marcar, desmarcar e marcar etapa com progresso na hora); Release BUILD SUCCEEDED com a extensão embutida |
+| 2026-10-18 | Hoje, nós dois — incremento 2 (catálogo, modelo v2, regras, repositório) | 94 testes unitários passaram (34 novos: contagens do catálogo, migração v1→v2 com dados, planejador, reconciliação de duplicatas, revelação, idempotência, isolamento entre espaços, jogo, filtros, ideias) |
 | 2026-10-18 | Convite logo após criar o espaço ("Agora não") e cartão no Início; ✓ das barras na cor do app | 60 testes unitários e 4 de UI passaram |
 | 2026-10-18 | Aviso de espaço encerrado em vez de recadinho falso; assinatura removida sem espaço | 59 testes unitários e 4 de UI passaram; só validável com dois iPhones (N9) |
 | 2026-10-18 | Botões com "Formatos dos Botões" ativado (símbolos na barra, `.tile` no "Adicionar") | 59 testes unitários e 4 de UI passaram; aparência com a opção ligada só conferida no iPhone |

@@ -1,0 +1,707 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "1.0.0",
+  "locale": "pt-BR",
+  "gestures": [
+    {
+      "id": "gesture-001",
+      "text": "Envie uma mensagem citando uma qualidade específica que admira no seu par.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-002",
+      "text": "Deixe um bilhete desejando um bom dia num lugar que a pessoa costuma ver.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-003",
+      "text": "Pergunte qual foi a melhor parte do dia e escute a resposta com calma.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-004",
+      "text": "Agradeça por uma tarefa recente, dizendo como ela ajudou você.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-005",
+      "text": "Convide para um abraço e respeite se a pessoa preferir outro carinho.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-006",
+      "text": "Envie uma música e conte em uma frase por que lembrou do seu par.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-007",
+      "text": "Prepare um copo de água quando a pessoa estiver ocupada, se ela quiser.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-008",
+      "text": "Pergunte se pode ajudar em uma pequena tarefa de hoje.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-009",
+      "text": "Conte uma lembrança boa que apareceu na sua cabeça.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-010",
+      "text": "Deseje boa sorte antes de um compromisso importante que a pessoa contou.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-011",
+      "text": "Pergunte depois como foi aquele compromisso importante.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-012",
+      "text": "Deixe o celular de lado por dez minutos para conversar.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-013",
+      "text": "Ofereça preparar uma bebida que a pessoa já gosta.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-014",
+      "text": "Repare num esforço recente e diga que você o percebeu.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-015",
+      "text": "Envie um áudio curto com uma mensagem carinhosa.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-016",
+      "text": "Diga uma coisa que aprendeu com seu par.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-017",
+      "text": "Proponha uma pausa de cinco minutos juntos.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-018",
+      "text": "Compartilhe uma foto de um detalhe bonito do seu dia.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-019",
+      "text": "Pergunte qual pequeno plano animaria a semana da pessoa.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-020",
+      "text": "Escreva uma frase de agradecimento por algo da rotina.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-021",
+      "text": "Convide seu par para escolher a música do próximo trajeto.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-022",
+      "text": "Ofereça buscar um item próximo que a pessoa esteja precisando.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-023",
+      "text": "Lembre de perguntar sobre um hobby que ela comentou recentemente.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-024",
+      "text": "Elogie uma atitude gentil que ela teve com alguém.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-025",
+      "text": "Deseje uma boa noite com uma mensagem escrita por você.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-026",
+      "text": "Pergunte se a pessoa prefere conversar, descansar ou ter companhia em silêncio.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-027",
+      "text": "Conte algo que fez você sorrir ao pensar em nós dois.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-028",
+      "text": "Reserve um lugar confortável para a pessoa se sentar junto, se ela quiser.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-029",
+      "text": "Compartilhe uma piada leve que combine com o humor do seu par.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-030",
+      "text": "Ofereça dividir uma tarefa que costuma ficar pesada no dia.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-031",
+      "text": "Diga uma coisa em que você acha que formam uma boa dupla.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-032",
+      "text": "Convide para uma caminhada curta, sem insistir se não for um bom momento.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-033",
+      "text": "Escreva um elogio que não seja sobre aparência.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-034",
+      "text": "Pergunte qual música combina com o dia da pessoa.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-035",
+      "text": "Envie uma mensagem de apoio sem cobrar resposta.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-036",
+      "text": "Ofereça separar um lanche que a pessoa já gosta e pode comer.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-037",
+      "text": "Mostre interesse por uma pequena conquista que ela contou.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-038",
+      "text": "Conte um detalhe do começo da relação que ainda guarda com carinho.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-039",
+      "text": "Deixe um recadinho no app com uma frase pessoal.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-040",
+      "text": "Pergunte se há algo simples que tornaria a noite mais tranquila.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-041",
+      "text": "Convide para olhar uma foto antiga juntos.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-042",
+      "text": "Diga que gostou de passar um momento específico com a pessoa.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-043",
+      "text": "Ofereça cuidar de uma tarefa sua sem esperar reconhecimento.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-044",
+      "text": "Mande um bom dia incluindo um desejo ligado aos planos dela.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-045",
+      "text": "Pergunte sobre uma notícia boa que ela gostaria de compartilhar.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-046",
+      "text": "Proponha ouvir uma música inteira juntos sem outras tarefas.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-047",
+      "text": "Elogie algo que ela fez com dedicação, mesmo que ainda não tenha terminado.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-048",
+      "text": "Convide para escolherem um passeio futuro de poucos minutos de planejamento.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-049",
+      "text": "Envie uma foto sua com uma expressão divertida, se ambos gostarem disso.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-050",
+      "text": "Diga uma palavra que descreve algo bom na companhia da pessoa.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-051",
+      "text": "Pergunte se ela quer mostrar algo que criou ou aprendeu.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-052",
+      "text": "Ofereça organizar um pequeno espaço que vocês compartilham, combinando antes.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-053",
+      "text": "Compartilhe um texto curto que lembrou uma conversa de vocês.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-054",
+      "text": "Diga uma coisa boa que espera viver com ela nesta semana.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-055",
+      "text": "Convide para um cumprimento carinhoso inventado por vocês.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-056",
+      "text": "Agradeça pela companhia em um dia comum.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-057",
+      "text": "Pergunte qual foi uma coisa curiosa que aconteceu no dia.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-058",
+      "text": "Diga que uma opinião dela fez você enxergar algo de outro jeito.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-059",
+      "text": "Proponha uma chamada breve quando estiverem longe, combinando o horário.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-060",
+      "text": "Ofereça levar ou trazer algo de um lugar ao qual você já vai.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-061",
+      "text": "Escreva um bilhete com uma piada interna gentil.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-062",
+      "text": "Convide para compartilhar uma fruta ou um lanche já disponível.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-063",
+      "text": "Conte qual qualidade dela você gostaria de aprender a cultivar.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-064",
+      "text": "Pergunte sobre um lugar que ela gostaria de colocar em Queremos ir.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-065",
+      "text": "Faça uma pequena comemoração verbal por algo que deu certo para ela.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-066",
+      "text": "Ofereça uma pausa sem conversa se a pessoa estiver cansada.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-067",
+      "text": "Diga que você lembrou de algo importante que ela contou.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-068",
+      "text": "Pergunte que tipo de companhia seria agradável hoje.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-069",
+      "text": "Envie uma mensagem agradecendo uma lembrança que construíram.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-070",
+      "text": "Convide para escolherem uma foto favorita do mês.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-071",
+      "text": "Leia com atenção uma mensagem dela antes de responder com pressa.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-072",
+      "text": "Conte um detalhe dela que você reconheceria mesmo de longe.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-073",
+      "text": "Proponha um lanche juntos num horário confortável para os dois.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-074",
+      "text": "Pergunte se ela quer ajuda para lembrar de uma tarefa que mencionou.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-075",
+      "text": "Diga uma coisa que tornou sua semana melhor por causa dela.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-076",
+      "text": "Ofereça fazer companhia enquanto ela realiza uma tarefa simples.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-077",
+      "text": "Deixe um desenho pequeno e carinhoso para ela encontrar.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-078",
+      "text": "Compartilhe uma lembrança engraçada sem expor a pessoa para outros.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-079",
+      "text": "Pergunte qual parte do dia merece uma pausa para respirar.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-080",
+      "text": "Conte uma coisa que você admira no jeito dela cuidar de si.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-081",
+      "text": "Convide para observarem a vista por alguns minutos.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-082",
+      "text": "Envie uma mensagem de saudade sem transformar isso em cobrança.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-083",
+      "text": "Agradeça por uma conversa que fez bem a você.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-084",
+      "text": "Ofereça escolher junto uma refeição para tirar uma decisão do caminho.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-085",
+      "text": "Pergunte se ela gostaria de receber um elogio por escrito ou em áudio.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-086",
+      "text": "Proponha contar uma boa notícia cada um antes de dormir.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-087",
+      "text": "Diga que você gostou de ouvir uma história que ela contou.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-088",
+      "text": "Convide para atualizar uma pequena lista de planos gostosos.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-089",
+      "text": "Ofereça guardar um objeto fora do lugar, perguntando antes se for pessoal.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-090",
+      "text": "Envie uma mensagem desejando descanso num momento de pausa.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-091",
+      "text": "Pergunte o que ela mais está gostando de aprender ultimamente.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-092",
+      "text": "Conte uma atitude dela que inspira você.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-093",
+      "text": "Convide para um carinho na mão ou no ombro, respeitando a preferência da pessoa.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-094",
+      "text": "Proponha cinco minutos para verem algo engraçado juntos.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-095",
+      "text": "Escreva uma frase sobre uma coisa simples que gosta em vocês.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-096",
+      "text": "Pergunte se existe uma pequena ajuda prática que você pode oferecer amanhã.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-097",
+      "text": "Envie um lembrete carinhoso de um plano bom já combinado, sem pressionar.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-098",
+      "text": "Convide para guardar uma memória recente no app juntos.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-099",
+      "text": "Diga uma coisa que deseja celebrar na história dos dois.",
+      "durationMinutes": 5,
+      "remoteFriendly": true,
+      "intensity": "leve"
+    },
+    {
+      "id": "gesture-100",
+      "text": "Escolha uma gentileza de hoje e faça sem esperar que a pessoa retribua.",
+      "durationMinutes": 10,
+      "remoteFriendly": false,
+      "intensity": "leve"
+    }
+  ]
+}

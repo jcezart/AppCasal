@@ -48,6 +48,7 @@ final class AppEnvironment {
     let favorites: FavoriteRepository
     let reminders: ReminderRepository
     let sharing: ShareService
+    let moments: MomentsRepository
     let sync: SyncMonitor
     let network = NetworkMonitor()
     let location = LocationService()
@@ -124,6 +125,26 @@ final class AppEnvironment {
         favorites = FavoriteRepository(persistence: persistence)
         reminders = ReminderRepository(persistence: persistence)
         sharing = ShareService(persistence: persistence, spaces: spaces)
+        moments = MomentsRepository(persistence: persistence)
         sync = SyncMonitor()
+    }
+
+    /// Content of "Hoje, nós dois", read from the bundle on first use (not at launch).
+    @ObservationIgnored private(set) lazy var catalog: Result<MomentsCatalog, MomentsCatalog.CatalogError> = {
+        do {
+            return .success(try MomentsCatalog.load())
+        } catch let error as MomentsCatalog.CatalogError {
+            return .failure(error)
+        } catch {
+            return .failure(.unreadable("catalog", String(describing: error)))
+        }
+    }()
+
+    /// Owner's device: gives a question to today and the next days. Runs at launch and
+    /// after every sync; does nothing for the participant or when all days have one.
+    func prepareMoments(now: Date = .now) {
+        guard runMode != .preview, let space = spaces.activeSpace(), let me = account.userRecordName,
+              spaces.role(in: space) == .owner, case .success(let catalog) = catalog else { return }
+        _ = try? moments.prepareDays(in: space, questions: catalog.questions, catalogVersion: catalog.questionsVersion, by: me, now: now)
     }
 }

@@ -1,0 +1,2204 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "1.0.0",
+  "locale": "pt-BR",
+  "categoryOrder": [
+    "humor",
+    "lembrancas",
+    "preferencias",
+    "carinho",
+    "futuro"
+  ],
+  "questions": [
+    {
+      "id": "question-001",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se nosso relacionamento fosse uma comédia, qual seria o título?"
+    },
+    {
+      "id": "question-002",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual detalhe do nosso primeiro encontro você ainda lembra?"
+    },
+    {
+      "id": "question-003",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Como seria um domingo perfeito para você?"
+    },
+    {
+      "id": "question-004",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual pequena coisa que faço deixa seu dia melhor?"
+    },
+    {
+      "id": "question-005",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual lugar você gostaria de conhecer comigo?"
+    },
+    {
+      "id": "question-006",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual de nós sobreviveria melhor num programa de culinária?"
+    },
+    {
+      "id": "question-007",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Quando você percebeu que queria me conhecer melhor?"
+    },
+    {
+      "id": "question-008",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Você prefere planejar um encontro ou decidir na hora? Por quê?"
+    },
+    {
+      "id": "question-009",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Em que momento você mais gosta de receber um abraço meu?"
+    },
+    {
+      "id": "question-010",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que pequeno plano você gostaria de realizar neste mês?"
+    },
+    {
+      "id": "question-011",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que objeto da casa seria o narrador da nossa história?"
+    },
+    {
+      "id": "question-012",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual passeio simples nosso ficou maior na lembrança?"
+    },
+    {
+      "id": "question-013",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que comida você escolheria para um jantar sem ocasião especial?"
+    },
+    {
+      "id": "question-014",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que qualidade minha você tem apreciado ultimamente?"
+    },
+    {
+      "id": "question-015",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual tradição você gostaria que começássemos?"
+    },
+    {
+      "id": "question-016",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria nosso talento menos útil num show de talentos?"
+    },
+    {
+      "id": "question-017",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que música transporta você para um momento nosso?"
+    },
+    {
+      "id": "question-018",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual tipo de passeio ajuda você a descansar?"
+    },
+    {
+      "id": "question-019",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Como posso fazer companhia a você num dia cansativo?"
+    },
+    {
+      "id": "question-020",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que habilidade seria divertido aprender juntos?"
+    },
+    {
+      "id": "question-021",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se eu fosse um sabor de sorvete inventado, qual seria?"
+    },
+    {
+      "id": "question-022",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual comida faz você lembrar de nós?"
+    },
+    {
+      "id": "question-023",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que música você colocaria para começarmos uma viagem?"
+    },
+    {
+      "id": "question-024",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual palavra carinhosa combina com nós dois?"
+    },
+    {
+      "id": "question-025",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Como você imagina um fim de semana nosso daqui a um ano?"
+    },
+    {
+      "id": "question-026",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual mania nossa merecia uma placa de aviso?"
+    },
+    {
+      "id": "question-027",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual conversa nossa você gostaria de ouvir outra vez?"
+    },
+    {
+      "id": "question-028",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Como você gosta de receber carinho depois de um dia cheio?"
+    },
+    {
+      "id": "question-029",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que atitude minha faz você se sentir lembrado?"
+    },
+    {
+      "id": "question-030",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual receita você gostaria que virasse nossa especialidade?"
+    },
+    {
+      "id": "question-031",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que nome teria uma banda formada só por nós?"
+    },
+    {
+      "id": "question-032",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi uma surpresa minha que marcou você?"
+    },
+    {
+      "id": "question-033",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que horário do dia você mais gosta de passar comigo?"
+    },
+    {
+      "id": "question-034",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "O que você gostaria que eu comemorasse com você hoje?"
+    },
+    {
+      "id": "question-035",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que passeio perto de casa ainda está na nossa lista?"
+    },
+    {
+      "id": "question-036",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria nosso bordão em um desenho animado?"
+    },
+    {
+      "id": "question-037",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Em que momento você se sentiu à vontade comigo pela primeira vez?"
+    },
+    {
+      "id": "question-038",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que filme você gostaria de me apresentar?"
+    },
+    {
+      "id": "question-039",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual é uma forma simples de eu demonstrar atenção?"
+    },
+    {
+      "id": "question-040",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que detalhe você gostaria de mudar na nossa rotina para termos mais tempo juntos?"
+    },
+    {
+      "id": "question-041",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que tarefa doméstica viraria uma modalidade olímpica para nós?"
+    },
+    {
+      "id": "question-042",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foto nossa tem uma história que pouca gente conhece?"
+    },
+    {
+      "id": "question-043",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual sobremesa você dividiria comigo hoje?"
+    },
+    {
+      "id": "question-044",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que momento recente nosso deixou seu coração quentinho?"
+    },
+    {
+      "id": "question-045",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual comemoração simples você gostaria de organizar?"
+    },
+    {
+      "id": "question-046",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se nosso sofá pudesse falar, o que contaria?"
+    },
+    {
+      "id": "question-047",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual viagem ou trajeto nosso você guarda com carinho?"
+    },
+    {
+      "id": "question-048",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Você prefere um encontro movimentado ou um lugar tranquilo?"
+    },
+    {
+      "id": "question-049",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Como você percebe que estou prestando atenção em você?"
+    },
+    {
+      "id": "question-050",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que experiência nova cabe no nosso próximo dia livre?"
+    },
+    {
+      "id": "question-051",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual de nós faria amizade com um extraterrestre primeiro?"
+    },
+    {
+      "id": "question-052",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que cheiro lembra um momento bom comigo?"
+    },
+    {
+      "id": "question-053",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que aroma deixa um ambiente aconchegante para você?"
+    },
+    {
+      "id": "question-054",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual cuidado você gosta de oferecer e também de receber?"
+    },
+    {
+      "id": "question-055",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual cantinho você gostaria de criar para relaxarmos?"
+    },
+    {
+      "id": "question-056",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que apelido engraçado daria ao nosso GPS?"
+    },
+    {
+      "id": "question-057",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi nossa primeira piada interna que você recorda?"
+    },
+    {
+      "id": "question-058",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual atividade você gosta de fazer sem pressa?"
+    },
+    {
+      "id": "question-059",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que detalhe meu desperta ternura em você?"
+    },
+    {
+      "id": "question-060",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que sonho seu você gostaria de me apresentar com mais detalhes?"
+    },
+    {
+      "id": "question-061",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual comida descreve meu humor ao acordar?"
+    },
+    {
+      "id": "question-062",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual dia comum acabou virando uma lembrança especial?"
+    },
+    {
+      "id": "question-063",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que tipo de surpresa costuma agradar você?"
+    },
+    {
+      "id": "question-064",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "O que você gostaria de agradecer sobre nossa semana?"
+    },
+    {
+      "id": "question-065",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual viagem pequena podemos começar a planejar sem compromisso?"
+    },
+    {
+      "id": "question-066",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se tivéssemos uma loja absurda, o que venderíamos?"
+    },
+    {
+      "id": "question-067",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "O que você pensou quando recebeu uma das minhas primeiras mensagens?"
+    },
+    {
+      "id": "question-068",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual seria seu café da manhã ideal comigo?"
+    },
+    {
+      "id": "question-069",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual elogio meu você guardou com carinho?"
+    },
+    {
+      "id": "question-070",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que coisa você gostaria de fotografar comigo um dia?"
+    },
+    {
+      "id": "question-071",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria a regra mais engraçada da nossa república?"
+    },
+    {
+      "id": "question-072",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual lugar mudou de significado depois de irmos juntos?"
+    },
+    {
+      "id": "question-073",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Você prefere conversar caminhando ou sentado num lugar confortável?"
+    },
+    {
+      "id": "question-074",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que parte da nossa rotina faz você se sentir acompanhado?"
+    },
+    {
+      "id": "question-075",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual projeto criativo poderíamos fazer aos poucos?"
+    },
+    {
+      "id": "question-076",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que figurinha representa melhor uma conversa nossa?"
+    },
+    {
+      "id": "question-077",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi a primeira coisa que cozinhamos ou comemos juntos?"
+    },
+    {
+      "id": "question-078",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que estação do ano combina com seus encontros favoritos?"
+    },
+    {
+      "id": "question-079",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Como você gosta de ser recebido quando nos encontramos?"
+    },
+    {
+      "id": "question-080",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que hábito gostoso você gostaria de cultivar como casal?"
+    },
+    {
+      "id": "question-081",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual de nós demoraria mais para montar uma barraca?"
+    },
+    {
+      "id": "question-082",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual encontro quase deu errado e acabou sendo bom?"
+    },
+    {
+      "id": "question-083",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual comida você sempre tem vontade de pedir de novo?"
+    },
+    {
+      "id": "question-084",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que gesto pode tornar uma despedida mais gostosa?"
+    },
+    {
+      "id": "question-085",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que lembrança você gostaria que tivéssemos do próximo verão?"
+    },
+    {
+      "id": "question-086",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se nossa geladeira desse prêmios, qual eu ganharia?"
+    },
+    {
+      "id": "question-087",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual detalhe da minha aparência chamou sua atenção no começo?"
+    },
+    {
+      "id": "question-088",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que lugar da cidade você escolhe para respirar um pouco?"
+    },
+    {
+      "id": "question-089",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que coisa pequena você admira na maneira como eu trato as pessoas?"
+    },
+    {
+      "id": "question-090",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Como seria um encontro perfeito numa cidade que ainda não conhecemos?"
+    },
+    {
+      "id": "question-091",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual desculpa inventada usaríamos para fugir de um jantar chato?"
+    },
+    {
+      "id": "question-092",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi uma gentileza minha que você não esqueceu?"
+    },
+    {
+      "id": "question-093",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual jogo de mesa você toparia aprender comigo?"
+    },
+    {
+      "id": "question-094",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "O que faz você se sentir confortável sendo você mesmo comigo?"
+    },
+    {
+      "id": "question-095",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que aprendizado seu você gostaria de compartilhar comigo nos próximos meses?"
+    },
+    {
+      "id": "question-096",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria meu superpoder mais atrapalhado?"
+    },
+    {
+      "id": "question-097",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Quando demos uma risada que parecia não acabar?"
+    },
+    {
+      "id": "question-098",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Você gosta mais de registrar fotos ou aproveitar sem câmera?"
+    },
+    {
+      "id": "question-099",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que lembrança carinhosa você gostaria de criar hoje?"
+    },
+    {
+      "id": "question-100",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que passeio gratuito você gostaria de descobrir?"
+    },
+    {
+      "id": "question-101",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que animal seria nosso mascote numa aventura?"
+    },
+    {
+      "id": "question-102",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi o melhor improviso que já fizemos juntos?"
+    },
+    {
+      "id": "question-103",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que detalhe faz você gostar de um restaurante?"
+    },
+    {
+      "id": "question-104",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual hábito nosso dá sensação de aconchego?"
+    },
+    {
+      "id": "question-105",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual ocasião você gostaria de comemorar do nosso jeito?"
+    },
+    {
+      "id": "question-106",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se só pudéssemos conversar cantando, qual estilo usaríamos?"
+    },
+    {
+      "id": "question-107",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que presente pequeno teve um significado grande para você?"
+    },
+    {
+      "id": "question-108",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual estilo de música você gostaria de explorar juntos?"
+    },
+    {
+      "id": "question-109",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Quando você gosta mais de ouvir que estou com saudade?"
+    },
+    {
+      "id": "question-110",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que tipo de aventura tranquila combina com nós dois?"
+    },
+    {
+      "id": "question-111",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria nosso maior desafio num reality de sobrevivência?"
+    },
+    {
+      "id": "question-112",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi nosso melhor dia de chuva?"
+    },
+    {
+      "id": "question-113",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Como você prefere comemorar uma pequena conquista?"
+    },
+    {
+      "id": "question-114",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Como posso apoiar um interesse seu nesta semana?"
+    },
+    {
+      "id": "question-115",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual lugar da sua história você gostaria de me mostrar?"
+    },
+    {
+      "id": "question-116",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que nome daria a um robô que imitasse minhas manias?"
+    },
+    {
+      "id": "question-117",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual momento nosso merecia ter sido fotografado?"
+    },
+    {
+      "id": "question-118",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que passeio você escolheria num dia nublado?"
+    },
+    {
+      "id": "question-119",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que tipo de incentivo ajuda você sem criar pressão?"
+    },
+    {
+      "id": "question-120",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que experiência cultural você gostaria de viver comigo?"
+    },
+    {
+      "id": "question-121",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual de nós faria um discurso ao ganhar um pão de queijo?"
+    },
+    {
+      "id": "question-122",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual lembrança nossa você contaria num jantar de amigos?"
+    },
+    {
+      "id": "question-123",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual bebida sem álcool combina com uma conversa longa?"
+    },
+    {
+      "id": "question-124",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual foi um cuidado meu que você percebeu mesmo sem comentar?"
+    },
+    {
+      "id": "question-125",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual meta pequena teria mais graça se fizéssemos juntos?"
+    },
+    {
+      "id": "question-126",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se nossa rotina virasse um meme, qual seria a legenda?"
+    },
+    {
+      "id": "question-127",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que frase minha ficou guardada na sua cabeça?"
+    },
+    {
+      "id": "question-128",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Você prefere cozinhar junto ou receber algo pronto?"
+    },
+    {
+      "id": "question-129",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que característica sua você gostaria que eu celebrasse mais?"
+    },
+    {
+      "id": "question-130",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que música você gostaria de aprender a tocar ou cantar comigo?"
+    },
+    {
+      "id": "question-131",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que roupa minha entraria num museu da nossa história?"
+    },
+    {
+      "id": "question-132",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi uma conquista que comemoramos de um jeito especial?"
+    },
+    {
+      "id": "question-133",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que tipo de presente simples tem mais a sua cara?"
+    },
+    {
+      "id": "question-134",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual detalhe da minha risada você reconheceria de longe?"
+    },
+    {
+      "id": "question-135",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual prato de outra região você gostaria de experimentar juntos?"
+    },
+    {
+      "id": "question-136",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria o slogan da nossa preguiça de domingo?"
+    },
+    {
+      "id": "question-137",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual abraço nosso você lembra com mais clareza?"
+    },
+    {
+      "id": "question-138",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual canto de casa você mais gosta para ficar junto?"
+    },
+    {
+      "id": "question-139",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Como seria um intervalo carinhoso no meio de um dia corrido?"
+    },
+    {
+      "id": "question-140",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Como você imagina uma manhã nossa com mais calma?"
+    },
+    {
+      "id": "question-141",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se eu virasse um aplicativo, para que serviria?"
+    },
+    {
+      "id": "question-142",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual pôr do sol ou paisagem vimos juntos que marcou você?"
+    },
+    {
+      "id": "question-143",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Você prefere praia, campo, cidade ou montanha para descansar?"
+    },
+    {
+      "id": "question-144",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que atitude nossa faz você sentir que somos um time?"
+    },
+    {
+      "id": "question-145",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que detalhe você gostaria de incluir na nossa próxima viagem?"
+    },
+    {
+      "id": "question-146",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria nossa estratégia numa guerra de travesseiros?"
+    },
+    {
+      "id": "question-147",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi a coisa mais inesperada que descobriu sobre mim no início?"
+    },
+    {
+      "id": "question-148",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que atividade faz você esquecer de olhar o celular?"
+    },
+    {
+      "id": "question-149",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "O que significa atenção de qualidade para você hoje?"
+    },
+    {
+      "id": "question-150",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual atividade poderíamos testar por uma semana?"
+    },
+    {
+      "id": "question-151",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que frase nossa merecia virar uma camiseta?"
+    },
+    {
+      "id": "question-152",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que roupa você lembra de eu usar num dia especial?"
+    },
+    {
+      "id": "question-153",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual programa você escolheria para uma noite de pouca energia?"
+    },
+    {
+      "id": "question-154",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual mensagem você gostaria de receber numa manhã difícil?"
+    },
+    {
+      "id": "question-155",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que lista divertida você gostaria de montar comigo?"
+    },
+    {
+      "id": "question-156",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual personagem de ficção seria nosso vizinho mais inconveniente?"
+    },
+    {
+      "id": "question-157",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual encontro você toparia repetir exatamente como foi?"
+    },
+    {
+      "id": "question-158",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Você prefere rever um favorito ou experimentar algo novo?"
+    },
+    {
+      "id": "question-159",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que gesto de carinho funciona mesmo quando estamos longe?"
+    },
+    {
+      "id": "question-160",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que passeio você gostaria de fazer numa estação diferente do ano?"
+    },
+    {
+      "id": "question-161",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se nosso carro ou transporte habitual tivesse personalidade, como seria?"
+    },
+    {
+      "id": "question-162",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual tradição nossa começou sem a gente perceber?"
+    },
+    {
+      "id": "question-163",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que tema de conversa sempre prende sua atenção?"
+    },
+    {
+      "id": "question-164",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual parte de estar comigo traz tranquilidade para você?"
+    },
+    {
+      "id": "question-165",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual tradição de fim de ano você gostaria de adaptar para nós?"
+    },
+    {
+      "id": "question-166",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual de nós levaria mais coisas para uma ilha deserta?"
+    },
+    {
+      "id": "question-167",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Quando você sentiu que éramos uma boa dupla numa tarefa?"
+    },
+    {
+      "id": "question-168",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual sabor você gostaria que eu conhecesse melhor?"
+    },
+    {
+      "id": "question-169",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que coisa você gosta quando fazemos lado a lado?"
+    },
+    {
+      "id": "question-170",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que objeto você gostaria de fazer à mão comigo?"
+    },
+    {
+      "id": "question-171",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que nome teria um campeonato de nossas pequenas distrações?"
+    },
+    {
+      "id": "question-172",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi uma mensagem minha que fez você sorrir em público?"
+    },
+    {
+      "id": "question-173",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Como você gosta de organizar uma viagem curta?"
+    },
+    {
+      "id": "question-174",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Como você gosta de compartilhar uma notícia boa comigo?"
+    },
+    {
+      "id": "question-175",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual experiência você gostaria de dar de presente para nós?"
+    },
+    {
+      "id": "question-176",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria meu cargo numa empresa de cochilos?"
+    },
+    {
+      "id": "question-177",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi nosso passeio mais econômico e mais divertido?"
+    },
+    {
+      "id": "question-178",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que tipo de foto nossa você mais gosta?"
+    },
+    {
+      "id": "question-179",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "O que você acha bonito no jeito como aprendemos juntos?"
+    },
+    {
+      "id": "question-180",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Como seria uma tarde nossa com orçamento zero?"
+    },
+    {
+      "id": "question-181",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que receita daria errado de um jeito engraçado se fizéssemos sem instruções?"
+    },
+    {
+      "id": "question-182",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que história minha você ouviu e ainda lembra dos detalhes?"
+    },
+    {
+      "id": "question-183",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual pequeno luxo acessível deixa seu dia melhor?"
+    },
+    {
+      "id": "question-184",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que pequeno esforço meu você percebe e valoriza?"
+    },
+    {
+      "id": "question-185",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual livro, filme ou jogo você gostaria que conhecêssemos juntos?"
+    },
+    {
+      "id": "question-186",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se nossas chaves escrevessem um diário, do que reclamariam?"
+    },
+    {
+      "id": "question-187",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual aniversário ou comemoração nossa teve um detalhe especial?"
+    },
+    {
+      "id": "question-188",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Você prefere um passeio de manhã ou no fim da tarde?"
+    },
+    {
+      "id": "question-189",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Como você gostaria de cuidar de nós no próximo fim de semana?"
+    },
+    {
+      "id": "question-190",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que lugar da lista Queremos ir você escolheria primeiro?"
+    },
+    {
+      "id": "question-191",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria nosso cumprimento secreto mais ridículo?"
+    },
+    {
+      "id": "question-192",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi a primeira vez que você sentiu saudade de mim?"
+    },
+    {
+      "id": "question-193",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que atividade criativa você toparia fazer sem se preocupar com o resultado?"
+    },
+    {
+      "id": "question-194",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual é uma maneira de demonstrar carinho respeitando seu espaço?"
+    },
+    {
+      "id": "question-195",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual memória nossa você gostaria de recriar com um detalhe novo?"
+    },
+    {
+      "id": "question-196",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que som deveria tocar quando decidimos o que comer?"
+    },
+    {
+      "id": "question-197",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual lembrança temos de um lugar que já não frequentamos?"
+    },
+    {
+      "id": "question-198",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que livro ou história você gostaria de comentar comigo?"
+    },
+    {
+      "id": "question-199",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que coisa do seu dia você gostaria que eu perguntasse mais?"
+    },
+    {
+      "id": "question-200",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que curso curto você toparia fazer em dupla?"
+    },
+    {
+      "id": "question-201",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual de nós inventaria um atalho que demora mais?"
+    },
+    {
+      "id": "question-202",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que momento nosso parecia cena de filme?"
+    },
+    {
+      "id": "question-203",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual lanche combina com uma sessão de filme em casa?"
+    },
+    {
+      "id": "question-204",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual frase descreve o que você gosta na nossa companhia?"
+    },
+    {
+      "id": "question-205",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que refeição você gostaria de preparar para comemorar um dia comum?"
+    },
+    {
+      "id": "question-206",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se fôssemos vilões inofensivos, qual seria nosso plano?"
+    },
+    {
+      "id": "question-207",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi uma coisa nova que experimentamos juntos?"
+    },
+    {
+      "id": "question-208",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Você prefere uma comemoração com outras pessoas ou só nós dois?"
+    },
+    {
+      "id": "question-209",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que lembrança ajuda você a sentir minha presença quando estamos longe?"
+    },
+    {
+      "id": "question-210",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual passeio você gostaria de organizar para me surpreender?"
+    },
+    {
+      "id": "question-211",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que nome teria um perfume inspirado no nosso fim de semana?"
+    },
+    {
+      "id": "question-212",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que conversa tivemos andando e você não esqueceu?"
+    },
+    {
+      "id": "question-213",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual som da natureza você mais gosta de ouvir?"
+    },
+    {
+      "id": "question-214",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que detalhe seu você fica feliz quando eu noto?"
+    },
+    {
+      "id": "question-215",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que coisa você gostaria de colecionar de forma simples nos nossos encontros?"
+    },
+    {
+      "id": "question-216",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual objeto levaríamos como troféu de casal mais caseiro?"
+    },
+    {
+      "id": "question-217",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual detalhe do começo você gostaria de trazer para hoje?"
+    },
+    {
+      "id": "question-218",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que coisa você gosta de aprender vendo alguém fazer?"
+    },
+    {
+      "id": "question-219",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Como você gosta que eu celebre algo que deu certo para você?"
+    },
+    {
+      "id": "question-220",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Como podemos reservar uma pausa juntos numa semana ocupada?"
+    },
+    {
+      "id": "question-221",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria o título de um documentário sobre nossas compras no mercado?"
+    },
+    {
+      "id": "question-222",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi a melhor companhia que fizemos um ao outro em silêncio?"
+    },
+    {
+      "id": "question-223",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Como seria uma pausa de quinze minutos ideal para você?"
+    },
+    {
+      "id": "question-224",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual gesto nosso parece pequeno, mas significa muito?"
+    },
+    {
+      "id": "question-225",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que mudança de estação você gostaria de celebrar comigo?"
+    },
+    {
+      "id": "question-226",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que aviso apareceria antes de eu ficar com fome?"
+    },
+    {
+      "id": "question-227",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que lembrança nossa cabe numa única palavra?"
+    },
+    {
+      "id": "question-228",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que estilo de decoração faz você se sentir em casa?"
+    },
+    {
+      "id": "question-229",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "O que você aprendeu sobre carinho estando comigo?"
+    },
+    {
+      "id": "question-230",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual habilidade prática tornaria nossas viagens mais fáceis?"
+    },
+    {
+      "id": "question-231",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se pudéssemos contratar um dublê para uma tarefa, qual seria?"
+    },
+    {
+      "id": "question-232",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi a primeira foto que tiramos juntos de que você se lembra?"
+    },
+    {
+      "id": "question-233",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Você prefere roteiro conhecido ou um caminho diferente para passear?"
+    },
+    {
+      "id": "question-234",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que qualidade nossa como dupla você admira?"
+    },
+    {
+      "id": "question-235",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que ideia de encontro você ainda não me contou?"
+    },
+    {
+      "id": "question-236",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual de nós se perderia seguindo as próprias instruções?"
+    },
+    {
+      "id": "question-237",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que pequeno cuidado meu ajudou num dia cansativo?"
+    },
+    {
+      "id": "question-238",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual flor ou planta você gostaria de ter por perto?"
+    },
+    {
+      "id": "question-239",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Como podemos tornar uma tarefa chata mais leve juntos?"
+    },
+    {
+      "id": "question-240",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que lembrança você gostaria de guardar quando completarmos mais um ano juntos?"
+    },
+    {
+      "id": "question-241",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que invenção boba facilitaria nossos encontros?"
+    },
+    {
+      "id": "question-242",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi um encontro curto que valeu muito?"
+    },
+    {
+      "id": "question-243",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que objeto simples você levaria para um piquenique?"
+    },
+    {
+      "id": "question-244",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual momento do dia merecia uma pausa só nossa?"
+    },
+    {
+      "id": "question-245",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Como seria um dia nosso sem agenda e sem pressa?"
+    },
+    {
+      "id": "question-246",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se nossa dança tivesse um nome oficial, qual seria?"
+    },
+    {
+      "id": "question-247",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que lugar você descobriu por minha causa?"
+    },
+    {
+      "id": "question-248",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual série curta você gostaria de assistir comigo?"
+    },
+    {
+      "id": "question-249",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que convite simples faria você se sentir querido hoje?"
+    },
+    {
+      "id": "question-250",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que bairro você gostaria de explorar caminhando comigo?"
+    },
+    {
+      "id": "question-251",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria nosso pedido mais estranho num restaurante imaginário?"
+    },
+    {
+      "id": "question-252",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi uma comemoração nossa sem motivo especial?"
+    },
+    {
+      "id": "question-253",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Como você prefere que eu convide para um encontro surpresa?"
+    },
+    {
+      "id": "question-254",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual parte de uma conversa faz você se sentir ouvido?"
+    },
+    {
+      "id": "question-255",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual experiência ao ar livre você gostaria de testar com tranquilidade?"
+    },
+    {
+      "id": "question-256",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que palavra inventada descreve quando estamos com sono e fome?"
+    },
+    {
+      "id": "question-257",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que memória você associa a uma madrugada ou manhã bem cedo comigo?"
+    },
+    {
+      "id": "question-258",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que tipo de lembrança você gosta de guardar de um passeio?"
+    },
+    {
+      "id": "question-259",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Como você gosta de receber companhia quando não quer conversar?"
+    },
+    {
+      "id": "question-260",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que atividade em casa você gostaria de transformar em encontro?"
+    },
+    {
+      "id": "question-261",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual de nós seria melhor apresentador de um programa de receitas instantâneas?"
+    },
+    {
+      "id": "question-262",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi a melhor história que vivemos usando transporte público ou caminhando?"
+    },
+    {
+      "id": "question-263",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Você prefere fazer compras com lista ou explorar as opções?"
+    },
+    {
+      "id": "question-264",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que coisa minha você sente falta quando passamos um tempo separados?"
+    },
+    {
+      "id": "question-265",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual presente feito por nós você gostaria de trocar um dia?"
+    },
+    {
+      "id": "question-266",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se tivéssemos uma moeda própria, qual rosto ou desenho apareceria nela?"
+    },
+    {
+      "id": "question-267",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que detalhe engraçado você lembra de conhecer alguém importante para mim?"
+    },
+    {
+      "id": "question-268",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que atividade você gosta mais quando tem companhia?"
+    },
+    {
+      "id": "question-269",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que lembrança de acolhimento nosso você leva com você?"
+    },
+    {
+      "id": "question-270",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que conquista sua você gostaria de comemorar comigo quando acontecer?"
+    },
+    {
+      "id": "question-271",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria minha habilidade especial num videogame sobre a vida comum?"
+    },
+    {
+      "id": "question-272",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual brincadeira nossa começou numa conversa aleatória?"
+    },
+    {
+      "id": "question-273",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual comida de infância você gostaria de me apresentar?"
+    },
+    {
+      "id": "question-274",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual atitude mostra que respeitamos o ritmo um do outro?"
+    },
+    {
+      "id": "question-275",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual tradição de aniversário você gostaria de inventar?"
+    },
+    {
+      "id": "question-276",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que objeto seria nosso microfone numa entrevista improvisada?"
+    },
+    {
+      "id": "question-277",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Quando você se sentiu acolhido por mim longe de casa?"
+    },
+    {
+      "id": "question-278",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Você prefere uma playlist compartilhada ou cada um escolher uma música por vez?"
+    },
+    {
+      "id": "question-279",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que elogio sincero você gostaria de me fazer agora?"
+    },
+    {
+      "id": "question-280",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que hobby seu você gostaria de me convidar para experimentar?"
+    },
+    {
+      "id": "question-281",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria a atração principal de um parque temático sobre nós?"
+    },
+    {
+      "id": "question-282",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi um plano que mudamos e acabou melhor?"
+    },
+    {
+      "id": "question-283",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que lugar você escolheria para ler ou ouvir uma história juntos?"
+    },
+    {
+      "id": "question-284",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual cuidado com nosso espaço representa carinho para você?"
+    },
+    {
+      "id": "question-285",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual seria o tema de uma noite especial organizada por nós?"
+    },
+    {
+      "id": "question-286",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se nossas mensagens virassem um livro, qual capítulo seria o mais engraçado?"
+    },
+    {
+      "id": "question-287",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que memória nossa você transformaria numa ilustração?"
+    },
+    {
+      "id": "question-288",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual seria seu roteiro ideal para duas horas livres?"
+    },
+    {
+      "id": "question-289",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Como você descreveria meu abraço sem usar a palavra abraço?"
+    },
+    {
+      "id": "question-290",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que lugar você gostaria de visitar numa viagem de um só dia?"
+    },
+    {
+      "id": "question-291",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que missão daríamos a um pombo mensageiro do casal?"
+    },
+    {
+      "id": "question-292",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi a primeira atividade em que você me ensinou algo?"
+    },
+    {
+      "id": "question-293",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que talento artístico você gostaria de experimentar sem compromisso?"
+    },
+    {
+      "id": "question-294",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual foi um momento recente em que você sentiu orgulho de nós?"
+    },
+    {
+      "id": "question-295",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual pequena melhoria deixaria nossos encontros mais confortáveis?"
+    },
+    {
+      "id": "question-296",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria nosso recorde mundial mais fácil de conquistar?"
+    },
+    {
+      "id": "question-297",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi uma coisa que eu ensinei e você ainda usa?"
+    },
+    {
+      "id": "question-298",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Você prefere bilhetes escritos ou mensagens de voz carinhosas?"
+    },
+    {
+      "id": "question-299",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que detalhe de um encontro deixa você mais à vontade?"
+    },
+    {
+      "id": "question-300",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que história você gostaria que pudéssemos contar daqui a alguns anos?"
+    },
+    {
+      "id": "question-301",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que nome teria uma operação secreta para escolher um filme?"
+    },
+    {
+      "id": "question-302",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que lembrança nossa tem uma cor muito presente?"
+    },
+    {
+      "id": "question-303",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual tipo de passeio combina com um dia de calor?"
+    },
+    {
+      "id": "question-304",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que gesto carinhoso da sua infância você gosta de compartilhar?"
+    },
+    {
+      "id": "question-305",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que coisa você gostaria de fazer comigo pela primeira vez?"
+    },
+    {
+      "id": "question-306",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se eu fosse um personagem de jogo de tabuleiro, qual seria minha regra especial?"
+    },
+    {
+      "id": "question-307",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi o momento mais aconchegante que vivemos em casa?"
+    },
+    {
+      "id": "question-308",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual tipo de passeio combina com um dia frio?"
+    },
+    {
+      "id": "question-309",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual coisa você gosta de me contar primeiro?"
+    },
+    {
+      "id": "question-310",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual lembrança você gostaria de deixar registrada em áudio?"
+    },
+    {
+      "id": "question-311",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual de nós negociaria melhor com um gato teimoso?"
+    },
+    {
+      "id": "question-312",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que passeio nosso teve a melhor trilha sonora?"
+    },
+    {
+      "id": "question-313",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que pequeno ritual ajuda você a desligar do trabalho?"
+    },
+    {
+      "id": "question-314",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Como podemos deixar uma noite comum mais acolhedora?"
+    },
+    {
+      "id": "question-315",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Como podemos tornar nossos próximos planos mais acessíveis para os dois?"
+    },
+    {
+      "id": "question-316",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que legenda colocaria numa foto nossa tentando parecer sérios?"
+    },
+    {
+      "id": "question-317",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi uma descoberta de bairro que fizemos juntos?"
+    },
+    {
+      "id": "question-318",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Como você gosta de escolher o que vamos assistir?"
+    },
+    {
+      "id": "question-319",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que parte da minha personalidade faz bem à sua rotina?"
+    },
+    {
+      "id": "question-320",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que experiência você gostaria de repetir em outra fase da vida?"
+    },
+    {
+      "id": "question-321",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se nosso despertador tivesse voz, o que diria sobre nós?"
+    },
+    {
+      "id": "question-322",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi um detalhe bonito de uma despedida nossa?"
+    },
+    {
+      "id": "question-323",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que assunto você gostaria de conhecer melhor através de mim?"
+    },
+    {
+      "id": "question-324",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual maneira de dizer boa noite você mais gosta?"
+    },
+    {
+      "id": "question-325",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual sonho pode começar com um passo de quinze minutos?"
+    },
+    {
+      "id": "question-326",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria a primeira lei do nosso país imaginário?"
+    },
+    {
+      "id": "question-327",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Quando você se divertiu comigo sem gastar nada?"
+    },
+    {
+      "id": "question-328",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Você prefere uma mesa bem arrumada ou uma refeição informal no sofá?"
+    },
+    {
+      "id": "question-329",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Como você gostaria de ser acompanhado numa pequena preocupação?"
+    },
+    {
+      "id": "question-330",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que passeio você gostaria de fazer para conhecer melhor nossa própria cidade?"
+    },
+    {
+      "id": "question-331",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que acessório usaríamos para disfarçar que estamos com preguiça?"
+    },
+    {
+      "id": "question-332",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi uma tradição de família que compartilhamos pela primeira vez?"
+    },
+    {
+      "id": "question-333",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que ingrediente você gostaria de experimentar numa receita juntos?"
+    },
+    {
+      "id": "question-334",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual expressão minha faz você sorrir sem perceber?"
+    },
+    {
+      "id": "question-335",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual detalhe você gostaria de incluir numa cápsula do tempo do casal?"
+    },
+    {
+      "id": "question-336",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria nosso pedido de socorro numa receita que desandou?"
+    },
+    {
+      "id": "question-337",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que momento nosso você guardaria numa cápsula do tempo?"
+    },
+    {
+      "id": "question-338",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual estilo de humor mais faz você rir?"
+    },
+    {
+      "id": "question-339",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "O que você acha especial no jeito como nos reconhecemos?"
+    },
+    {
+      "id": "question-340",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que encontro seria bonito organizar para uma data comum do calendário?"
+    },
+    {
+      "id": "question-341",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se fôssemos uma dupla de detetives, que mistério bobo investigaríamos?"
+    },
+    {
+      "id": "question-342",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual lembrança nossa melhor representa companheirismo?"
+    },
+    {
+      "id": "question-343",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Você prefere um encontro com horário definido ou uma tarde livre?"
+    },
+    {
+      "id": "question-344",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Que gesto você gostaria de transformar numa tradição nossa?"
+    },
+    {
+      "id": "question-345",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual pequena surpresa você gostaria de preparar junto comigo para alguém querido?"
+    },
+    {
+      "id": "question-346",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual de nós criaria um apelido para cada planta da casa?"
+    },
+    {
+      "id": "question-347",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi uma vez em que nos ajudamos a sair da zona de conforto?"
+    },
+    {
+      "id": "question-348",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que detalhe torna uma hospedagem agradável para você?"
+    },
+    {
+      "id": "question-349",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Como você percebe carinho nas nossas conversas à distância?"
+    },
+    {
+      "id": "question-350",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que atividade gostaria de experimentar quando estivermos com energia sobrando?"
+    },
+    {
+      "id": "question-351",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Que nome teria um prêmio para quem esquece onde colocou o celular?"
+    },
+    {
+      "id": "question-352",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Que memória nossa ainda faz você sorrir ao contar?"
+    },
+    {
+      "id": "question-353",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Qual atividade você gostaria de repetir mais vezes comigo?"
+    },
+    {
+      "id": "question-354",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "O que você gostaria que eu soubesse sobre uma alegria sua hoje?"
+    },
+    {
+      "id": "question-355",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual seria um bom compromisso de cuidado com nosso tempo juntos?"
+    },
+    {
+      "id": "question-356",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Se nosso relacionamento tivesse efeitos sonoros, qual tocaria hoje?"
+    },
+    {
+      "id": "question-357",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual foi um instante em que o tempo pareceu passar devagar comigo?"
+    },
+    {
+      "id": "question-358",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Que tipo de passeio você costuma evitar e qual alternativa prefere?"
+    },
+    {
+      "id": "question-359",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Qual é uma pequena gentileza que podemos oferecer um ao outro amanhã?"
+    },
+    {
+      "id": "question-360",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Que palavra você gostaria que descrevesse nosso próximo mês?"
+    },
+    {
+      "id": "question-361",
+      "category": "humor",
+      "intensity": "leve",
+      "text": "Qual seria nosso plano para entreter um dinossauro por dez minutos?"
+    },
+    {
+      "id": "question-362",
+      "category": "lembrancas",
+      "intensity": "leve",
+      "text": "Qual capítulo da nossa história você gostaria de registrar melhor?"
+    },
+    {
+      "id": "question-363",
+      "category": "preferencias",
+      "intensity": "leve",
+      "text": "Como você descreveria um encontro simples com a sua cara?"
+    },
+    {
+      "id": "question-364",
+      "category": "carinho",
+      "intensity": "leve",
+      "text": "Se escrevesse um bilhete de uma linha para nós hoje, o que diria?"
+    },
+    {
+      "id": "question-365",
+      "category": "futuro",
+      "intensity": "leve",
+      "text": "Qual primeiro passo podemos dar hoje para um plano que nos anima?"
+    }
+  ]
+}

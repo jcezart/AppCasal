@@ -26,6 +26,15 @@ nonisolated final class CoupleSpace: NSManagedObject {
     @NSManaged var goals: Set<Goal>?
     @NSManaged var places: Set<Place>?
     @NSManaged var reminders: Set<Reminder>?
+    /// "Hoje, nós dois" (model v2). The calendar day of the daily question is counted in
+    /// this time zone for both partners; set by the owner when the first day is prepared.
+    @NSManaged var momentsTimeZone: String?
+    @NSManaged var dailyQuestions: Set<DailyQuestion>?
+    @NSManaged var dailyAnswers: Set<DailyAnswer>?
+    @NSManaged var gameRounds: Set<GameRound>?
+    @NSManaged var gameAnswers: Set<GameAnswer>?
+    @NSManaged var datePlans: Set<DatePlan>?
+    @NSManaged var dateIdeas: Set<DateIdea>?
     /// Couple photo shown on Início, downscaled like memory photos.
     @NSManaged var coverPhotoData: Data?
 }

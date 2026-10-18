@@ -1,0 +1,1388 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "1.0.0",
+  "locale": "pt-BR",
+  "instructions": "Cada pessoa escolhe uma alternativa sobre si e tenta adivinhar a escolha do par. Não há gabarito universal; compare IDs após ambos concluírem. Permita pular se nenhuma opção servir.",
+  "questions": [
+    {
+      "id": "game-001",
+      "text": "Qual programa eu escolheria para um domingo livre?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Ficar em casa"
+        },
+        {
+          "id": "option-2",
+          "text": "Passear ao ar livre"
+        },
+        {
+          "id": "option-3",
+          "text": "Encontrar amigos"
+        },
+        {
+          "id": "option-4",
+          "text": "Conhecer um lugar novo"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-002",
+      "text": "Qual café da manhã combina mais comigo?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Pão e café ou chá"
+        },
+        {
+          "id": "option-2",
+          "text": "Frutas e iogurte"
+        },
+        {
+          "id": "option-3",
+          "text": "Panqueca ou tapioca"
+        },
+        {
+          "id": "option-4",
+          "text": "Algo salgado reforçado"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-003",
+      "text": "Como prefiro escolher um filme?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Rever um favorito"
+        },
+        {
+          "id": "option-2",
+          "text": "Buscar novidade"
+        },
+        {
+          "id": "option-3",
+          "text": "Aceitar indicação"
+        },
+        {
+          "id": "option-4",
+          "text": "Sortear entre opções"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-004",
+      "text": "Qual paisagem eu escolheria para descansar?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Praia"
+        },
+        {
+          "id": "option-2",
+          "text": "Montanha"
+        },
+        {
+          "id": "option-3",
+          "text": "Campo"
+        },
+        {
+          "id": "option-4",
+          "text": "Cidade tranquila"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-005",
+      "text": "Que sabor de sobremesa me atrai mais?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Chocolate"
+        },
+        {
+          "id": "option-2",
+          "text": "Frutas"
+        },
+        {
+          "id": "option-3",
+          "text": "Doce de leite"
+        },
+        {
+          "id": "option-4",
+          "text": "Baunilha ou creme"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-006",
+      "text": "Quando tenho tempo livre, o que faço primeiro?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Descanso"
+        },
+        {
+          "id": "option-2",
+          "text": "Converso com alguém"
+        },
+        {
+          "id": "option-3",
+          "text": "Começo um hobby"
+        },
+        {
+          "id": "option-4",
+          "text": "Saio para passear"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-007",
+      "text": "Qual encontro eu escolheria hoje?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Jantar em casa"
+        },
+        {
+          "id": "option-2",
+          "text": "Café fora"
+        },
+        {
+          "id": "option-3",
+          "text": "Cinema"
+        },
+        {
+          "id": "option-4",
+          "text": "Caminhada"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-008",
+      "text": "Que horário eu prefiro para passear?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Manhã"
+        },
+        {
+          "id": "option-2",
+          "text": "Depois do almoço"
+        },
+        {
+          "id": "option-3",
+          "text": "Fim de tarde"
+        },
+        {
+          "id": "option-4",
+          "text": "Noite"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-009",
+      "text": "Como costumo organizar uma viagem?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Roteiro detalhado"
+        },
+        {
+          "id": "option-2",
+          "text": "Lista de prioridades"
+        },
+        {
+          "id": "option-3",
+          "text": "Só o essencial"
+        },
+        {
+          "id": "option-4",
+          "text": "Decido no destino"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-010",
+      "text": "Qual presente simples tem mais a minha cara?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Carta"
+        },
+        {
+          "id": "option-2",
+          "text": "Comida favorita"
+        },
+        {
+          "id": "option-3",
+          "text": "Objeto útil"
+        },
+        {
+          "id": "option-4",
+          "text": "Experiência juntos"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-011",
+      "text": "Qual trilha sonora combina com meu dia ideal?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Pop"
+        },
+        {
+          "id": "option-2",
+          "text": "Rock"
+        },
+        {
+          "id": "option-3",
+          "text": "MPB"
+        },
+        {
+          "id": "option-4",
+          "text": "Instrumental"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-012",
+      "text": "Qual formato prefiro para aprender algo?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Vídeo"
+        },
+        {
+          "id": "option-2",
+          "text": "Texto"
+        },
+        {
+          "id": "option-3",
+          "text": "Prática"
+        },
+        {
+          "id": "option-4",
+          "text": "Conversa com alguém"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-013",
+      "text": "Que lanche eu escolheria para um filme?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Pipoca"
+        },
+        {
+          "id": "option-2",
+          "text": "Sanduíche"
+        },
+        {
+          "id": "option-3",
+          "text": "Frutas"
+        },
+        {
+          "id": "option-4",
+          "text": "Doces"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-014",
+      "text": "Como gosto de receber carinho à distância?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Mensagem escrita"
+        },
+        {
+          "id": "option-2",
+          "text": "Áudio"
+        },
+        {
+          "id": "option-3",
+          "text": "Chamada"
+        },
+        {
+          "id": "option-4",
+          "text": "Foto com legenda"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-015",
+      "text": "Qual clima eu prefiro para um passeio?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Ensolarado ameno"
+        },
+        {
+          "id": "option-2",
+          "text": "Frio com sol"
+        },
+        {
+          "id": "option-3",
+          "text": "Nublado fresco"
+        },
+        {
+          "id": "option-4",
+          "text": "Calor de verão"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-016",
+      "text": "Qual seria meu papel na cozinha hoje?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Planejar a receita"
+        },
+        {
+          "id": "option-2",
+          "text": "Cortar e preparar"
+        },
+        {
+          "id": "option-3",
+          "text": "Cuidar do fogão"
+        },
+        {
+          "id": "option-4",
+          "text": "Montar e servir"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-017",
+      "text": "Qual jogo eu escolheria para nós?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Cartas"
+        },
+        {
+          "id": "option-2",
+          "text": "Tabuleiro"
+        },
+        {
+          "id": "option-3",
+          "text": "Perguntas"
+        },
+        {
+          "id": "option-4",
+          "text": "Videogame"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-018",
+      "text": "Como gosto de comemorar uma conquista pequena?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Refeição especial"
+        },
+        {
+          "id": "option-2",
+          "text": "Passeio curto"
+        },
+        {
+          "id": "option-3",
+          "text": "Contar para quem gosto"
+        },
+        {
+          "id": "option-4",
+          "text": "Descansar feliz"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-019",
+      "text": "Qual canto de casa mais me atrai para relaxar?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Sofá"
+        },
+        {
+          "id": "option-2",
+          "text": "Cama"
+        },
+        {
+          "id": "option-3",
+          "text": "Varanda ou janela"
+        },
+        {
+          "id": "option-4",
+          "text": "Mesa de hobby"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-020",
+      "text": "Que tipo de foto eu mais gosto de tirar?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Pessoas"
+        },
+        {
+          "id": "option-2",
+          "text": "Paisagens"
+        },
+        {
+          "id": "option-3",
+          "text": "Comidas"
+        },
+        {
+          "id": "option-4",
+          "text": "Detalhes curiosos"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-021",
+      "text": "Qual passeio cultural eu escolheria?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Museu"
+        },
+        {
+          "id": "option-2",
+          "text": "Show"
+        },
+        {
+          "id": "option-3",
+          "text": "Teatro"
+        },
+        {
+          "id": "option-4",
+          "text": "Cinema"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-022",
+      "text": "Quando estou cansado, prefiro que me ofereçam o quê?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Companhia quieta"
+        },
+        {
+          "id": "option-2",
+          "text": "Conversa leve"
+        },
+        {
+          "id": "option-3",
+          "text": "Ajuda prática"
+        },
+        {
+          "id": "option-4",
+          "text": "Tempo sozinho"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-023",
+      "text": "Como eu escolheria um restaurante?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Pelo cardápio"
+        },
+        {
+          "id": "option-2",
+          "text": "Pelo ambiente"
+        },
+        {
+          "id": "option-3",
+          "text": "Pelo preço"
+        },
+        {
+          "id": "option-4",
+          "text": "Por recomendação"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-024",
+      "text": "Qual atividade criativa eu toparia primeiro?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Desenhar"
+        },
+        {
+          "id": "option-2",
+          "text": "Cozinhar algo novo"
+        },
+        {
+          "id": "option-3",
+          "text": "Fazer fotos"
+        },
+        {
+          "id": "option-4",
+          "text": "Escrever"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-025",
+      "text": "Qual bebida sem álcool eu escolheria agora?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Água"
+        },
+        {
+          "id": "option-2",
+          "text": "Suco"
+        },
+        {
+          "id": "option-3",
+          "text": "Café"
+        },
+        {
+          "id": "option-4",
+          "text": "Chá"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-026",
+      "text": "Qual viagem curta me animaria mais?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Praia próxima"
+        },
+        {
+          "id": "option-2",
+          "text": "Cidade histórica"
+        },
+        {
+          "id": "option-3",
+          "text": "Interior tranquilo"
+        },
+        {
+          "id": "option-4",
+          "text": "Capital com atrações"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-027",
+      "text": "Como prefiro guardar lembranças?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Fotos"
+        },
+        {
+          "id": "option-2",
+          "text": "Textos"
+        },
+        {
+          "id": "option-3",
+          "text": "Objetos"
+        },
+        {
+          "id": "option-4",
+          "text": "Áudios ou vídeos"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-028",
+      "text": "Qual tarefa em dupla eu escolheria?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Cozinhar"
+        },
+        {
+          "id": "option-2",
+          "text": "Organizar um canto"
+        },
+        {
+          "id": "option-3",
+          "text": "Cuidar de plantas"
+        },
+        {
+          "id": "option-4",
+          "text": "Planejar um passeio"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-029",
+      "text": "O que mais me chama atenção numa hospedagem?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Conforto da cama"
+        },
+        {
+          "id": "option-2",
+          "text": "Localização"
+        },
+        {
+          "id": "option-3",
+          "text": "Vista"
+        },
+        {
+          "id": "option-4",
+          "text": "Café da manhã"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-030",
+      "text": "Qual refeição eu mais gosto de transformar em encontro?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Café da manhã"
+        },
+        {
+          "id": "option-2",
+          "text": "Almoço"
+        },
+        {
+          "id": "option-3",
+          "text": "Lanche da tarde"
+        },
+        {
+          "id": "option-4",
+          "text": "Jantar"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-031",
+      "text": "Qual pausa curta me ajuda mais?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Tomar uma bebida"
+        },
+        {
+          "id": "option-2",
+          "text": "Ouvir música"
+        },
+        {
+          "id": "option-3",
+          "text": "Caminhar um pouco"
+        },
+        {
+          "id": "option-4",
+          "text": "Ficar em silêncio"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-032",
+      "text": "Qual novidade eu prefiro experimentar?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Comida"
+        },
+        {
+          "id": "option-2",
+          "text": "Lugar"
+        },
+        {
+          "id": "option-3",
+          "text": "Jogo"
+        },
+        {
+          "id": "option-4",
+          "text": "Habilidade"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-033",
+      "text": "Como gosto de receber uma surpresa?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Com pistas antes"
+        },
+        {
+          "id": "option-2",
+          "text": "Sabendo só o horário"
+        },
+        {
+          "id": "option-3",
+          "text": "Totalmente sem pistas"
+        },
+        {
+          "id": "option-4",
+          "text": "Escolhendo entre opções"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-034",
+      "text": "Qual gênero de filme eu escolheria hoje?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Comédia"
+        },
+        {
+          "id": "option-2",
+          "text": "Romance"
+        },
+        {
+          "id": "option-3",
+          "text": "Aventura"
+        },
+        {
+          "id": "option-4",
+          "text": "Mistério"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-035",
+      "text": "Qual detalhe deixa uma casa aconchegante para mim?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Luz suave"
+        },
+        {
+          "id": "option-2",
+          "text": "Música"
+        },
+        {
+          "id": "option-3",
+          "text": "Mantas e almofadas"
+        },
+        {
+          "id": "option-4",
+          "text": "Plantas"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-036",
+      "text": "Qual tipo de passeio eu faria com orçamento zero?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Parque"
+        },
+        {
+          "id": "option-2",
+          "text": "Caminhada no bairro"
+        },
+        {
+          "id": "option-3",
+          "text": "Biblioteca pública"
+        },
+        {
+          "id": "option-4",
+          "text": "Pôr do sol"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-037",
+      "text": "Qual seria minha escolha numa padaria?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Pão de queijo"
+        },
+        {
+          "id": "option-2",
+          "text": "Pão com recheio"
+        },
+        {
+          "id": "option-3",
+          "text": "Bolo"
+        },
+        {
+          "id": "option-4",
+          "text": "Salgado assado"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-038",
+      "text": "Como prefiro conversar sobre planos?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Durante uma caminhada"
+        },
+        {
+          "id": "option-2",
+          "text": "À mesa"
+        },
+        {
+          "id": "option-3",
+          "text": "Por mensagens primeiro"
+        },
+        {
+          "id": "option-4",
+          "text": "Num momento reservado"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-039",
+      "text": "Qual lembrança eu levaria de uma viagem?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Foto especial"
+        },
+        {
+          "id": "option-2",
+          "text": "Cartão-postal"
+        },
+        {
+          "id": "option-3",
+          "text": "Comida típica"
+        },
+        {
+          "id": "option-4",
+          "text": "Peça artesanal"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-040",
+      "text": "Qual atividade combina com minha manhã livre?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Dormir mais"
+        },
+        {
+          "id": "option-2",
+          "text": "Tomar café com calma"
+        },
+        {
+          "id": "option-3",
+          "text": "Fazer exercício"
+        },
+        {
+          "id": "option-4",
+          "text": "Passear cedo"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-041",
+      "text": "Qual tipo de humor mais me faz rir?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Piada interna"
+        },
+        {
+          "id": "option-2",
+          "text": "Situação inesperada"
+        },
+        {
+          "id": "option-3",
+          "text": "Jogo de palavras"
+        },
+        {
+          "id": "option-4",
+          "text": "Imitação leve"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-042",
+      "text": "Como costumo escolher uma música?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Pelo humor do momento"
+        },
+        {
+          "id": "option-2",
+          "text": "Pela letra"
+        },
+        {
+          "id": "option-3",
+          "text": "Pela batida"
+        },
+        {
+          "id": "option-4",
+          "text": "Pela lembrança que traz"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-043",
+      "text": "O que prefiro fazer numa noite de chuva?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Assistir algo"
+        },
+        {
+          "id": "option-2",
+          "text": "Cozinhar"
+        },
+        {
+          "id": "option-3",
+          "text": "Conversar"
+        },
+        {
+          "id": "option-4",
+          "text": "Ler ou ouvir histórias"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-044",
+      "text": "Qual seria minha primeira escolha num piquenique?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Sanduíche"
+        },
+        {
+          "id": "option-2",
+          "text": "Fruta"
+        },
+        {
+          "id": "option-3",
+          "text": "Bolo"
+        },
+        {
+          "id": "option-4",
+          "text": "Biscoito ou petisco"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-045",
+      "text": "Que habilidade eu gostaria de experimentar primeiro?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Instrumento musical"
+        },
+        {
+          "id": "option-2",
+          "text": "Dança"
+        },
+        {
+          "id": "option-3",
+          "text": "Fotografia"
+        },
+        {
+          "id": "option-4",
+          "text": "Artesanato"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-046",
+      "text": "Como prefiro celebrar meu aniversário atualmente?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Só nós dois"
+        },
+        {
+          "id": "option-2",
+          "text": "Com poucas pessoas"
+        },
+        {
+          "id": "option-3",
+          "text": "Com uma festa"
+        },
+        {
+          "id": "option-4",
+          "text": "Com um passeio"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-047",
+      "text": "Qual parte de planejar um date eu mais gosto?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Escolher o lugar"
+        },
+        {
+          "id": "option-2",
+          "text": "Escolher a comida"
+        },
+        {
+          "id": "option-3",
+          "text": "Pensar na surpresa"
+        },
+        {
+          "id": "option-4",
+          "text": "Montar a trilha sonora"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-048",
+      "text": "O que eu mais observaria num bairro novo?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Arquitetura"
+        },
+        {
+          "id": "option-2",
+          "text": "Lojas e cafés"
+        },
+        {
+          "id": "option-3",
+          "text": "Áreas verdes"
+        },
+        {
+          "id": "option-4",
+          "text": "Movimento das pessoas"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-049",
+      "text": "Qual formato eu escolheria para uma lembrança nossa?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Álbum de fotos"
+        },
+        {
+          "id": "option-2",
+          "text": "Carta"
+        },
+        {
+          "id": "option-3",
+          "text": "Vídeo curto"
+        },
+        {
+          "id": "option-4",
+          "text": "Playlist"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-050",
+      "text": "Como gosto de dividir uma atividade nova?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Fazer tudo juntos"
+        },
+        {
+          "id": "option-2",
+          "text": "Alternar as etapas"
+        },
+        {
+          "id": "option-3",
+          "text": "Cada um testa e compartilha"
+        },
+        {
+          "id": "option-4",
+          "text": "Um ensina e o outro tenta"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-051",
+      "text": "Qual ritmo eu prefiro num passeio?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Sem pressa"
+        },
+        {
+          "id": "option-2",
+          "text": "Com várias paradas"
+        },
+        {
+          "id": "option-3",
+          "text": "Com objetivo definido"
+        },
+        {
+          "id": "option-4",
+          "text": "Alternando passeio e descanso"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-052",
+      "text": "O que mais me anima numa feira?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Comidas"
+        },
+        {
+          "id": "option-2",
+          "text": "Artesanato"
+        },
+        {
+          "id": "option-3",
+          "text": "Livros e objetos usados"
+        },
+        {
+          "id": "option-4",
+          "text": "Música e apresentações"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-053",
+      "text": "Que tipo de encontro em casa eu escolheria?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Cozinhar juntos"
+        },
+        {
+          "id": "option-2",
+          "text": "Cinema no sofá"
+        },
+        {
+          "id": "option-3",
+          "text": "Jogo e conversa"
+        },
+        {
+          "id": "option-4",
+          "text": "Música e descanso"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-054",
+      "text": "Qual memória eu teria mais vontade de rever hoje?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Uma viagem"
+        },
+        {
+          "id": "option-2",
+          "text": "Nosso começo"
+        },
+        {
+          "id": "option-3",
+          "text": "Um dia engraçado"
+        },
+        {
+          "id": "option-4",
+          "text": "Uma conquista juntos"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-055",
+      "text": "Como eu escolheria um lugar da lista Queremos ir?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "O mais perto"
+        },
+        {
+          "id": "option-2",
+          "text": "O mais econômico"
+        },
+        {
+          "id": "option-3",
+          "text": "O mais diferente"
+        },
+        {
+          "id": "option-4",
+          "text": "O que está há mais tempo"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-056",
+      "text": "Qual tema eu escolheria para uma noite especial?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Receitas de uma região"
+        },
+        {
+          "id": "option-2",
+          "text": "Músicas da nossa história"
+        },
+        {
+          "id": "option-3",
+          "text": "Filmes de uma época"
+        },
+        {
+          "id": "option-4",
+          "text": "Jogos de infância"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-057",
+      "text": "Qual seria minha preferência numa tarde de calor?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Sombra e bebida fresca"
+        },
+        {
+          "id": "option-2",
+          "text": "Passeio perto da água"
+        },
+        {
+          "id": "option-3",
+          "text": "Ambiente interno fresco"
+        },
+        {
+          "id": "option-4",
+          "text": "Esperar o fim da tarde"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-058",
+      "text": "Qual detalhe de um date eu lembro mais depois?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Conversa"
+        },
+        {
+          "id": "option-2",
+          "text": "Comida"
+        },
+        {
+          "id": "option-3",
+          "text": "Lugar"
+        },
+        {
+          "id": "option-4",
+          "text": "Uma situação engraçada"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-059",
+      "text": "Como prefiro começar um hobby em dupla?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Testar em casa"
+        },
+        {
+          "id": "option-2",
+          "text": "Ver uma aula curta"
+        },
+        {
+          "id": "option-3",
+          "text": "Ir a uma oficina"
+        },
+        {
+          "id": "option-4",
+          "text": "Aprender com alguém conhecido"
+        }
+      ],
+      "intensity": "leve"
+    },
+    {
+      "id": "game-060",
+      "text": "Qual plano simples eu escolheria para amanhã?",
+      "options": [
+        {
+          "id": "option-1",
+          "text": "Lanche juntos"
+        },
+        {
+          "id": "option-2",
+          "text": "Caminhada curta"
+        },
+        {
+          "id": "option-3",
+          "text": "Música e conversa"
+        },
+        {
+          "id": "option-4",
+          "text": "Preparar uma refeição"
+        }
+      ],
+      "intensity": "leve"
+    }
+  ]
+}
