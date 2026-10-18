@@ -63,6 +63,7 @@ struct LoadingStateView: View {
 /// Inline error with an optional retry.
 struct ErrorBanner: View {
     let message: String
+    var actionTitle: LocalizedStringKey = "Tentar novamente"
     var retry: (() -> Void)?
 
     var body: some View {
@@ -78,7 +79,7 @@ struct ErrorBanner: View {
                     .font(.subheadline)
                     .foregroundStyle(Palette.textSecondary)
                 if let retry {
-                    Button("Tentar novamente", action: retry)
+                    Button(actionTitle, action: retry)
                         .buttonStyle(.soft)
                         .padding(.top, Spacing.xxs)
                 }
@@ -96,6 +97,10 @@ enum SyncDisplayState: Equatable {
     case upToDate
     case syncing
     case failed(String)
+    /// No network; local changes keep working and wait to be sent.
+    case offline(pending: Int?)
+    /// Connected, local changes not yet sent.
+    case pending(Int)
     case accountUnavailable
     /// Local demo data, never synced.
     case demo
@@ -132,6 +137,8 @@ struct SyncStatusBanner: View {
         case .upToDate: "checkmark.icloud"
         case .syncing: "arrow.triangle.2.circlepath.icloud"
         case .failed: "exclamationmark.icloud"
+        case .offline: "wifi.slash"
+        case .pending: "arrow.up.circle"
         case .accountUnavailable: "icloud.slash"
         case .demo: "hammer"
         }
@@ -142,6 +149,8 @@ struct SyncStatusBanner: View {
         case .upToDate: "Tudo sincronizado"
         case .syncing: "Sincronizando"
         case .failed: "Não foi possível sincronizar"
+        case .offline: "Sem conexão"
+        case .pending: "Enviando alterações"
         case .accountUnavailable: "iCloud indisponível"
         case .demo: "Modo demonstração"
         }
@@ -152,6 +161,9 @@ struct SyncStatusBanner: View {
         case .upToDate: "Suas alterações estão salvas no iCloud."
         case .syncing: "Você pode continuar usando o app normalmente."
         case .failed(let reason): "\(reason) Suas alterações continuam salvas neste iPhone."
+        case .offline(let pending?) where pending > 0: "\(pending) alterações aguardando envio. Você pode continuar editando."
+        case .offline: "Você pode continuar editando. Tudo é enviado quando a conexão voltar."
+        case .pending(let count): "\(count) alterações aguardando envio ao iCloud."
         case .accountUnavailable: "Suas alterações ficam neste iPhone até o iCloud voltar."
         case .demo: "Dados fictícios, só neste aparelho. Nada é enviado ao iCloud."
         }

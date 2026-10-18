@@ -12,9 +12,13 @@ struct CoupleHeroHeader: View {
     let title: String
     let daysTogether: Int?
     var photoData: Data?
-    /// Height of the bars above the header. The header draws under them, as in the
-    /// reference, and pushes its text below them.
+    /// Height of the bars above the header (status bar and navigation bar). The header
+    /// draws under them, as in the reference.
     var topInset: CGFloat = 0
+
+    /// Height of the navigation bar row. The title sits in that row, beside the avatar,
+    /// so it covers less of the photo.
+    private static let toolbarRowHeight: CGFloat = 44
 
     /// Fixed on purpose: the title grows with Dynamic Type, the photo area does not.
     private let height: CGFloat = 300
@@ -38,8 +42,10 @@ struct CoupleHeroHeader: View {
                     .foregroundStyle(Palette.textPrimary)
                 }
             }
-            .padding(.horizontal, Spacing.screen)
-            .padding(.top, topInset + Spacing.s)
+            .padding(.leading, Spacing.screen)
+            // Clear of the toolbar avatar, which shares the first line.
+            .padding(.trailing, Spacing.screen + Self.toolbarRowHeight)
+            .padding(.top, max(topInset - Self.toolbarRowHeight, 0) + Spacing.xxs)
             .accessibilityElement(children: .combine)
             .accessibilityAddTraits(.isHeader)
         }
@@ -48,13 +54,12 @@ struct CoupleHeroHeader: View {
 
     @ViewBuilder
     private var background: some View {
-        if let photoData, let image = UIImage(data: photoData) {
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFill()
-                .frame(maxWidth: .infinity, minHeight: height + topInset)
+        if photoData != nil {
+            DecodedImage(data: photoData) { Palette.surfaceMuted }
+                .frame(maxWidth: .infinity, minHeight: height + topInset, maxHeight: height + topInset)
                 .clipped()
                 .overlay(fade)
+                .accessibilityElement()
                 .accessibilityLabel(Text("Foto do casal"))
         } else {
             LinearGradient(
@@ -76,7 +81,7 @@ struct CoupleHeroHeader: View {
     private var fade: some View {
         VStack(spacing: 0) {
             LinearGradient(colors: [Palette.canvas.opacity(0.85), .clear], startPoint: .top, endPoint: .bottom)
-                .frame(height: 140)
+                .frame(height: 120)
             Spacer()
             LinearGradient(colors: [.clear, Palette.canvas], startPoint: .top, endPoint: .bottom)
                 .frame(height: 80)

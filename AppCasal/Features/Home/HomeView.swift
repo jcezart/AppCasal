@@ -6,99 +6,168 @@
 import CoreData
 import SwiftUI
 
-/// Início: couple header, latest note and summaries.
+/// Início: couple photo and names, days together, latest note, goal in progress and
+/// latest memory.
 struct HomeView: View {
     let environment: AppEnvironment
     @ObservedObject var space: CoupleSpace
     let userRecordName: String
     let showSpace: () -> Void
-    let showNotes: () -> Void
+    let showTab: (AppTab) -> Void
 
     @FetchRequest private var latestNotes: FetchedResults<Note>
+    @FetchRequest private var latestMemories: FetchedResults<Memory>
+    @FetchRequest private var activeGoals: FetchedResults<Goal>
     @State private var topInset: CGFloat = 0
+    @State private var isCreatingMemory = false
+    @State private var errorMessage: String?
 
     init(
         environment: AppEnvironment,
         space: CoupleSpace,
         userRecordName: String,
         showSpace: @escaping () -> Void,
-        showNotes: @escaping () -> Void
+        showTab: @escaping (AppTab) -> Void
     ) {
         self.environment = environment
         self.space = space
         self.userRecordName = userRecordName
         self.showSpace = showSpace
-        self.showNotes = showNotes
-        let request = Note.fetchRequest()
-        request.predicate = NSPredicate(format: "space == %@ AND deletedAt == nil", space)
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Note.createdAt, ascending: false)]
-        request.fetchLimit = 1
-        _latestNotes = FetchRequest(fetchRequest: request)
+        self.showTab = showTab
+        let notDeleted = NSPredicate(format: "space == %@ AND deletedAt == nil", space)
+
+        let noteRequest = Note.fetchRequest()
+        noteRequest.predicate = notDeleted
+        noteRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Note.createdAt, ascending: false)]
+        noteRequest.fetchLimit = 1
+        _latestNotes = FetchRequest(fetchRequest: noteRequest)
+
+        let memoryRequest = Memory.fetchRequest()
+        memoryRequest.predicate = notDeleted
+        memoryRequest.sortDescriptors = [
+            NSSortDescriptor(keyPath: \Memory.date, ascending: false),
+            NSSortDescriptor(keyPath: \Memory.createdAt, ascending: false),
+        ]
+        memoryRequest.fetchLimit = 1
+        _latestMemories = FetchRequest(fetchRequest: memoryRequest)
+
+        let goalRequest = Goal.fetchRequest()
+        goalRequest.predicate = NSPredicate(format: "space == %@ AND deletedAt == nil AND completedAt == nil", space)
+        goalRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Goal.modifiedAt, ascending: false)]
+        goalRequest.fetchLimit = 1
+        _activeGoals = FetchRequest(fetchRequest: goalRequest)
     }
 
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                CoupleHeroHeader(title: coupleTitle, daysTogether: space.daysTogether(), topInset: topInset)
+                CoupleHeroHeader(
+                    title: coupleTitle,
+                    daysTogether: space.daysTogether(),
+                    photoData: space.coverPhotoData,
+                    topInset: topInset
+                )
+                .overlay(alignment: .bottomTrailing) { addCouplePhoto }
                 VStack(alignment: .leading, spacing: Spacing.m) {
+                    if let errorMessage {
+                        ErrorBanner(message: errorMessage)
+                    }
                     latestNote
-                    InfoCard(
-                        systemImage: "target",
-                        title: "Nenhuma meta ainda",
-                        message: "Os planos de vocês e o progresso de cada um aparecem aqui."
-                    )
+                    goalSummary
                     SectionLabel(title: "Última memória")
                         .padding(.top, Spacing.xs)
-                    InfoCard(
-                        systemImage: "photo.on.rectangle.angled",
-                        title: "Nenhuma memória ainda",
-                        message: "A memória mais recente de vocês aparece aqui."
-                    )
+                    latestMemory
+                    Button("Nova memória", systemImage: "plus") { isCreatingMemory = true }
+                        .buttonStyle(.primary)
+                        .padding(.top, Spacing.xs)
                 }
                 .padding(.horizontal, Spacing.screen)
-                .padding(.top, -Spacing.xxxl * 2)
+                .padding(.top, space.coverPhotoData == nil ? -Spacing.xxxl * 2 : -Spacing.xl)
                 .padding(.bottom, Spacing.xl)
             }
         }
         .ignoresSafeArea(edges: .top)
         .onGeometryChange(for: CGFloat.self) { $0.safeAreaInsets.top } action: { topInset = $0 }
         .canvasBackground()
+        .sheet(isPresented: $isCreatingMemory) {
+            MemoryEditorView(environment: environment, mode: .create(space), userRecordName: userRecordName)
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(action: showSpace) {
-                    AvatarView(name: myName, size: 32)
+                    AvatarView(name: me?.displayName ?? "", imageData: me?.avatarData, size: 32)
                 }
                 .accessibilityLabel(Text("Nosso espaço"))
             }
         }
     }
 
+    /// Without a couple photo, a glass button over the hero invites adding one.
+    @ViewBuilder
+    private var addCouplePhoto: some View {
+        if space.coverPhotoData == nil {
+            PhotoPickerButton(onPicked: { photo in
+                do {
+                    try environment.spaces.setCoverPhoto(photo.imageData, in: space)
+                } catch {
+                    errorMessage = error.localizedDescription
+                }
+            }, onFailure: { errorMessage = $0 }) {
+                Label("Foto do casal", systemImage: "camera")
+                    .font(.subheadline.weight(.medium))
+                    .padding(.horizontal, Spacing.m)
+                    .padding(.vertical, Spacing.xs)
+            }
+            .buttonStyle(.glass)
+            .padding(.trailing, Spacing.screen)
+            .padding(.bottom, Spacing.xxxl * 2 + Spacing.m)
+        }
+    }
+
     @ViewBuilder
     private var latestNote: some View {
         if let note = latestNotes.first {
-            Button(action: showNotes) {
-                NotePreviewCard(
-                    text: note.text ?? "",
-                    authorName: name(for: note.authorID),
-                    date: note.createdAt ?? .now
-                )
+            Button { showTab(.notes) } label: {
+                NotePreviewCard(text: note.text ?? "", authorName: name(for: note.authorID), date: note.createdAt ?? .now)
             }
             .buttonStyle(.plain)
             .accessibilityHint(Text("Abre os recados"))
         } else {
-            InfoCard(
-                systemImage: "envelope.open",
-                title: "Nenhum recadinho ainda",
-                message: "O último recadinho entre vocês aparece aqui."
-            )
+            InfoCard(systemImage: "envelope.open", title: "Nenhum recadinho ainda", message: "O último recadinho entre vocês aparece aqui.")
         }
     }
 
-    private var myName: String {
-        environment.spaces.member(for: userRecordName, in: space)?.displayName ?? ""
+    @ViewBuilder
+    private var goalSummary: some View {
+        if let goal = activeGoals.first {
+            Button { showTab(.goals) } label: {
+                GoalSummaryRow(goal: goal)
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint(Text("Abre as metas"))
+        } else {
+            InfoCard(systemImage: "target", title: "Nenhuma meta em andamento", message: "Os planos de vocês e o progresso de cada um aparecem aqui.")
+        }
     }
 
+    @ViewBuilder
+    private var latestMemory: some View {
+        if let memory = latestMemories.first {
+            NavigationLink {
+                MemoryDetailView(environment: environment, memory: memory, userRecordName: userRecordName)
+            } label: {
+                MemoryRow(memory: memory)
+            }
+            .buttonStyle(.plain)
+        } else {
+            InfoCard(systemImage: "photo.on.rectangle.angled", title: "Nenhuma memória ainda", message: "A memória mais recente de vocês aparece aqui.")
+        }
+    }
+
+    private var me: Member? { environment.spaces.member(for: userRecordName, in: space) }
+
     private var coupleTitle: String {
+        let myName = me?.displayName ?? ""
         guard let partner = environment.spaces.partner(of: userRecordName, in: space)?.displayName else {
             return myName
         }
@@ -113,9 +182,8 @@ struct HomeView: View {
 #if DEBUG
 #Preview {
     let environment = DemoData.previewEnvironment()
-    let space = environment.spaces.activeSpace()!
     NavigationStack {
-        HomeView(environment: environment, space: space, userRecordName: DemoData.ownerID, showSpace: {}, showNotes: {})
+        HomeView(environment: environment, space: environment.spaces.activeSpace()!, userRecordName: DemoData.ownerID, showSpace: {}, showTab: { _ in })
     }
     .environment(\.managedObjectContext, environment.persistence.viewContext)
 }

@@ -46,6 +46,7 @@ struct DesignSupportTests {
         #expect(monitor.displayState(isDemo: true, accountStatus: .available) == .demo)
         #expect(monitor.displayState(isDemo: false, accountStatus: .noAccount) == .accountUnavailable)
         #expect(monitor.displayState(isDemo: false, accountStatus: .available) == .upToDate)
+        #expect(monitor.displayState(isDemo: false, accountStatus: .available, isConnected: false) == .offline(pending: nil))
     }
 
     #if DEBUG
@@ -62,6 +63,13 @@ struct DesignSupportTests {
         let space = try #require(environment.spaces.activeSpace())
         #expect(space.members?.count == 2)
         #expect(space.notes?.count == 3)
+        #expect(space.memories?.count == 2)
+        #expect(space.memories?.allSatisfy { $0.visiblePhotos.count == 1 && $0.locationName != nil } == true)
+        #expect(space.places?.count == 4)
+        #expect(space.goals?.count == 3)
+        #expect(space.reminders?.count == 1)
+        #expect(space.coverPhotoData != nil)
+        #expect(environment.favorites.favoriteNoteIDs(for: DemoData.ownerID).count == 1)
         #expect(environment.isDemo)
 
         try DemoData.seedIfNeeded(environment)

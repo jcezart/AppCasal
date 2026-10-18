@@ -6,7 +6,8 @@
 import CloudKit
 import SwiftUI
 
-/// "Nosso espaço": both partners, connection, profile, relationship date and sync status.
+/// "Nosso espaço": both partners, connection, profile, couple photo, relationship date,
+/// reminders, notifications, recently deleted, sharing and space management, sync status.
 struct SpaceView: View {
     let environment: AppEnvironment
     @ObservedObject var space: CoupleSpace
@@ -14,8 +15,14 @@ struct SpaceView: View {
 
     @Environment(\.dismiss) private var dismiss
     @State private var share: CKShare?
-    @State private var isPreparingInvite = false
+    @State private var isWorking = false
     @State private var errorMessage: String?
+    @State private var confirmation: Confirmation?
+
+    private enum Confirmation: Identifiable {
+        case leave, startNew, delete
+        var id: Self { self }
+    }
 
     private var me: Member? { environment.spaces.member(for: userRecordName, in: space) }
     private var partner: Member? { environment.spaces.partner(of: userRecordName, in: space) }
@@ -26,7 +33,12 @@ struct SpaceView: View {
             ScrollView {
                 VStack(spacing: Spacing.xl) {
                     VStack(spacing: Spacing.m) {
-                        CoupleAvatars(firstName: me?.displayName ?? "", secondName: partner?.displayName)
+                        CoupleAvatars(
+                            firstName: me?.displayName ?? "",
+                            secondName: partner?.displayName,
+                            firstPhoto: me?.avatarData,
+                            secondPhoto: partner?.avatarData
+                        )
                         connectionChip
                     }
                     .padding(.top, Spacing.s)
@@ -39,8 +51,13 @@ struct SpaceView: View {
 
                     SyncStatusBanner(state: environment.sync.displayState(
                         isDemo: environment.isDemo,
-                        accountStatus: environment.account.status
+                        accountStatus: environment.account.status,
+                        isConnected: environment.network.isConnected
                     ))
+
+                    if !environment.isDemo {
+                        sharingRows
+                    }
 
                     #if DEBUG
                     NavigationLink {
@@ -55,6 +72,8 @@ struct SpaceView: View {
                 .padding(.bottom, Spacing.xl)
             }
             .canvasBackground()
+            .disabled(isWorking)
+            .overlay { if isWorking { ProgressView() } }
             .navigationTitle("Nosso espaço")
             .navigationSubtitle("Aqui é onde a nossa história continua.")
             .toolbar {
@@ -62,9 +81,45 @@ struct SpaceView: View {
                     Button("OK") { dismiss() }
                 }
             }
+            .confirmationDialog(confirmationTitle, isPresented: Binding(
+                get: { confirmation != nil && confirmation != .delete },
+                set: { if !$0 { confirmation = nil } }
+            ), titleVisibility: .visible, presenting: confirmation) { item in
+                switch item {
+                case .leave:
+                    Button("Sair do espaço", role: .destructive) { run { try await environment.sharing.leave(space) } }
+                case .startNew:
+                    Button("Começar um novo espaço", role: .destructive) { run { try environment.spaces.archive(space) } }
+                case .delete:
+                    EmptyView()
+                }
+            } message: { item in
+                switch item {
+                case .leave:
+                    Text("Você deixa de ver o espaço neste iPhone. Nada é apagado do iCloud do seu par.")
+                case .startNew:
+                    Text("Este espaço fica arquivado com você e um novo espaço, vazio, é criado para um novo convite.")
+                case .delete:
+                    EmptyView()
+                }
+            }
+            .sheet(isPresented: Binding(get: { confirmation == .delete }, set: { if !$0 { confirmation = nil } })) {
+                DeleteSpaceView { run { try await environment.sharing.deletePermanently(space) } }
+            }
         }
-        .task { reloadShare() }
+        .task {
+            reloadShare()
+            await environment.reminderNotifications.refreshAuthorization()
+        }
         .onChange(of: environment.sharing.shareRevision) { reloadShare() }
+    }
+
+    private var confirmationTitle: LocalizedStringKey {
+        switch confirmation {
+        case .leave: "Sair do espaço?"
+        case .startNew: "Começar um novo espaço?"
+        default: ""
+        }
     }
 
     @ViewBuilder
@@ -82,65 +137,123 @@ struct SpaceView: View {
         VStack(spacing: 0) {
             if let me {
                 NavigationLink {
-                    EditNameView(environment: environment, member: me)
+                    ProfileView(environment: environment, member: me)
                 } label: {
                     SettingsRow(systemImage: "person", title: "Meu perfil", subtitle: me.displayName)
                 }
                 .buttonStyle(.plain)
-                Divider().overlay(Palette.hairline)
+                divider
             }
+            NavigationLink {
+                CouplePhotoView(environment: environment, space: space)
+            } label: {
+                SettingsRow(
+                    systemImage: "camera",
+                    title: "Foto do casal",
+                    subtitle: space.coverPhotoData == nil ? String(localized: "Nenhuma foto") : nil
+                )
+            }
+            .buttonStyle(.plain)
+            divider
             NavigationLink {
                 RelationshipStartView(environment: environment, space: space)
             } label: {
                 SettingsRow(
                     systemImage: "calendar",
                     title: "Início do relacionamento",
-                    subtitle: space.relationshipStart?.formatted(date: .long, time: .omitted)
-                        ?? String(localized: "Não definido")
+                    subtitle: space.relationshipStart?.formatted(date: .long, time: .omitted) ?? String(localized: "Não definido")
                 )
             }
             .buttonStyle(.plain)
-            inviteRow
+            divider
+            NavigationLink {
+                RemindersView(environment: environment, space: space, userRecordName: userRecordName)
+            } label: {
+                SettingsRow(systemImage: "bell", title: "Lembretes", subtitle: remindersSubtitle)
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("space.reminders")
+            divider
+            NavigationLink {
+                NotificationSettingsView(environment: environment)
+            } label: {
+                SettingsRow(
+                    systemImage: "app.badge",
+                    title: "Notificações",
+                    subtitle: environment.reminderNotifications.isAllowed ? String(localized: "Ativadas") : String(localized: "Desativadas")
+                )
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("space.notifications")
+            divider
+            NavigationLink {
+                DeletedItemsView(environment: environment, space: space, userRecordName: userRecordName)
+            } label: {
+                SettingsRow(systemImage: "trash", title: "Excluídos recentemente")
+            }
+            .buttonStyle(.plain)
         }
         .padding(.horizontal, Spacing.card)
         .padding(.vertical, Spacing.xxs)
         .surfaceCard(padding: 0)
     }
 
+    /// Invite, manage, leave, start over and delete. Not shown in demo mode (no CloudKit).
     @ViewBuilder
-    private var inviteRow: some View {
-        if isOwner, !environment.isDemo, partner == nil {
-            Divider().overlay(Palette.hairline)
-            if space.sharingEndedAt != nil {
-                SettingsRow(
-                    systemImage: "person.crop.circle.badge.xmark",
-                    title: "Compartilhamento encerrado",
-                    subtitle: String(localized: "Os dados continuam com você. Um novo relacionamento começa em um novo espaço."),
-                    showsChevron: false
-                )
-            } else if let share {
-                Button {
-                    environment.sharing.presentSharingController(for: share, of: space)
-                } label: {
+    private var sharingRows: some View {
+        VStack(spacing: 0) {
+            if isOwner {
+                if space.sharingEndedAt != nil {
                     SettingsRow(
-                        systemImage: "person.badge.plus",
-                        title: CoupleLimit.canInvite(CoupleLimit.summaries(of: share)) ? "Convidar seu par" : "Gerenciar convite"
+                        systemImage: "person.crop.circle.badge.xmark",
+                        title: "Compartilhamento encerrado",
+                        subtitle: String(localized: "Os dados continuam com você."),
+                        showsChevron: false
                     )
+                    divider
+                    Button { confirmation = .startNew } label: {
+                        SettingsRow(systemImage: "plus.circle", title: "Começar um novo espaço")
+                    }
+                    .buttonStyle(.plain)
+                } else if let share, !CoupleLimit.canInvite(CoupleLimit.summaries(of: share)) {
+                    manageSharingButton(share, title: "Gerenciar compartilhamento")
+                } else {
+                    ShareLink(
+                        item: environment.sharing.invitation(for: space),
+                        preview: SharePreview("Nosso espaço", image: Image(uiImage: ShareThumbnail.image(for: space)))
+                    ) {
+                        SettingsRow(systemImage: "person.badge.plus", title: "Convidar seu par")
+                    }
+                    .buttonStyle(.plain)
+                    if let share {
+                        divider
+                        manageSharingButton(share, title: "Gerenciar convite")
+                    }
+                }
+                divider
+                Button { confirmation = .delete } label: {
+                    SettingsRow(systemImage: "exclamationmark.triangle", title: "Apagar o espaço", showsChevron: false)
                 }
                 .buttonStyle(.plain)
             } else {
-                Button {
-                    Task { await createInvite() }
-                } label: {
-                    SettingsRow(systemImage: "person.badge.plus", title: "Convidar seu par", showsChevron: !isPreparingInvite)
-                        .overlay(alignment: .trailing) {
-                            if isPreparingInvite { ProgressView() }
-                        }
+                Button { confirmation = .leave } label: {
+                    SettingsRow(systemImage: "rectangle.portrait.and.arrow.right", title: "Sair do espaço", showsChevron: false)
                 }
                 .buttonStyle(.plain)
-                .disabled(isPreparingInvite)
             }
         }
+        .padding(.horizontal, Spacing.card)
+        .padding(.vertical, Spacing.xxs)
+        .surfaceCard(padding: 0)
+    }
+
+    private var remindersSubtitle: String? {
+        let count = (space.reminders ?? []).filter { $0.deletedAt == nil }.count
+        return count == 0 ? nil : String(localized: "\(count) lembretes")
+    }
+
+    private var divider: some View {
+        Divider().overlay(Palette.hairline)
     }
 
     private func reloadShare() {
@@ -148,22 +261,77 @@ struct SpaceView: View {
         share = environment.sharing.existingShare(for: space)
     }
 
-    private func createInvite() async {
-        isPreparingInvite = true
-        defer { isPreparingInvite = false }
-        do {
-            let newShare = try await environment.sharing.createShare(for: space)
-            share = newShare
-            environment.sharing.presentSharingController(for: newShare, of: space)
-        } catch {
-            errorMessage = error.localizedDescription
+    /// Participants and stopping the share, in the system sharing screen.
+    private func manageSharingButton(_ share: CKShare, title: LocalizedStringKey) -> some View {
+        Button {
+            environment.sharing.presentSharingController(for: share, of: space)
+        } label: {
+            SettingsRow(systemImage: "person.2", title: title)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func run(_ action: @escaping () async throws -> Void) {
+        isWorking = true
+        errorMessage = nil
+        Task {
+            defer { isWorking = false }
+            do {
+                try await action()
+            } catch {
+                errorMessage = error.localizedDescription
+            }
         }
     }
 }
 
-private struct EditNameView: View {
+/// Strong confirmation for the irreversible deletion: the owner types a word.
+private struct DeleteSpaceView: View {
+    let onConfirm: () -> Void
+
+    @Environment(\.dismiss) private var dismiss
+    @State private var typed = ""
+    private let word = String(localized: "APAGAR")
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    Text("Isto apaga o espaço e tudo o que há nele (memórias, fotos, recados, metas e lugares) para vocês dois, neste iPhone e no iCloud. Não dá para desfazer.")
+                        .foregroundStyle(Palette.textPrimary)
+                }
+                .listRowBackground(Palette.surface)
+                Section {
+                    TextField(word, text: $typed)
+                        .textInputAutocapitalization(.characters)
+                        .autocorrectionDisabled()
+                } header: {
+                    Text("Digite \(word) para confirmar")
+                }
+                .listRowBackground(Palette.surface)
+            }
+            .canvasBackground()
+            .navigationTitle("Apagar o espaço")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancelar", role: .cancel) { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Apagar", role: .destructive) {
+                        dismiss()
+                        onConfirm()
+                    }
+                    .disabled(typed.trimmingCharacters(in: .whitespaces).uppercased() != word)
+                }
+            }
+        }
+    }
+}
+
+private struct ProfileView: View {
     let environment: AppEnvironment
-    let member: Member
+    @ObservedObject var member: Member
 
     @Environment(\.dismiss) private var dismiss
     @State private var name: String
@@ -178,29 +346,117 @@ private struct EditNameView: View {
     var body: some View {
         Form {
             Section {
+                HStack {
+                    Spacer()
+                    VStack(spacing: Spacing.s) {
+                        AvatarView(name: name, imageData: member.avatarData, size: 96)
+                        HStack(spacing: Spacing.s) {
+                            PhotoPickerButton(onPicked: { photo in
+                                save { try environment.spaces.setAvatar(photo.thumbnailData, for: member) }
+                            }, onFailure: { errorMessage = $0 }) {
+                                Text(member.avatarData == nil ? "Escolher foto" : "Trocar foto")
+                            }
+                            if member.avatarData != nil {
+                                Button("Remover", role: .destructive) {
+                                    save { try environment.spaces.setAvatar(nil, for: member) }
+                                }
+                            }
+                        }
+                        .buttonStyle(.borderless)
+                    }
+                    Spacer()
+                }
+            }
+            .listRowBackground(Color.clear)
+            Section {
                 TextField("Seu nome", text: $name)
                     .textContentType(.givenName)
             } footer: {
                 Text("É assim que você aparece para o seu par.")
             }
+            .listRowBackground(Palette.surface)
             if let errorMessage {
                 Section { Text(errorMessage).foregroundStyle(Palette.accentText) }
+                    .listRowBackground(Palette.surface)
             }
         }
         .canvasBackground()
+        .tint(Palette.accentText)
         .navigationTitle("Meu perfil")
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Salvar") {
-                    do {
+                    save {
                         try environment.spaces.updateDisplayName(member, to: name.trimmingCharacters(in: .whitespaces))
                         dismiss()
-                    } catch {
-                        errorMessage = error.localizedDescription
                     }
                 }
                 .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
             }
+        }
+    }
+
+    private func save(_ action: () throws -> Void) {
+        do {
+            try action()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+}
+
+private struct CouplePhotoView: View {
+    let environment: AppEnvironment
+    @ObservedObject var space: CoupleSpace
+
+    @State private var errorMessage: String?
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: Spacing.m) {
+                DecodedImage(data: space.coverPhotoData) {
+                    Image(systemName: "photo")
+                        .font(.largeTitle)
+                        .foregroundStyle(Palette.textSecondary)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Palette.surfaceMuted)
+                }
+                .frame(maxWidth: .infinity)
+                .aspectRatio(4 / 5, contentMode: .fit)
+                .clipShape(.rect(cornerRadius: Radius.card, style: .continuous))
+                .accessibilityLabel(Text("Foto do casal"))
+                PhotoPickerButton(onPicked: { photo in
+                    save { try environment.spaces.setCoverPhoto(photo.imageData, in: space) }
+                }, onFailure: { errorMessage = $0 }) {
+                    Label(space.coverPhotoData == nil ? "Escolher foto" : "Trocar foto", systemImage: "photo.on.rectangle")
+                }
+                .buttonStyle(.primary)
+                if space.coverPhotoData != nil {
+                    Button("Remover foto", role: .destructive) {
+                        save { try environment.spaces.setCoverPhoto(nil, in: space) }
+                    }
+                    .buttonStyle(.soft)
+                }
+                if let errorMessage {
+                    ErrorBanner(message: errorMessage)
+                }
+                Text("A foto aparece no Início para vocês dois.")
+                    .font(.footnote)
+                    .foregroundStyle(Palette.textSecondary)
+            }
+            .padding(Spacing.screen)
+        }
+        .canvasBackground()
+        .navigationTitle("Foto do casal")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private func save(_ action: () throws -> Void) {
+        do {
+            try action()
+            errorMessage = nil
+        } catch {
+            errorMessage = error.localizedDescription
         }
     }
 }
@@ -228,13 +484,16 @@ private struct RelationshipStartView: View {
             } footer: {
                 Text("Usada para contar os dias juntos no Início.")
             }
+            .listRowBackground(Palette.surface)
             if space.relationshipStart != nil {
                 Section {
                     Button("Remover data", role: .destructive) { save(nil) }
                 }
+                .listRowBackground(Palette.surface)
             }
             if let errorMessage {
                 Section { Text(errorMessage).foregroundStyle(Palette.accentText) }
+                    .listRowBackground(Palette.surface)
             }
         }
         .canvasBackground()

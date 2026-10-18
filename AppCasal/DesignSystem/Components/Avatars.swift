@@ -15,11 +15,7 @@ struct AvatarView: View {
     var body: some View {
         ZStack {
             Circle().fill(Palette.surfaceMuted)
-            if let imageData, let image = UIImage(data: imageData) {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-            } else {
+            DecodedImage(data: imageData) {
                 Text(initial)
                     .font(.system(size: size * 0.42, design: .serif))
                     .foregroundStyle(Palette.accentText)
@@ -40,19 +36,21 @@ struct AvatarView: View {
 struct CoupleAvatars: View {
     let firstName: String
     let secondName: String?
+    var firstPhoto: Data?
+    var secondPhoto: Data?
 
     @ScaledMetric(relativeTo: .title) private var size: CGFloat = 88
 
     var body: some View {
         HStack(alignment: .top, spacing: Spacing.m) {
-            person(firstName)
+            person(firstName, photo: firstPhoto)
             Image(systemName: "heart.fill")
                 .font(.title3)
                 .foregroundStyle(Palette.accent)
                 .padding(.top, size / 2 - 10)
                 .accessibilityHidden(true)
             if let secondName {
-                person(secondName)
+                person(secondName, photo: secondPhoto)
             } else {
                 VStack(spacing: Spacing.xs) {
                     Circle()
@@ -69,9 +67,9 @@ struct CoupleAvatars: View {
         }
     }
 
-    private func person(_ name: String) -> some View {
+    private func person(_ name: String, photo: Data?) -> some View {
         VStack(spacing: Spacing.xs) {
-            AvatarView(name: name, size: size)
+            AvatarView(name: name, imageData: photo, size: size)
             Text(name)
                 .font(.cardTitle)
                 .foregroundStyle(Palette.textPrimary)

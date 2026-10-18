@@ -62,8 +62,27 @@ final class ShareService {
         guard let store = persistence.privateStore else { throw ShareError.storeUnavailable }
         let (_, share, _) = try await persistence.container.share([space], to: nil)
         share[CKShare.SystemFieldKey.title] = String(localized: "Nosso espaço")
+        share[CKShare.SystemFieldKey.thumbnailImageData] = ShareThumbnail.data(for: space)
         share.publicPermission = .none
-        return try await persistence.container.persistUpdatedShare(share, in: store)
+        let saved = try await persistence.container.persistUpdatedShare(share, in: store)
+        shareRevision += 1
+        return saved
+    }
+
+    /// Item for `ShareLink`: sends the existing share, or creates it when the person
+    /// picks where to send the invitation.
+    func invitation(for space: CoupleSpace) -> SpaceInvitation {
+        let spaceID = space.objectID
+        return SpaceInvitation(
+            container: persistence.cloudKitContainer,
+            existing: existingShare(for: space),
+            prepare: { @MainActor [self] in
+                guard let space = try persistence.viewContext.existingObject(with: spaceID) as? CoupleSpace else {
+                    throw ShareError.storeUnavailable
+                }
+                return try await createShare(for: space)
+            }
+        )
     }
 
     /// Presents the system sharing UI, restricted to private, read-write invitations.
@@ -97,6 +116,31 @@ final class ShareService {
         }
     }
 
+    /// Participant leaves the couple space. Purging the shared zone from the shared database
+    /// removes this user from the share and deletes the local copy; the owner's data is
+    /// untouched. (Behavior to validate with two accounts: S8.)
+    func leave(_ space: CoupleSpace) async throws {
+        guard let store = persistence.sharedStore, persistence.isInSharedStore(space),
+              let share = existingShare(for: space) else { throw ShareError.storeUnavailable }
+        _ = try await persistence.container.purgeObjectsAndRecordsInZone(with: share.recordID.zoneID, in: store)
+        acceptance = .idle
+        shareRevision += 1
+    }
+
+    /// Owner permanently deletes the space and everything in it, for both partners.
+    /// Shared: purges the share zone (data and share). Not shared: deletes the objects,
+    /// and mirroring deletes the records.
+    func deletePermanently(_ space: CoupleSpace) async throws {
+        guard !persistence.isInSharedStore(space) else { throw ShareError.storeUnavailable }
+        if let share = existingShare(for: space), let store = persistence.privateStore {
+            _ = try await persistence.container.purgeObjectsAndRecordsInZone(with: share.recordID.zoneID, in: store)
+        } else {
+            persistence.viewContext.delete(space)
+            try persistence.save()
+        }
+        shareRevision += 1
+    }
+
     fileprivate func sharingControllerDidSave(_ share: CKShare?) {
         guard let share, let store = persistence.privateStore else { return }
         Task {
@@ -124,6 +168,10 @@ final class ShareService {
         shareRevision += 1
     }
 
+    fileprivate var presentedThumbnail: Data? {
+        presentedSpace.flatMap(ShareThumbnail.data(for:))
+    }
+
     fileprivate func sharingControllerFailed(_ error: Error) {
         lastError = error.localizedDescription
     }
@@ -149,6 +197,10 @@ private final class SharingControllerDelegate: NSObject, UICloudSharingControlle
 
     func itemTitle(for csc: UICloudSharingController) -> String? {
         String(localized: "Nosso espaço")
+    }
+
+    func itemThumbnailData(for csc: UICloudSharingController) -> Data? {
+        service?.presentedThumbnail
     }
 
     func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {

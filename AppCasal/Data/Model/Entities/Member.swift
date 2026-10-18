@@ -12,6 +12,8 @@ nonisolated final class Member: NSManagedObject {
     @NSManaged var userRecordName: String?
     @NSManaged var displayName: String?
     @NSManaged var role: String?
+    /// Profile photo, thumbnail size.
+    @NSManaged var avatarData: Data?
     @NSManaged var createdAt: Date?
     @NSManaged var modifiedAt: Date?
     @NSManaged var space: CoupleSpace?

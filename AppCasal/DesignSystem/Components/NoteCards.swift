@@ -10,6 +10,10 @@ struct NoteCard: View {
     let text: String
     let authorName: String
     let date: Date
+    var isEdited = false
+    /// nil hides the heart.
+    var isFavorite: Bool?
+    var onToggleFavorite: () -> Void = {}
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.s) {
@@ -21,12 +25,33 @@ struct NoteCard: View {
                 .font(.noteQuote)
                 .foregroundStyle(Palette.textPrimary)
                 .fixedSize(horizontal: false, vertical: true)
-            Text("\(authorName) · \(date, format: .relative(presentation: .named))")
+            HStack(alignment: .center) {
+                Group {
+                    if isEdited {
+                        Text("\(authorName) · \(NoteTimestamp.text(for: date)) · editado")
+                    } else {
+                        Text("\(authorName) · \(NoteTimestamp.text(for: date))")
+                    }
+                }
                 .font(.metadata)
                 .foregroundStyle(Palette.textSecondary)
+                Spacer(minLength: Spacing.xs)
+                if let isFavorite {
+                    Button(action: onToggleFavorite) {
+                        Image(systemName: isFavorite ? "heart.fill" : "heart")
+                            .font(.title3)
+                            .foregroundStyle(Palette.accentText)
+                            .frame(width: 44, height: 44)
+                            .contentShape(.rect)
+                    }
+                    .buttonStyle(.plain)
+                    .sensoryFeedback(.selection, trigger: isFavorite)
+                    .accessibilityLabel(isFavorite ? Text("Remover dos favoritos") : Text("Favoritar"))
+                }
+            }
         }
         .surfaceCard()
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .contain)
     }
 }
 
@@ -53,7 +78,7 @@ struct NotePreviewCard: View {
                     .font(.system(.body, design: .serif))
                     .foregroundStyle(Palette.textPrimary)
                     .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 3)
-                Text("\(authorName) · \(date, format: .relative(presentation: .named))")
+                Text("\(authorName) · \(NoteTimestamp.text(for: date))")
                     .font(.caption)
                     .foregroundStyle(Palette.textSecondary)
             }

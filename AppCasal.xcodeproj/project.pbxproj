@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A7C3E17C2FCB9230003B7BEA /* NoteNotificationService.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = A7C3E1702FCB9230003B7BEA /* NoteNotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		A7C3E1472FCB9230003B7BEA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -14,11 +18,41 @@
 			remoteGlobalIDString = A7C3E11E2FCB9230003B7BEA;
 			remoteInfo = AppCasal;
 		};
+		A7C3E1572FCB9230003B7BEA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A7C3E1172FCB9230003B7BEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A7C3E11E2FCB9230003B7BEA;
+			remoteInfo = AppCasal;
+		};
+		A7C3E1792FCB9230003B7BEA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A7C3E1172FCB9230003B7BEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A7C3E1722FCB9230003B7BEA;
+			remoteInfo = NoteNotificationService;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A7C3E17B2FCB9230003B7BEA /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A7C3E17C2FCB9230003B7BEA /* NoteNotificationService.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A7C3E11F2FCB9230003B7BEA /* AppCasal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppCasal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7C3E1412FCB9230003B7BEA /* AppCasalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppCasalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7C3E1512FCB9230003B7BEA /* AppCasalUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppCasalUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7C3E1702FCB9230003B7BEA /* NoteNotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NoteNotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -29,6 +63,21 @@
 			);
 			target = A7C3E11E2FCB9230003B7BEA /* AppCasal */;
 		};
+		A7C3E17D2FCB9230003B7BEA /* Exceptions for "NoteNotificationService" folder in "NoteNotificationService" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A7C3E1722FCB9230003B7BEA /* NoteNotificationService */;
+		};
+		A7C3E17E2FCB9230003B7BEA /* Exceptions for "AppCasal" folder in "NoteNotificationService" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Data/Notifications/NoteAlertContent.swift,
+				Data/Notifications/NoteTimestamp.swift,
+			);
+			target = A7C3E1722FCB9230003B7BEA /* NoteNotificationService */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -36,6 +85,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				A7C3E1402FCB9230003B7BEA /* Exceptions for "AppCasal" folder in "AppCasal" target */,
+				A7C3E17E2FCB9230003B7BEA /* Exceptions for "AppCasal" folder in "NoteNotificationService" target */,
 			);
 			path = AppCasal;
 			sourceTree = "<group>";
@@ -43,6 +93,19 @@
 		A7C3E1422FCB9230003B7BEA /* AppCasalTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = AppCasalTests;
+			sourceTree = "<group>";
+		};
+		A7C3E1522FCB9230003B7BEA /* AppCasalUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AppCasalUITests;
+			sourceTree = "<group>";
+		};
+		A7C3E1712FCB9230003B7BEA /* NoteNotificationService */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A7C3E17D2FCB9230003B7BEA /* Exceptions for "NoteNotificationService" folder in "NoteNotificationService" target */,
+			);
+			path = NoteNotificationService;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -62,6 +125,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A7C3E1542FCB9230003B7BEA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7C3E1742FCB9230003B7BEA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -70,6 +147,8 @@
 			children = (
 				A7C3E1212FCB9230003B7BEA /* AppCasal */,
 				A7C3E1422FCB9230003B7BEA /* AppCasalTests */,
+				A7C3E1522FCB9230003B7BEA /* AppCasalUITests */,
+				A7C3E1712FCB9230003B7BEA /* NoteNotificationService */,
 				A7C3E1202FCB9230003B7BEA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -79,6 +158,8 @@
 			children = (
 				A7C3E11F2FCB9230003B7BEA /* AppCasal.app */,
 				A7C3E1412FCB9230003B7BEA /* AppCasalTests.xctest */,
+				A7C3E1512FCB9230003B7BEA /* AppCasalUITests.xctest */,
+				A7C3E1702FCB9230003B7BEA /* NoteNotificationService.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -93,10 +174,12 @@
 				A7C3E11B2FCB9230003B7BEA /* Sources */,
 				A7C3E11C2FCB9230003B7BEA /* Frameworks */,
 				A7C3E11D2FCB9230003B7BEA /* Resources */,
+				A7C3E17B2FCB9230003B7BEA /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A7C3E17A2FCB9230003B7BEA /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				A7C3E1212FCB9230003B7BEA /* AppCasal */,
@@ -131,6 +214,51 @@
 			productReference = A7C3E1412FCB9230003B7BEA /* AppCasalTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		A7C3E1562FCB9230003B7BEA /* AppCasalUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A7C3E1592FCB9230003B7BEA /* Build configuration list for PBXNativeTarget "AppCasalUITests" */;
+			buildPhases = (
+				A7C3E1532FCB9230003B7BEA /* Sources */,
+				A7C3E1542FCB9230003B7BEA /* Frameworks */,
+				A7C3E1552FCB9230003B7BEA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A7C3E1582FCB9230003B7BEA /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				A7C3E1522FCB9230003B7BEA /* AppCasalUITests */,
+			);
+			name = AppCasalUITests;
+			packageProductDependencies = (
+			);
+			productName = AppCasalUITests;
+			productReference = A7C3E1512FCB9230003B7BEA /* AppCasalUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		A7C3E1722FCB9230003B7BEA /* NoteNotificationService */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A7C3E1762FCB9230003B7BEA /* Build configuration list for PBXNativeTarget "NoteNotificationService" */;
+			buildPhases = (
+				A7C3E1732FCB9230003B7BEA /* Sources */,
+				A7C3E1742FCB9230003B7BEA /* Frameworks */,
+				A7C3E1752FCB9230003B7BEA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				A7C3E1712FCB9230003B7BEA /* NoteNotificationService */,
+			);
+			name = NoteNotificationService;
+			packageProductDependencies = (
+			);
+			productName = NoteNotificationService;
+			productReference = A7C3E1702FCB9230003B7BEA /* NoteNotificationService.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -147,6 +275,13 @@
 					A7C3E1462FCB9230003B7BEA = {
 						CreatedOnToolsVersion = 27.0;
 						TestTargetID = A7C3E11E2FCB9230003B7BEA;
+					};
+					A7C3E1562FCB9230003B7BEA = {
+						CreatedOnToolsVersion = 27.0;
+						TestTargetID = A7C3E11E2FCB9230003B7BEA;
+					};
+					A7C3E1722FCB9230003B7BEA = {
+						CreatedOnToolsVersion = 27.0;
 					};
 				};
 			};
@@ -166,6 +301,8 @@
 			targets = (
 				A7C3E11E2FCB9230003B7BEA /* AppCasal */,
 				A7C3E1462FCB9230003B7BEA /* AppCasalTests */,
+				A7C3E1562FCB9230003B7BEA /* AppCasalUITests */,
+				A7C3E1722FCB9230003B7BEA /* NoteNotificationService */,
 			);
 		};
 /* End PBXProject section */
@@ -179,6 +316,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A7C3E1452FCB9230003B7BEA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7C3E1552FCB9230003B7BEA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7C3E1752FCB9230003B7BEA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -202,6 +353,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A7C3E1532FCB9230003B7BEA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7C3E1732FCB9230003B7BEA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -209,6 +374,16 @@
 			isa = PBXTargetDependency;
 			target = A7C3E11E2FCB9230003B7BEA /* AppCasal */;
 			targetProxy = A7C3E1472FCB9230003B7BEA /* PBXContainerItemProxy */;
+		};
+		A7C3E1582FCB9230003B7BEA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A7C3E11E2FCB9230003B7BEA /* AppCasal */;
+			targetProxy = A7C3E1572FCB9230003B7BEA /* PBXContainerItemProxy */;
+		};
+		A7C3E17A2FCB9230003B7BEA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A7C3E1722FCB9230003B7BEA /* NoteNotificationService */;
+			targetProxy = A7C3E1792FCB9230003B7BEA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -346,6 +521,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AppCasal/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Usamos sua localização para mostrar no mapa a distância até os lugares de vocês.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -378,6 +554,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AppCasal/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Usamos sua localização para mostrar no mapa a distância até os lugares de vocês.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -442,6 +619,102 @@
 			};
 			name = Release;
 		};
+		A7C3E15A2FCB9230003B7BEA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F44CYBRGC2;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = jc.app.dev.AppCasalUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = AppCasal;
+			};
+			name = Debug;
+		};
+		A7C3E15B2FCB9230003B7BEA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F44CYBRGC2;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = jc.app.dev.AppCasalUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = AppCasal;
+			};
+			name = Release;
+		};
+		A7C3E1772FCB9230003B7BEA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NoteNotificationService/NoteNotificationService.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F44CYBRGC2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NoteNotificationService/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NoteNotificationService;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = jc.app.dev.AppCasal.NoteNotificationService;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		A7C3E1782FCB9230003B7BEA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NoteNotificationService/NoteNotificationService.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F44CYBRGC2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NoteNotificationService/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NoteNotificationService;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = jc.app.dev.AppCasal.NoteNotificationService;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -468,6 +741,24 @@
 			buildConfigurations = (
 				A7C3E14A2FCB9230003B7BEA /* Debug */,
 				A7C3E14B2FCB9230003B7BEA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A7C3E1592FCB9230003B7BEA /* Build configuration list for PBXNativeTarget "AppCasalUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7C3E15A2FCB9230003B7BEA /* Debug */,
+				A7C3E15B2FCB9230003B7BEA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A7C3E1762FCB9230003B7BEA /* Build configuration list for PBXNativeTarget "NoteNotificationService" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7C3E1772FCB9230003B7BEA /* Debug */,
+				A7C3E1782FCB9230003B7BEA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

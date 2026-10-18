@@ -47,14 +47,20 @@ struct RepositoryTests {
         let note = try notes.create(text: "Oi", in: space, by: owner)
         #expect(note.objectID.persistentStore == persistence.privateStore)
 
-        try notes.update(note, text: "Oi, amor", by: partner)
+        #expect(throws: NoteRepository.NoteError.self, "only the author edits") {
+            try notes.update(note, text: "Oi, amor", by: partner)
+        }
+        try notes.update(note, text: "Oi, amor", by: owner)
         #expect(note.text == "Oi, amor")
-        #expect(note.modifiedBy == partner)
+        #expect(note.modifiedBy == owner)
         #expect(note.authorID == owner)
 
-        try notes.softDelete(note, by: partner)
+        #expect(throws: NoteRepository.NoteError.self, "only the author deletes") {
+            try notes.softDelete(note, by: partner)
+        }
+        try notes.softDelete(note, by: owner)
         #expect(note.deletedAt != nil)
-        #expect(note.deletedBy == partner)
+        #expect(note.deletedBy == owner)
         #expect(!note.isDeleted, "logical deletion keeps the object")
 
         try notes.restore(note, by: owner)

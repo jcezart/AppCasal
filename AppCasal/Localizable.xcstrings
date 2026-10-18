@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "pt-BR",
   "strings" : {
+    "" : {
+
+    },
     "“%@”" : {
 
     },
@@ -10,6 +13,16 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "%@ · %@ · editado" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · %2$@ · editado"
           }
         }
       }
@@ -28,10 +41,66 @@
     "%@ Suas alterações continuam salvas neste iPhone." : {
 
     },
+    "%lld" : {
+
+    },
+    "%lld alterações aguardando envio ao iCloud." : {
+
+    },
+    "%lld alterações aguardando envio. Você pode continuar editando." : {
+
+    },
+    "%lld de %lld etapas" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld de %2$lld etapas"
+          }
+        }
+      }
+    },
+    "%lld dias antes" : {
+
+    },
     "%lld dias juntos" : {
 
     },
+    "%lld fotos" : {
+
+    },
+    "%lld lembretes" : {
+
+    },
+    "%lld/%lld" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld/%2$lld"
+          }
+        }
+      }
+    },
+    "1 dia antes" : {
+
+    },
+    "A %@ de você" : {
+
+    },
+    "A foto aparece no Início para vocês dois." : {
+
+    },
     "A memória mais recente de vocês aparece aqui." : {
+
+    },
+    "A notificação chega às %lldh, neste iPhone e no do seu par." : {
+
+    },
+    "Abre as metas" : {
+
+    },
+    "Abre o Mapas com o caminho" : {
 
     },
     "Abre os recados" : {
@@ -40,7 +109,25 @@
     "Abrindo o espaço de vocês" : {
 
     },
+    "Abrir Ajustes" : {
+
+    },
     "Aceitando o convite…" : {
+
+    },
+    "Adicionar" : {
+
+    },
+    "Adicionar etapa" : {
+
+    },
+    "Adicionar fotos" : {
+
+    },
+    "Adicionar lugar" : {
+
+    },
+    "Agora não" : {
 
     },
     "Aguardando" : {
@@ -52,10 +139,79 @@
     "Algo deu errado" : {
 
     },
+    "Aniversário de namoro" : {
+
+    },
+    "Aniversários, datas especiais e tudo o que vocês não querem esquecer." : {
+
+    },
+    "Apagar" : {
+
+    },
+    "APAGAR" : {
+
+    },
+    "Apagar o espaço" : {
+
+    },
     "Aqui é onde a nossa história continua." : {
 
     },
     "As metas que vocês concluírem ficam guardadas aqui." : {
+
+    },
+    "As notificações do app estão desativadas. Ative nos Ajustes para receber os lembretes." : {
+
+    },
+    "Até" : {
+
+    },
+    "Até %@" : {
+
+    },
+    "Até %lld fotos. Elas são reduzidas para ocupar menos espaço no iCloud." : {
+
+    },
+    "Ativadas" : {
+
+    },
+    "Ativar notificações" : {
+
+    },
+    "Ative as notificações para o seu par te encher de carinho" : {
+
+    },
+    "Ative as notificações para saber quando seu par deixar um recadinho e para lembrar das datas especiais de vocês." : {
+
+    },
+    "Buscar um lugar" : {
+
+    },
+    "Busque um lugar para guardar onde vocês foram ou querem ir." : {
+
+    },
+    "Cancelar" : {
+
+    },
+    "Casa" : {
+
+    },
+    "Categoria" : {
+
+    },
+    "Chegou um carinho pra você. Toque para ler." : {
+
+    },
+    "Começar um novo espaço" : {
+
+    },
+    "Começar um novo espaço?" : {
+
+    },
+    "Comemoração" : {
+
+    },
+    "Como chegar" : {
 
     },
     "Como você quer aparecer para o seu par?" : {
@@ -64,19 +220,37 @@
     "Compartilhamento encerrado" : {
 
     },
+    "Concluída em %@" : {
+
+    },
     "Concluídas" : {
+
+    },
+    "Concluir" : {
+
+    },
+    "Concluir meta" : {
 
     },
     "Conectados" : {
 
     },
+    "Continuar editando" : {
+
+    },
     "Convidar seu par" : {
+
+    },
+    "Convite aceito" : {
 
     },
     "Convite aceito. Trazendo o espaço de vocês do iCloud…" : {
 
     },
     "Convite enviado" : {
+
+    },
+    "Criar memória" : {
 
     },
     "Criar nosso espaço" : {
@@ -88,10 +262,73 @@
     "Data" : {
 
     },
+    "Dê um nome para o lembrete." : {
+
+    },
+    "Dê um título para a memória." : {
+
+    },
+    "Dê um título para a meta." : {
+
+    },
+    "Desativadas" : {
+
+    },
+    "Desativadas nos Ajustes do iPhone" : {
+
+    },
+    "Descartar" : {
+
+    },
+    "Descartar alterações?" : {
+
+    },
+    "Descrição" : {
+
+    },
+    "Dia a dia" : {
+
+    },
+    "Digite %@ para confirmar" : {
+
+    },
+    "É amanhã." : {
+
+    },
     "É assim que você aparece para o seu par." : {
 
     },
+    "É hoje!" : {
+
+    },
+    "Editar" : {
+
+    },
+    "Editar lembrete" : {
+
+    },
+    "Editar memória" : {
+
+    },
+    "Editar meta" : {
+
+    },
+    "Editar recadinho" : {
+
+    },
+    "Ela vai para Excluídos recentemente, de onde vocês podem restaurá-la." : {
+
+    },
+    "Ele vai para Excluídos recentemente." : {
+
+    },
+    "em %lld d" : {
+
+    },
     "Em andamento" : {
+
+    },
+    "Encontro" : {
 
     },
     "Entrar no espaço" : {
@@ -103,22 +340,116 @@
     "Enviados" : {
 
     },
+    "Enviando alterações" : {
+
+    },
+    "Enviar" : {
+
+    },
     "Erro desconhecido." : {
+
+    },
+    "Escolha em cada lembrete" : {
+
+    },
+    "Escolher foto" : {
+
+    },
+    "Escreva algo bonito…" : {
+
+    },
+    "Escreva alguma coisa no recadinho." : {
+
+    },
+    "Escrever recadinho" : {
+
+    },
+    "Especial" : {
+
+    },
+    "Estamos trazendo o espaço de vocês do iCloud. Isso pode levar alguns segundos." : {
 
     },
     "Este convite inclui mais de uma pessoa além do dono. Um espaço é só para o casal." : {
 
     },
+    "Este espaço fica arquivado com você e um novo espaço, vazio, é criado para um novo convite." : {
+
+    },
+    "Etapa" : {
+
+    },
+    "Etapas" : {
+
+    },
+    "Ex.: Aniversário de namoro" : {
+
+    },
+    "Excluído %@" : {
+
+    },
+    "Excluídos recentemente" : {
+
+    },
+    "Excluir" : {
+
+    },
+    "Excluir esta memória?" : {
+
+    },
+    "Excluir este lembrete?" : {
+
+    },
+    "Excluir lembrete" : {
+
+    },
+    "Faltam %lld dias." : {
+
+    },
+    "Favoritar" : {
+
+    },
     "Favoritos" : {
+
+    },
+    "Feita" : {
+
+    },
+    "Finanças" : {
+
+    },
+    "Foto" : {
 
     },
     "Foto do casal" : {
 
     },
+    "Fotos" : {
+
+    },
+    "Gerenciar compartilhamento" : {
+
+    },
     "Gerenciar convite" : {
 
     },
-    "Guardem aqui os momentos de vocês, com fotos, data e lugar." : {
+    "Guardada por %@" : {
+
+    },
+    "Guardada por %@ · editada por %@" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Guardada por %1$@ · editada por %2$@"
+          }
+        }
+      }
+    },
+    "Guardem aqui os momentos de vocês, com fotos, data e descrição." : {
+
+    },
+    "Hoje" : {
 
     },
     "iCloud indisponível" : {
@@ -128,6 +459,27 @@
 
     },
     "Início do relacionamento" : {
+
+    },
+    "Isto apaga o espaço e tudo o que há nele (memórias, fotos, recados, metas e lugares) para vocês dois, neste iPhone e no iCloud. Não dá para desfazer." : {
+
+    },
+    "Lembrar" : {
+
+    },
+    "Lembrar do aniversário de namoro?" : {
+
+    },
+    "Lembretes" : {
+
+    },
+    "Lugar" : {
+
+    },
+    "Lugares" : {
+
+    },
+    "Mais opções" : {
 
     },
     "Mapa" : {
@@ -145,7 +497,22 @@
     "Modo demonstração" : {
 
     },
+    "Nada por aqui" : {
+
+    },
     "Não definido" : {
+
+    },
+    "Não foi possível abrir esta foto." : {
+
+    },
+    "Não foi possível adicionar %lld foto(s)." : {
+
+    },
+    "Não foi possível buscar agora. Verifique a conexão." : {
+
+    },
+    "Não foi possível preparar esta foto." : {
 
     },
     "Não foi possível sincronizar" : {
@@ -157,7 +524,19 @@
     "Não foi possível verificar sua conta iCloud. %@" : {
 
     },
+    "Não perca nenhum carinho" : {
+
+    },
+    "Não repetir" : {
+
+    },
+    "Nenhum" : {
+
+    },
     "Nenhum favorito ainda" : {
+
+    },
+    "Nenhum lembrete ainda" : {
 
     },
     "Nenhum lugar salvo ainda" : {
@@ -172,13 +551,22 @@
     "Nenhum recadinho recebido" : {
 
     },
+    "Nenhum resultado" : {
+
+    },
+    "Nenhuma foto" : {
+
+    },
     "Nenhuma memória ainda" : {
 
     },
-    "Nenhuma meta ainda" : {
+    "Nenhuma meta concluída" : {
 
     },
-    "Nenhuma meta concluída" : {
+    "Nenhuma meta em andamento" : {
+
+    },
+    "No dia" : {
 
     },
     "Nosso espaço" : {
@@ -190,6 +578,39 @@
     "Nossos planos" : {
 
     },
+    "Notificação %lld dias antes" : {
+
+    },
+    "Notificação 1 dia antes" : {
+
+    },
+    "Notificação no dia" : {
+
+    },
+    "Notificações" : {
+
+    },
+    "Notificações ativadas" : {
+
+    },
+    "Nova etapa" : {
+
+    },
+    "Nova memória" : {
+
+    },
+    "Nova meta" : {
+
+    },
+    "Novo lembrete" : {
+
+    },
+    "Novo lugar" : {
+
+    },
+    "Novo recadinho" : {
+
+    },
     "O armazenamento local não está disponível." : {
 
     },
@@ -197,6 +618,15 @@
 
     },
     "O iCloud está temporariamente indisponível. Tente de novo em instantes." : {
+
+    },
+    "O progresso é calculado pelas etapas feitas. Deslize para remover." : {
+
+    },
+    "O que vocês excluírem aparece aqui e pode ser restaurado." : {
+
+    },
+    "O que vocês viveram nesse dia?" : {
 
     },
     "O último recadinho entre vocês aparece aqui." : {
@@ -208,22 +638,49 @@
     "OK" : {
 
     },
-    "Os dados continuam com você. Um novo relacionamento começa em um novo espaço." : {
+    "Opções da memória" : {
 
     },
-    "Os lugares que vocês visitaram e os que querem conhecer vão aparecer no mapa." : {
+    "Opções da meta" : {
+
+    },
+    "Opções do lugar" : {
+
+    },
+    "Os avisos chegam pelo iCloud e podem levar alguns instantes, principalmente sem internet ou com o modo de economia de bateria." : {
+
+    },
+    "Os dados continuam com você." : {
 
     },
     "Os planos de vocês e o progresso de cada um aparecem aqui." : {
 
     },
+    "Os recadinhos do seu par aparecem aqui." : {
+
+    },
     "Os recadinhos que você marcar com o coração aparecem aqui. Só você vê seus favoritos." : {
+
+    },
+    "Outro" : {
+
+    },
+    "Para %@" : {
 
     },
     "Para guardar o que vivemos, o que sonhamos e tudo o que ainda vamos viver juntos." : {
 
     },
+    "Para nunca esquecer o que importa." : {
+
+    },
+    "Para outro lugar, salve-o antes pela busca no Mapa." : {
+
+    },
     "Parceiro ou parceira ainda não entrou" : {
+
+    },
+    "Pendente" : {
 
     },
     "Pequenas palavras guardadas para sempre." : {
@@ -232,7 +689,19 @@
     "Pequenas palavras, grandes significados." : {
 
     },
+    "Praia" : {
+
+    },
+    "Prazo" : {
+
+    },
+    "Prazo passou" : {
+
+    },
     "Precisamos do iCloud" : {
+
+    },
+    "Preparando o espaço de vocês…" : {
 
     },
     "Progresso" : {
@@ -244,7 +713,19 @@
     "Queremos ir" : {
 
     },
+    "Reabrir" : {
+
+    },
+    "Recadinho de %@" : {
+
+    },
+    "Recadinhos do seu par" : {
+
+    },
     "Recados" : {
+
+    },
+    "Receber notificação" : {
 
     },
     "Recebeu um convite? Abra o link que seu par enviou e o espaço de vocês aparece aqui." : {
@@ -253,10 +734,55 @@
     "Recebidos" : {
 
     },
+    "Registrar visita" : {
+
+    },
+    "Relacionamento" : {
+
+    },
+    "Remover" : {
+
+    },
     "Remover data" : {
 
     },
+    "Remover dos favoritos" : {
+
+    },
+    "Remover foto" : {
+
+    },
+    "Repetir" : {
+
+    },
+    "Restaurante" : {
+
+    },
+    "Restaurantes, praias, endereços… tudo o que vocês viveram ou querem viver." : {
+
+    },
+    "Restaurar" : {
+
+    },
+    "Sair do espaço" : {
+
+    },
+    "Sair do espaço?" : {
+
+    },
     "Salvar" : {
+
+    },
+    "Salvar lugar" : {
+
+    },
+    "Saúde" : {
+
+    },
+    "Sem conexão" : {
+
+    },
+    "Sem notificação" : {
 
     },
     "Seu nome" : {
@@ -266,6 +792,12 @@
 
     },
     "Sincronizando" : {
+
+    },
+    "Situação" : {
+
+    },
+    "Só quem escreveu o recadinho pode alterá-lo." : {
 
     },
     "Sonhos que se constroem juntos." : {
@@ -280,7 +812,31 @@
     "Tentar novamente" : {
 
     },
+    "Tente outro nome ou endereço." : {
+
+    },
+    "Título" : {
+
+    },
+    "Todo ano" : {
+
+    },
+    "Todo ano em %@" : {
+
+    },
+    "Todo mês" : {
+
+    },
+    "Todo mês no dia %lld" : {
+
+    },
     "Todos" : {
+
+    },
+    "Toque para criar um lembrete todo ano a partir da data de início do relacionamento." : {
+
+    },
+    "Trocar foto" : {
 
     },
     "Tudo sincronizado" : {
@@ -295,16 +851,43 @@
     "Um espaço só nosso" : {
 
     },
+    "Um recadinho novo, um aniversário chegando: o iPhone avisa vocês dois." : {
+
+    },
+    "Uma nota (opcional)" : {
+
+    },
     "Usada para contar os dias juntos no Início." : {
+
+    },
+    "Ver memória" : {
+
+    },
+    "Viagem" : {
 
     },
     "Viagens, planos e conquistas, com etapas e prazo." : {
 
     },
+    "Visitado" : {
+
+    },
+    "Visitado em %@" : {
+
+    },
     "Visitados" : {
 
     },
+    "Você" : {
+
+    },
+    "Você deixa de ver o espaço neste iPhone. Nada é apagado do iCloud do seu par." : {
+
+    },
     "Você já tem um espaço próprio. Por enquanto, cada pessoa participa de um único espaço." : {
+
+    },
+    "Você pode continuar editando. Tudo é enviado quando a conexão voltar." : {
 
     },
     "Você pode continuar usando o app normalmente." : {

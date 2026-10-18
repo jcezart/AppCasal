@@ -39,6 +39,17 @@
                ReferencedContainer = "container:AppCasal.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A7C3E1562FCB9230003B7BEA"
+               BuildableName = "AppCasalUITests.xctest"
+               BlueprintName = "AppCasalUITests"
+               ReferencedContainer = "container:AppCasal.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

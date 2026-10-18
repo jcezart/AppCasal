@@ -81,6 +81,26 @@ final class SpaceRepository {
         try persistence.save()
     }
 
+    func setCoverPhoto(_ data: Data?, in space: CoupleSpace, now: Date = .now) throws {
+        space.coverPhotoData = data
+        space.modifiedAt = now
+        try persistence.save()
+    }
+
+    func setAvatar(_ data: Data?, for member: Member, now: Date = .now) throws {
+        member.avatarData = data
+        member.modifiedAt = now
+        try persistence.save()
+    }
+
+    /// Owner only, after the partnership ended: archives the space (logical deletion, data
+    /// kept) so a new relationship starts in a new, empty space.
+    func archive(_ space: CoupleSpace, now: Date = .now) throws {
+        space.deletedAt = now
+        space.modifiedAt = now
+        try persistence.save()
+    }
+
     func setRelationshipStart(_ date: Date?, in space: CoupleSpace, now: Date = .now) throws {
         space.relationshipStart = date
         space.modifiedAt = now

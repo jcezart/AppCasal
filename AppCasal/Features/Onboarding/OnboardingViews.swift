@@ -111,6 +111,20 @@ struct CreateSpaceView: View {
     }
 }
 
+/// Shown after the invitation is accepted while the shared space comes from iCloud.
+/// No form here, so the participant cannot create a separate space by mistake.
+struct AcceptingInvitationView: View {
+    var body: some View {
+        OnboardingScaffold(
+            title: "Convite aceito",
+            message: "Estamos trazendo o espaço de vocês do iCloud. Isso pode levar alguns segundos."
+        ) {
+            LoadingStateView(message: "Preparando o espaço de vocês…")
+                .frame(height: 80)
+        }
+    }
+}
+
 /// Shown to the participant after accepting, before their member record exists.
 struct JoinSpaceView: View {
     let environment: AppEnvironment

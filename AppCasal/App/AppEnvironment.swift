@@ -42,11 +42,43 @@ final class AppEnvironment {
     let account: AccountService
     let spaces: SpaceRepository
     let notes: NoteRepository
+    let memories: MemoryRepository
+    let places: PlaceRepository
+    let goals: GoalRepository
+    let favorites: FavoriteRepository
+    let reminders: ReminderRepository
     let sharing: ShareService
     let sync: SyncMonitor
+    let network = NetworkMonitor()
+    let location = LocationService()
+    let reminderNotifications = ReminderNotifications()
+    let noteAlerts = NoteAlerts()
+    /// Tab to open next, set when a notification is tapped.
+    var pendingTab: AppTab?
 
     /// Local fictitious data that is never synced.
     var isDemo: Bool { runMode == .demo || runMode == .preview }
+
+    /// Reschedules this device's reminder notifications from the active space.
+    func syncReminderNotifications() async {
+        guard runMode != .tests, runMode != .preview else { return }
+        let schedules = spaces.activeSpace().map(reminders.activeSchedules) ?? []
+        await reminderNotifications.sync(schedules)
+    }
+
+    /// Keeps the partner-note push subscription in line with permission and preference.
+    /// Production only: demo, previews and tests never talk to CloudKit.
+    func syncNoteAlerts() async {
+        guard runMode == .production, let space = spaces.activeSpace(), let me = account.userRecordName else { return }
+        await reminderNotifications.refreshAuthorization()
+        let partner = spaces.partner(of: me, in: space)
+        await noteAlerts.update(
+            role: spaces.role(in: space),
+            partnerName: partner.map { $0.displayName ?? "" },
+            allowed: reminderNotifications.isAllowed,
+            container: persistence.cloudKitContainer
+        )
+    }
 
     init(runMode: RunMode) {
         let persistence: PersistenceController
@@ -79,6 +111,11 @@ final class AppEnvironment {
         self.account = account
         self.spaces = spaces
         notes = NoteRepository(persistence: persistence)
+        memories = MemoryRepository(persistence: persistence)
+        places = PlaceRepository(persistence: persistence)
+        goals = GoalRepository(persistence: persistence)
+        favorites = FavoriteRepository(persistence: persistence)
+        reminders = ReminderRepository(persistence: persistence)
         sharing = ShareService(persistence: persistence, spaces: spaces)
         sync = SyncMonitor()
     }

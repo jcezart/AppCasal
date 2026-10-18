@@ -11,6 +11,7 @@ nonisolated final class Note: NSManagedObject {
     @NSManaged var id: UUID?
     @NSManaged var text: String?
     @NSManaged var authorID: String?
+    @NSManaged var recipientID: String?
     @NSManaged var createdAt: Date?
     @NSManaged var modifiedAt: Date?
     @NSManaged var modifiedBy: String?

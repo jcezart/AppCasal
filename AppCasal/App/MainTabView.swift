@@ -13,6 +13,7 @@ struct MainTabView: View {
 
     @State private var selection = AppTab.initial
     @State private var isShowingSpace = false
+    @State private var isShowingNotificationPrompt = false
 
     var body: some View {
         TabView(selection: $selection) {
@@ -23,34 +24,51 @@ struct MainTabView: View {
                         space: space,
                         userRecordName: userRecordName,
                         showSpace: { isShowingSpace = true },
-                        showNotes: { selection = .notes }
+                        showTab: { selection = $0 }
                     )
                 }
             }
             Tab("Mapa", systemImage: "map", value: AppTab.map) {
                 NavigationStack {
-                    MapTabView()
+                    MapTabView(environment: environment, space: space, userRecordName: userRecordName)
                 }
             }
             Tab("Memórias", systemImage: "photo.on.rectangle.angled", value: AppTab.memories) {
                 NavigationStack {
-                    MemoriesView()
+                    MemoriesView(environment: environment, space: space, userRecordName: userRecordName)
                 }
             }
             Tab("Recados", systemImage: "envelope", value: AppTab.notes) {
                 NavigationStack {
-                    NotesView(space: space, userRecordName: userRecordName)
+                    NotesView(environment: environment, space: space, userRecordName: userRecordName)
                 }
             }
             Tab("Metas", systemImage: "target", value: AppTab.goals) {
                 NavigationStack {
-                    GoalsView()
+                    GoalsView(environment: environment, space: space, userRecordName: userRecordName)
                 }
             }
         }
         .tint(Palette.accentText)
         .sheet(isPresented: $isShowingSpace) {
             SpaceView(environment: environment, space: space, userRecordName: userRecordName)
+        }
+        .onChange(of: environment.pendingTab, initial: true) {
+            if let tab = environment.pendingTab {
+                selection = tab
+                environment.pendingTab = nil
+            }
+        }
+        .sheet(isPresented: $isShowingNotificationPrompt) {
+            NotificationPromptView(environment: environment)
+        }
+        .task {
+            // Asked once, after the space is ready, with an explanation first.
+            guard NotificationPromptView.shouldOffer(environment) else { return }
+            await environment.reminderNotifications.refreshAuthorization()
+            if environment.reminderNotifications.authorization == .notDetermined {
+                isShowingNotificationPrompt = true
+            }
         }
         #if DEBUG
         .onAppear {

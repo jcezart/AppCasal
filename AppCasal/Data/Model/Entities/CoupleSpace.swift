@@ -22,6 +22,12 @@ nonisolated final class CoupleSpace: NSManagedObject {
     @NSManaged var sharingEndedAt: Date?
     @NSManaged var members: Set<Member>?
     @NSManaged var notes: Set<Note>?
+    @NSManaged var memories: Set<Memory>?
+    @NSManaged var goals: Set<Goal>?
+    @NSManaged var places: Set<Place>?
+    @NSManaged var reminders: Set<Reminder>?
+    /// Couple photo shown on Início, downscaled like memory photos.
+    @NSManaged var coverPhotoData: Data?
 }
 
 // `id` is set on insert by the repositories.

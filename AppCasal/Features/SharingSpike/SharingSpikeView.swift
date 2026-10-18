@@ -37,9 +37,6 @@ struct SharingSpikeView: View {
                             NewNoteSection(environment: environment, space: space, userRecordName: userRecordName, onError: { errorMessage = $0 })
                             NoteListSection(environment: environment, space: space, userRecordName: userRecordName, showsDeleted: false, onError: { errorMessage = $0 })
                             NoteListSection(environment: environment, space: space, userRecordName: userRecordName, showsDeleted: true, onError: { errorMessage = $0 })
-                            #if DEBUG
-                            AlertExperimentSection(environment: environment, role: environment.spaces.role(in: space))
-                            #endif
                         }
                     } else {
                         CreateSpaceSection(environment: environment, userRecordName: userRecordName, onCreated: reload, onError: { errorMessage = $0 })
@@ -393,47 +390,6 @@ private struct EditNoteView: View {
         }
     }
 }
-
-#if DEBUG
-/// Debug-only, manually triggered notification experiment. Not compiled in Release.
-private struct AlertExperimentSection: View {
-    let environment: AppEnvironment
-    let role: Member.Role
-
-    @State private var status: String?
-
-    var body: some View {
-        Section {
-            Button("Ativar avisos de recadinho (experimento)") {
-                Task { await run { try await NoteAlertSubscription.register(for: role, in: environment.persistence.cloudKitContainer) } }
-            }
-            Button("Desativar avisos (experimento)") {
-                Task { await run { try await NoteAlertSubscription.remove(for: role, in: environment.persistence.cloudKitContainer) } }
-            }
-            if let status {
-                Text(status).font(.footnote).foregroundStyle(.secondary)
-            }
-        } header: {
-            Text("Avisos")
-        } footer: {
-            if role == .owner {
-                Text("Experimento: assinatura do banco privado filtrada pelo tipo de registro. Não garante entrega imediata.")
-            } else {
-                Text("Experimento: assinatura do banco compartilhado filtrada pelo tipo de registro. Não garante entrega imediata.")
-            }
-        }
-    }
-
-    private func run(_ action: () async throws -> Void) async {
-        do {
-            try await action()
-            status = String(localized: "Concluído.")
-        } catch {
-            status = error.localizedDescription
-        }
-    }
-}
-#endif
 
 private struct SyncSection: View {
     let monitor: SyncMonitor

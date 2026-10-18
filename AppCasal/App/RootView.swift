@@ -11,6 +11,9 @@ struct RootView: View {
     let environment: AppEnvironment
 
     @State private var space: CoupleSpace?
+    /// Kept in state: `space` is the same object before and after the participant joins,
+    /// so reading membership in `body` alone would not refresh the screen.
+    @State private var isMember = false
     @State private var didLoad = false
 
     private var account: AccountService { environment.account }
@@ -36,11 +39,27 @@ struct RootView: View {
                 await account.refresh()
                 LaunchLog.mark("account resolved")
                 reload()
+                await environment.syncReminderNotifications()
+                await environment.syncNoteAlerts()
             }
             .task { await account.observeAccountChanges() }
             .task { await environment.sync.observe(environment.persistence.container) }
+            .task { await environment.network.observe() }
             .task {
                 for await _ in NotificationCenter.default.notifications(named: .NSPersistentStoreRemoteChange) {
+                    reload()
+                    await environment.sync.refreshPendingChanges(in: environment.persistence.container)
+                    // Reminders created or changed by the partner are scheduled here too.
+                    await environment.syncReminderNotifications()
+                    // Registers the note alert once the partner joins.
+                    await environment.syncNoteAlerts()
+                }
+            }
+            .task(id: isWaitingForSharedSpace) {
+                // Importing an accepted space can take a while; besides remote-change
+                // notifications, look again every few seconds until it arrives.
+                while isWaitingForSharedSpace, !Task.isCancelled {
+                    try? await Task.sleep(for: .seconds(2))
                     reload()
                 }
             }
@@ -58,11 +77,14 @@ struct RootView: View {
                 .transition(.opacity)
         } else if account.status == .available, let userRecordName = account.userRecordName {
             if let space {
-                if environment.spaces.member(for: userRecordName, in: space) != nil {
+                if isMember {
                     MainTabView(environment: environment, space: space, userRecordName: userRecordName)
                 } else {
                     JoinSpaceView(environment: environment, space: space, userRecordName: userRecordName, onJoined: reload)
                 }
+            } else if isWaitingForSharedSpace {
+                AcceptingInvitationView()
+                    .transition(.opacity)
             } else {
                 CreateSpaceView(environment: environment, userRecordName: userRecordName, onCreated: reload)
             }
@@ -82,8 +104,21 @@ struct RootView: View {
         #endif
     }
 
+    /// After accepting an invitation, until the shared space is on this iPhone.
+    private var isWaitingForSharedSpace: Bool {
+        guard space == nil else { return false }
+        switch environment.sharing.acceptance {
+        case .accepting, .accepted: return true
+        case .idle, .rejected, .failed: return false
+        }
+    }
+
     private func reload() {
-        space = environment.spaces.activeSpace()
+        let active = environment.spaces.activeSpace()
+        space = active
+        isMember = active.flatMap { active in
+            account.userRecordName.flatMap { environment.spaces.member(for: $0, in: active) }
+        } != nil
         didLoad = true
     }
 }

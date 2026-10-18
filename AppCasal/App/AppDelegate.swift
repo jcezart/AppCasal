@@ -28,11 +28,28 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         return configuration
     }
 
-    /// Shows note alerts while the app is in the foreground too.
-    nonisolated func userNotificationCenter(
+    // Completion-handler variants on purpose: the system expects these handlers on the
+    // main thread, and the nonisolated `async` variants resume them from a background
+    // executor, which can drop the tap instead of opening the app.
+
+    /// A tapped note alert opens Recados.
+    func userNotificationCenter(
         _ center: UNUserNotificationCenter,
-        willPresent notification: UNNotification
-    ) async -> UNNotificationPresentationOptions {
-        [.banner, .list, .sound]
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        if NoteAlerts.isNoteAlert(response.notification.request.content.userInfo) {
+            AppEnvironment.shared.pendingTab = .notes
+        }
+        completionHandler()
+    }
+
+    /// Shows note alerts while the app is in the foreground too.
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        completionHandler([.banner, .list, .sound])
     }
 }
