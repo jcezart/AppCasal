@@ -29,27 +29,15 @@ struct InvitePartnerPromptView: View {
     @State private var errorMessage: String?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Spacing.l) {
-            Image(systemName: "person.2")
-                .font(.system(size: 44, weight: .light))
-                .foregroundStyle(Palette.accent)
-                .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: Spacing.s) {
-                Text("Convide seu par")
-                    .font(.displayTitle)
-                    .foregroundStyle(Palette.textPrimary)
-                    .accessibilityAddTraits(.isHeader)
-                Text("O espaço fica completo com vocês dois. Envie o convite pelo WhatsApp, por Mensagens ou como preferir.")
-                    .font(.body)
-                    .foregroundStyle(Palette.textSecondary)
-                Text(InvitePartner.whatsAppHint)
-                    .font(.footnote)
-                    .foregroundStyle(Palette.textSecondary)
-            }
+        PromptScaffold(
+            systemImage: "person.2",
+            title: "Convide seu par",
+            message: "O espaço fica completo com vocês dois. Envie o convite pelo WhatsApp, por Mensagens ou como preferir.",
+            note: InvitePartner.whatsAppHint
+        ) {
             if let errorMessage {
                 ErrorBanner(message: errorMessage)
             }
-            Spacer(minLength: 0)
             Button(action: prepare) {
                 if isPreparing {
                     ProgressView()
@@ -63,17 +51,11 @@ struct InvitePartnerPromptView: View {
             .disabled(isPreparing)
             .accessibilityIdentifier("invitePrompt.invite")
             Button("Agora não") { dismiss() }
-                .buttonStyle(.soft)
+                .buttonStyle(.text)
                 .disabled(isPreparing)
+                .accessibilityHint(Text("Você pode convidar depois, pelo Início ou em Nosso espaço."))
                 .accessibilityIdentifier("invitePrompt.later")
-            Text("Você também pode convidar depois, pelo Início ou em Nosso espaço.")
-                .font(.footnote)
-                .foregroundStyle(Palette.textSecondary)
         }
-        .padding(Spacing.screen)
-        .padding(.top, Spacing.l)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .canvasBackground()
         .presentationDetents([.large])
         .interactiveDismissDisabled(isPreparing)
     }
@@ -124,15 +106,18 @@ struct InvitePartnerCard: View {
                 ErrorBanner(message: errorMessage)
             }
             Button(action: invite) {
-                if isWorking {
-                    ProgressView()
-                        .accessibilityLabel(Text("Preparando convite"))
-                } else {
-                    Label("Convidar seu par", systemImage: "paperplane")
+                Group {
+                    if isWorking {
+                        ProgressView()
+                            .accessibilityLabel(Text("Preparando convite"))
+                    } else {
+                        Label("Convidar seu par", systemImage: "paperplane")
+                    }
                 }
+                // Full width inside the card, like the other card actions.
+                .frame(maxWidth: .infinity)
             }
             .buttonStyle(.soft)
-            .frame(maxWidth: .infinity, alignment: .leading)
             .disabled(isWorking)
             .accessibilityIdentifier("home.invitePartner")
         }

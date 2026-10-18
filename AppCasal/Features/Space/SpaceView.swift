@@ -444,7 +444,7 @@ private struct CouplePhotoView: View {
                     Button("Remover foto", role: .destructive) {
                         save { try environment.spaces.setCoverPhoto(nil, in: space) }
                     }
-                    .buttonStyle(.soft)
+                    .buttonStyle(.text)
                 }
                 if let errorMessage {
                     ErrorBanner(message: errorMessage)

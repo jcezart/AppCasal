@@ -39,6 +39,23 @@ struct SoftButtonStyle: ButtonStyle {
     }
 }
 
+/// Secondary action under a primary button ("Agora não", "Remover foto"): text only,
+/// centered, as wide as the primary button so both line up. Apple's prompts use this
+/// pairing: one filled action, the alternative visibly lighter.
+struct TextButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.body.weight(.semibold))
+            .foregroundStyle(Palette.accentText)
+            .frame(maxWidth: .infinity, minHeight: 44)
+            .contentShape(.rect)
+            .opacity(isEnabled ? (configuration.isPressed ? 0.6 : 1) : 0.45)
+            .animation(.easeOut(duration: 0.1), value: configuration.isPressed)
+    }
+}
+
 /// For labels that already draw their own shape (the "Adicionar" photo tile). A custom
 /// style, so "Formatos dos Botões" (Ajustes > Acessibilidade) does not add a second
 /// background around that shape; the tile itself is the visible button shape.
@@ -66,6 +83,10 @@ extension ButtonStyle where Self == PrimaryButtonStyle {
 
 extension ButtonStyle where Self == SoftButtonStyle {
     static var soft: SoftButtonStyle { SoftButtonStyle() }
+}
+
+extension ButtonStyle where Self == TextButtonStyle {
+    static var text: TextButtonStyle { TextButtonStyle() }
 }
 
 extension ButtonStyle where Self == TileButtonStyle {

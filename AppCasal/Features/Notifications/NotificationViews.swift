@@ -19,21 +19,11 @@ struct NotificationPromptView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Spacing.l) {
-            Image(systemName: "heart.text.square")
-                .font(.system(size: 44, weight: .light))
-                .foregroundStyle(Palette.accent)
-                .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: Spacing.s) {
-                Text("Não perca nenhum carinho")
-                    .font(.displayTitle)
-                    .foregroundStyle(Palette.textPrimary)
-                    .accessibilityAddTraits(.isHeader)
-                Text("Ative as notificações para saber quando seu par deixar um recadinho e para lembrar das datas especiais de vocês.")
-                    .font(.body)
-                    .foregroundStyle(Palette.textSecondary)
-            }
-            Spacer(minLength: 0)
+        PromptScaffold(
+            systemImage: "heart.text.square",
+            title: "Não perca nenhum carinho",
+            message: "Ative as notificações para saber quando seu par deixar um recadinho e para lembrar das datas especiais de vocês."
+        ) {
             Button("Ativar notificações") {
                 Task {
                     await NotificationSettingsView.enable(environment)
@@ -42,12 +32,8 @@ struct NotificationPromptView: View {
             }
             .buttonStyle(.primary)
             Button("Agora não") { dismiss() }
-                .buttonStyle(.soft)
+                .buttonStyle(.text)
         }
-        .padding(Spacing.screen)
-        .padding(.top, Spacing.l)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .canvasBackground()
         .presentationDetents([.medium, .large])
         .onAppear { UserDefaults.standard.set(true, forKey: Self.offeredKey) }
     }

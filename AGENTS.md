@@ -82,7 +82,7 @@ AppCasal/
 │   │   ├── Tokens/          # Palette, Metrics, Typography
 │   │   └── Components/      # cartões, chips, segmentado, botões, avatares, estados, progresso, NoteCards, MemoryCards,
 │   │                        # GoalCard, GoalSummaryRow, InfoCard, CoupleHeroHeader, SettingsRow, AdaptiveStack,
-│   │                        # PhotoView, PhotoPickerButton (+ DecodedImage, ImageDecoder; `crop:` abre PhotoCropView), PhotoCropView (arrastar e pinça antes de salvar; quadro circular para perfil, quadrado para foto do casal), GoalStepsObserver
+│   │                        # PhotoView, PhotoPickerButton (+ DecodedImage, ImageDecoder; `crop:` abre PhotoCropView), PromptScaffold (telas de pedido), PhotoCropView (arrastar e pinça antes de salvar; quadro circular para perfil, quadrado para foto do casal), GoalStepsObserver
 │   ├── Data/
 │   │   ├── Model/           # AppCasal.xcdatamodeld, Entities/*, MemoryCategory, Categories (PlaceStatus, GoalCategory)
 │   │   ├── Persistence/     # PersistenceController, SyncMonitor
@@ -252,6 +252,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 | Convite: share salvo antes, depois folha do sistema com `registerCKShare`; `UICloudSharingController` só para gerenciar | o app escolhido abre no primeiro toque; mesmas restrições (privado, leitura e escrita) |
 | Barras das telas de edição com símbolos do iOS 26: X (`role: .cancel`), ✓ (`role: .confirm`; "Enviar" com avião de papel), lixeira em "Apagar"; títulos mantidos para VoiceOver; peças com forma própria usam `.tile` | com "Formatos dos Botões" ativado (visto no iPhone da parceira), os textos "Cancelar"/"Salvar" ficavam sublinhados dentro da cápsula de vidro e o bloco "Adicionar" ganhava um segundo fundo |
 | ✓ das barras com `confirmationButtonStyle()` | o botão `role: .confirm` usa vidro proeminente azul do sistema, e o `.tint` da tela não o alcança |
+| Telas de pedido ("Convide seu par", notificações) em `PromptScaffold`: ícone, título e texto centralizados; ação principal `.primary` em largura total no rodapé; alternativa ("Agora não", "Remover foto") em `.text` (só texto, centralizado, mesma largura) | regra `primary-action` (Apple HIG, também no `ui-ux-pro-max`): uma ação principal, a secundária visualmente subordinada; antes o "Agora não" era um `.soft` estreito à esquerda |
 | Modo demonstração só DEBUG, por argumento explícito, stores próprios | nunca misturar com dados reais |
 
 ## Pendências do usuário
@@ -306,6 +307,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 - **2026-10-18:** apagar o espaço não gera mais "recadinho" na parceira: a extensão detecta a zona apagada e avisa que o espaço foi encerrado.
 - **2026-10-18:** aviso "Compartilhe o link no app WhatsApp" identificado como do sistema (manter "Continuar"); dica na linha do convite; ✓ das barras ficava azul (o `.tint` da tela não chega à barra): agora `confirmationButtonStyle()` (`.glassProminent` + `Palette.accent`) em cada botão `role: .confirm`. WhatsApp abriu direto depois de "Continuar", com alguma demora (o iOS prepara o link de uso único no iCloud nesse momento).
 - **2026-10-18:** ao criar o espaço, tela "Convide seu par" com "Agora não"; cartão de convite no Início até o par entrar; opção em Nosso espaço mantida.
+- **2026-10-18:** telas de pedido refeitas no padrão da Apple (`PromptScaffold`, botão de texto `.text`); "Remover foto" e o botão do cartão de convite alinhados.
 - **Retomar em:** commit (aguardando autorização) e revalidação com dois aparelhos.
 
 ## Próximos passos
