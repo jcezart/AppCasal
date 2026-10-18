@@ -27,6 +27,16 @@
         }
       }
     },
+    "%@ às %@" : {
+      "localizations" : {
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ às %2$@"
+          }
+        }
+      }
+    },
     "%@ e %@" : {
       "comment" : "Couple names, e.g. 'Ana e Lucas'",
       "localizations" : {
@@ -301,6 +311,9 @@
     "É hoje!" : {
 
     },
+    "Editado: %@" : {
+
+    },
     "Editar" : {
 
     },
@@ -450,6 +463,9 @@
 
     },
     "Hoje" : {
+
+    },
+    "Hoje às %@" : {
 
     },
     "iCloud indisponível" : {
@@ -636,6 +652,9 @@
 
     },
     "OK" : {
+
+    },
+    "Ontem às %@" : {
 
     },
     "Opções da memória" : {
