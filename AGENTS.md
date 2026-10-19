@@ -264,6 +264,27 @@ Contraste ≥ 4,5:1 medido por `PaletteContrastTests` nos dois modos. Tipografia
 
 **Liquid Glass:** barra de abas e barras nativas; busca, filtros e "+" do mapa (`GlassEffectContainer`, `.glassProminent`); "+"/"Escrever recadinho"/"Nova meta" (`.glassProminent` tingido); botão "Foto do casal" sobre o herói (`.glass`). Sem glass em cartões, formulários, banners e segmentado.
 
+## Preparação para TestFlight e App Store (auditoria de 2026-10-19)
+
+**Corrigido (branch `audit/testflight`):**
+- Manifestos de privacidade `AppCasal/PrivacyInfo.xcprivacy` e `NoteNotificationService/PrivacyInfo.xcprivacy`: sem rastreamento, sem dados coletados, `UserDefaults` com motivo `CA92.1` (só o próprio app). Exigidos pela Apple para APIs de motivo obrigatório; `UserDefaults` é usado no app e na extensão.
+- `ITSAppUsesNonExemptEncryption = false` no `Info.plist` (só criptografia do sistema: HTTPS e CloudKit), para o TestFlight não pedir a declaração a cada build.
+- Convite: quem já participa de um espaço não aceita convite de outro casal (antes só o dono era barrado; dois espaços compartilhados misturariam casais no banco compartilhado e nos avisos). O mesmo convite aberto de novo é tratado como já aceito. Com o app já num espaço, o motivo aparece num alerta ("Convite não aceito"). Regra pura em `ShareService.decision`, testada.
+- Extensão de notificação: busca o `userRecordName` a cada push (cache só se falhar), para não confundir contas depois de trocar o iCloud no iPhone.
+- Ferramenta só de DEBUG: `-AppCasalInitializeCloudKitSchema YES` chama `initializeCloudKitSchema` num store privado temporário (os stores reais não são tocados) e cria no ambiente Development todos os tipos e campos do modelo atual.
+- Teste novo: tipos de registro e campos lidos pelos avisos (`CD_Note`, `CD_DailyAnswer`, `CD_GameAnswer`) existem no modelo.
+
+**Verificado por inspeção (sem mudança):** banco público não usado; `CKShare` privado (`publicPermission = .none`, só convidados, leitura e escrita, no máximo um parceiro); sair do espaço apaga a cópia local (`purgeObjectsAndRecordsInZone`); logs só com mensagens de erro e marcas de tempo, nunca textos, fotos ou nomes; sem credenciais no código; demonstração, tela de teste de compartilhamento e ferramenta de esquema fora do Release; fotos limitadas a 2048 px e guardadas como arquivo externo (asset no CloudKit); seletor de fotos do sistema (sem permissão de Fotos); localização só durante o uso, com texto explicativo; avisos pedidos com explicação antes.
+
+**Pendências manuais antes do TestFlight:**
+1. Esquema: no iPhone com iCloud, rodar o build Debug pelo Xcode com o argumento `-AppCasalInitializeCloudKitSchema YES`; no Console do Xcode, esperar "CloudKit Development schema initialized". Depois, no CloudKit Console (container `iCloud.jc.app.dev.casal`), conferir em Development os tipos `CD_*` de todas as entidades (incluindo `CD_DailyQuestion`, `CD_DailyAnswer`, `CD_GameRound`, `CD_GameAnswer`, `CD_DateIdea`, `CD_DatePlan` e os campos novos de `CD_CoupleSpace` e `CD_Memory`) e usar "Deploy Schema Changes" para Production. Não exige índices: o espelhamento lê mudanças por zona, sem consultas. A publicação é só aditiva; tipos e campos publicados em Production não podem ser apagados depois.
+2. App Store Connect: criar o app com o bundle `jc.app.dev.AppCasal`, URL da política de privacidade, URL de suporte, informações de revisão (notas abaixo) e questionário de classificação etária.
+3. Política de privacidade: hospedar uma página e informar a URL; a diretriz 5.1.1(i) pede link também dentro do app (falta a URL para colocar em Nosso espaço).
+4. Privacidade do app ("App Privacy"): o desenvolvedor não recebe dados (tudo fica no iCloud de cada pessoa e no espaço compartilhado entre os dois); declaração provável "Dados não coletados", a confirmar pelo usuário.
+5. Classificação etária: conteúdo do catálogo leve (sem conteúdo sexual; álcool só citado como "sem álcool"); declarar mensagens privadas entre os dois (recados, respostas) no questionário.
+
+**Notas para a revisão (rascunho):** o app usa a conta iCloud do iPhone, sem cadastro nem senha. Para testar sozinho: abrir, criar "Nosso espaço" e usar memórias, mapa, recados, metas, lembretes e "Hoje, nós dois". O compartilhamento com o par exige uma segunda conta iCloud (convite por link pelo Compartilhar). Localização só no Mapa, para mostrar a distância; notificações para recados, respostas do par e lembretes. Os dados ficam no iCloud do usuário; o dono pode apagar o espaço em Nosso espaço, e o par pode sair.
+
 ## Testes que dependem de dois aparelhos
 
 Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta como validação.
@@ -370,6 +391,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 | 2026-10-17 | Suíte completa após todas as funcionalidades | 35 testes unitários em 8 suítes e 3 testes de UI passaram: `MemoryFlowUITests` (criar, editar, fechar e reabrir), `NotesAndGoalsUITests` (escrever recadinho, criar meta com etapa, marcar, fechar e reabrir), capturas de memórias |
 | 2026-10-17 | Lembretes | 42 testes unitários e 4 de UI passaram (`RemindersUITests`: criar pela tela, fechar e reabrir); Release BUILD SUCCEEDED |
 | 2026-10-18 | Progresso das metas e texto do recadinho no aviso (extensão) | 56 testes unitários e 4 de UI passaram (UI: marcar, desmarcar e marcar etapa com progresso na hora); Release BUILD SUCCEEDED com a extensão embutida |
+| 2026-10-19 | Auditoria para TestFlight (manifestos, criptografia, segundo convite, identidade na extensão, ferramenta de esquema) | 131 testes unitários e 7 de UI passaram; Release BUILD SUCCEEDED (simulador e iPhone, sem assinatura) sem avisos; Release sem demonstração nem ferramenta de esquema; manifestos no app e na extensão |
 | 2026-10-19 | Auditoria das notificações (horizonte, horário de verão, idempotência, obsoletos, apresentação remota) | 129 testes unitários (17 novos) e 7 de UI passaram; Release BUILD SUCCEEDED com `fetch` e o identificador da tarefa no Info.plist; entrega, segundo plano e dois aparelhos só validáveis no iPhone (H15–H18) |
 | 2026-10-19 | Push do quiz (par terminou a rodada) | 113 testes unitários passaram, 4 novos de `GameAlertContent`; Release BUILD SUCCEEDED; entrega só validável com dois iPhones (H14) |
 | 2026-10-19 | Pergunta nova diária (padrão ligado, 9h) e push "seu par respondeu" | 116 testes (unitários e de UI) passaram, 6 novos de `AnswerAlertContent`; Release BUILD SUCCEEDED; entrega só validável com dois iPhones (H11–H13) |
@@ -405,7 +427,8 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 - **2026-10-19:** push do quiz "Quem conhece melhor?" quando o par termina a rodada (`game-alerts-v1`).
 - **2026-10-19:** branch `feature/hoje-nos-dois` juntada na `main` (fast-forward) e enviada ao GitHub, a pedido do usuário. Segundo iPhone disponível na quarta-feira (2026-10-21).
 - **2026-10-19:** auditoria das notificações: horizonte de até 60 dias, horário certo no horário de verão, sincronização idempotente, remoção de avisos obsoletos, atualização em segundo plano, avisos discretos para reação e eventos sem novidade, um único "espaço encerrado" com som (branch `fix/notifications-reliability`).
-- **Retomar em:** testar H1–H18 com os dois iPhones na quarta-feira (2026-10-21); antes do TestFlight, publicar o esquema do CloudKit em Produção com os dois iPhones; revalidação dos testes S/N pendentes.
+- **2026-10-19:** auditoria para TestFlight na branch `audit/testflight` (sem push nem merge); pendências manuais na seção "Preparação para TestFlight e App Store".
+- **Retomar em:** usuário revisa `audit/testflight`; inicializar e publicar o esquema; testar H1–H18 com os dois iPhones na quarta-feira (2026-10-21); antes do TestFlight, publicar o esquema do CloudKit em Produção com os dois iPhones; revalidação dos testes S/N pendentes.
 
 ## Próximos passos
 

@@ -3,6 +3,7 @@
 //  AppCasalTests
 //
 
+import CloudKit
 import Testing
 @testable import AppCasal
 
@@ -28,5 +29,16 @@ struct CoupleLimitTests {
     @Test func removedPartnerDoesNotFreeTheSeat() {
         #expect(!CoupleLimit.canInvite([owner, removedPartner]))
         #expect(CoupleLimit.activePartnerCount([owner, removedPartner, partner]) == 1)
+    }
+
+    @Test func onlyOneSpacePerPerson() {
+        let mine = CKRecordZone.ID(zoneName: "space-a", ownerName: "_owner")
+        let other = CKRecordZone.ID(zoneName: "space-b", ownerName: "_someoneElse")
+        #expect(ShareService.decision(currentRole: nil, currentZone: nil, invitedZone: other) == .accept)
+        #expect(ShareService.decision(currentRole: .owner, currentZone: nil, invitedZone: other) == .ownsASpace)
+        #expect(ShareService.decision(currentRole: .participant, currentZone: mine, invitedZone: mine) == .alreadyIn)
+        #expect(ShareService.decision(currentRole: .participant, currentZone: mine, invitedZone: other) == .inAnotherSpace)
+        // Share not on this iPhone yet: never join a second space blindly.
+        #expect(ShareService.decision(currentRole: .participant, currentZone: nil, invitedZone: other) == .inAnotherSpace)
     }
 }

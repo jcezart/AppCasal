@@ -77,6 +77,13 @@ struct MainTabView: View {
                 selection = .moments
             }
         }
+        // An invitation opened while already in a space: say why it was not accepted
+        // (onboarding shows it only before a space exists).
+        .alert("Convite não aceito", isPresented: isShowingAcceptanceMessage) {
+            Button("OK", role: .cancel) { environment.sharing.dismissAcceptanceMessage() }
+        } message: {
+            Text(acceptanceMessage)
+        }
         .sheet(isPresented: $isShowingNotificationPrompt) {
             NotificationPromptView(environment: environment)
         }
@@ -99,6 +106,24 @@ struct MainTabView: View {
             }
         }
         #endif
+    }
+
+    private var acceptanceMessage: String {
+        switch environment.sharing.acceptance {
+        case .rejected(let message), .failed(let message): message
+        default: ""
+        }
+    }
+
+    private var isShowingAcceptanceMessage: Binding<Bool> {
+        Binding {
+            switch environment.sharing.acceptance {
+            case .rejected, .failed: true
+            default: false
+            }
+        } set: { isShowing in
+            if !isShowing { environment.sharing.dismissAcceptanceMessage() }
+        }
     }
 
     private var momentsContext: MomentsContext {

@@ -3,6 +3,7 @@
 //  AppCasal
 //
 
+import OSLog
 import SwiftUI
 
 @main
@@ -15,6 +16,19 @@ struct AppCasalApp: App {
         NavigationAppearance.apply()
         environment = AppEnvironment.shared
         LaunchLog.mark("environment ready")
+        #if DEBUG
+        if UserDefaults.standard.bool(forKey: "AppCasalInitializeCloudKitSchema") {
+            Task.detached(priority: .utility) {
+                let log = Logger(subsystem: "jc.app.dev.AppCasal", category: "schema")
+                do {
+                    try PersistenceController.initializeDevelopmentSchema()
+                    log.notice("CloudKit Development schema initialized")
+                } catch {
+                    log.error("CloudKit schema initialization failed: \(String(describing: error), privacy: .public)")
+                }
+            }
+        }
+        #endif
     }
 
     var body: some Scene {

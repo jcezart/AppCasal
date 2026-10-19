@@ -18,7 +18,7 @@ final class PersistenceController {
         case inMemory
     }
 
-    static let cloudKitContainerIdentifier = "iCloud.jc.app.dev.casal"
+    nonisolated static let cloudKitContainerIdentifier = "iCloud.jc.app.dev.casal"
 
     /// Loaded once: several models in one process make Core Data warn about
     /// ambiguous entity classes.
@@ -105,4 +105,30 @@ final class PersistenceController {
         guard viewContext.hasChanges else { return }
         try viewContext.save()
     }
+
+    #if DEBUG
+    /// DEBUG, run once from Xcode with `-AppCasalInitializeCloudKitSchema YES` on a device
+    /// signed in to iCloud: uploads every record type and field of the current model to
+    /// the Development environment, so it can be deployed to Production in the CloudKit
+    /// Console. Uses a throwaway private-only store in a temporary folder; the real stores
+    /// and their data are not touched. CloudKit creates sample records and removes them.
+    nonisolated static func initializeDevelopmentSchema() throws {
+        let directory = FileManager.default.temporaryDirectory.appending(path: "SchemaInit-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        // Its own copy of the model, off the main actor (Core Data may warn about the
+        // second model in the process; harmless for this one-off tool).
+        guard let url = Bundle(for: PersistenceController.self).url(forResource: "AppCasal", withExtension: "momd"),
+              let model = NSManagedObjectModel(contentsOf: url) else { throw CocoaError(.fileNoSuchFile) }
+        let container = NSPersistentCloudKitContainer(name: "AppCasalSchema", managedObjectModel: model)
+        let description = NSPersistentStoreDescription(url: directory.appending(path: "Schema.sqlite"))
+        description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: cloudKitContainerIdentifier)
+        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+        container.persistentStoreDescriptions = [description]
+        var loadError: Error?
+        container.loadPersistentStores { _, error in loadError = error }
+        if let loadError { throw loadError }
+        try container.initializeCloudKitSchema(options: [])
+    }
+    #endif
 }

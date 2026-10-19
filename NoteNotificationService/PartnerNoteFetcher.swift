@@ -52,14 +52,18 @@ enum ZoneChangeReader {
         try await database.allRecordZones().filter { $0.zoneID != CKRecordZone.default().zoneID }
     }
 
+    /// Asked each time, so a different iCloud account on this iPhone is never taken for
+    /// the previous one; the last known name only when the lookup fails.
     static func currentUserRecordName(in container: CKContainer) async throws -> String {
         let key = "userRecordName"
-        if let cached = UserDefaults.standard.string(forKey: key) {
-            return cached
+        do {
+            let name = try await container.userRecordID().recordName
+            UserDefaults.standard.set(name, forKey: key)
+            return name
+        } catch {
+            if let cached = UserDefaults.standard.string(forKey: key) { return cached }
+            throw error
         }
-        let name = try await container.userRecordID().recordName
-        UserDefaults.standard.set(name, forKey: key)
-        return name
     }
 
     static func changedZones(

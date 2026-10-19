@@ -36,4 +36,22 @@ struct CloudKitSchemaTests {
             #expect(entity.uniquenessConstraints.isEmpty, "\(entity.name ?? "")")
         }
     }
+
+    /// The alert subscriptions and the extension read mirrored records by name: the
+    /// record types and fields must exist in the model (and so in the CloudKit schema).
+    @Test func alertRecordTypesAndFieldsMatchTheModel() {
+        let checks: [(recordType: String, keys: [String])] = [
+            (NoteAlertContent.recordType, NoteAlertContent.desiredKeys),
+            (AnswerAlertContent.recordType, AnswerAlertContent.desiredKeys),
+            (GameAlertContent.recordType, GameAlertContent.desiredKeys),
+        ]
+        for check in checks {
+            let entityName = String(check.recordType.dropFirst(3))
+            let entity = model.entitiesByName[entityName]
+            #expect(check.recordType.hasPrefix("CD_") && entity != nil, "\(check.recordType)")
+            for key in check.keys {
+                #expect(entity?.attributesByName[String(key.dropFirst(3))] != nil, "\(check.recordType).\(key)")
+            }
+        }
+    }
 }

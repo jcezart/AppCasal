@@ -115,13 +115,55 @@ final class ShareService {
         Self.topViewController()?.present(controller, animated: true)
     }
 
+    enum AcceptDecision: Equatable {
+        case accept
+        /// The same invitation opened again.
+        case alreadyIn
+        case ownsASpace
+        /// Another couple's invitation: two shared spaces would mix both couples in the
+        /// shared database (and in its alerts).
+        case inAnotherSpace
+    }
+
+    /// One space per person: an owner never joins another space, and a participant joins
+    /// no second one.
+    nonisolated static func decision(currentRole: Member.Role?, currentZone: CKRecordZone.ID?, invitedZone: CKRecordZone.ID) -> AcceptDecision {
+        switch currentRole {
+        case nil: .accept
+        case .owner: .ownsASpace
+        case .participant: currentZone == invitedZone ? .alreadyIn : .inAnotherSpace
+        }
+    }
+
+    /// Clears a rejection or failure once the person has seen it.
+    func dismissAcceptanceMessage() {
+        switch acceptance {
+        case .rejected, .failed: acceptance = .idle
+        default: break
+        }
+    }
+
     func accept(_ metadata: CKShare.Metadata) async {
         guard CoupleLimit.isValidCouple(CoupleLimit.summaries(of: metadata.share)) else {
             acceptance = .rejected(String(localized: "Este convite inclui mais de uma pessoa além do dono. Um espaço é só para o casal."))
             return
         }
-        if let current = spaces.activeSpace(), spaces.role(in: current) == .owner {
+        let current = spaces.activeSpace()
+        switch Self.decision(
+            currentRole: current.map(spaces.role(in:)),
+            currentZone: current.flatMap(existingShare(for:))?.recordID.zoneID,
+            invitedZone: metadata.share.recordID.zoneID
+        ) {
+        case .accept:
+            break
+        case .alreadyIn:
+            acceptance = .accepted
+            return
+        case .ownsASpace:
             acceptance = .rejected(String(localized: "Você já tem um espaço próprio. Por enquanto, cada pessoa participa de um único espaço."))
+            return
+        case .inAnotherSpace:
+            acceptance = .rejected(String(localized: "Você já participa de um espaço. Para entrar em outro, saia do atual em Nosso espaço."))
             return
         }
         guard let store = persistence.sharedStore else {
