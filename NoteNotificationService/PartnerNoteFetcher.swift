@@ -7,17 +7,6 @@ import CloudKit
 import Foundation
 import OSLog
 
-/// What a push from the note alert subscription turned out to be.
-enum NoteAlertOutcome: Sendable {
-    /// The partner wrote or edited this note.
-    case note(NoteAlertContent.Note)
-    /// The shared space is gone (deleted by the owner, or sharing stopped). The database
-    /// subscription also fires when the zone is deleted.
-    case spaceEnded
-    /// Nothing to name (no network, an edit of an old note, a deletion).
-    case unknown
-}
-
 /// Fetches the notes changed since the last push and returns the partner's latest one. Uses its own change tokens (kept in this extension's defaults),
 /// independent from the app's `NSPersistentCloudKitContainer` mirroring.
 enum PartnerNoteFetcher {
@@ -46,7 +35,7 @@ enum PartnerNoteFetcher {
             if scope == .shared, try await ZoneChangeReader.spaceZones(in: database).isEmpty {
                 return .spaceEnded
             }
-            return .unknown
+            return .irrelevant
         } catch {
             log.error("Note fetch failed: \(error.localizedDescription, privacy: .public)")
             return .unknown

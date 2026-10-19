@@ -26,5 +26,9 @@ struct AppCasalApp: App {
                     .environment(\.managedObjectContext, environment.persistence.viewContext)
             }
         }
+        // Opportunistic extra; the reminders already scheduled do not depend on it.
+        .backgroundTask(.appRefresh(AppEnvironment.refreshTaskIdentifier)) {
+            await AppEnvironment.shared.refreshNotificationsInBackground()
+        }
     }
 }

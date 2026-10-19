@@ -7,15 +7,6 @@ import CloudKit
 import Foundation
 import OSLog
 
-/// What a push from the game alert subscription turned out to be.
-enum GameAlertOutcome: Sendable {
-    case event(GameAlertContent.Event)
-    /// The shared space is gone (the database subscription also fires then).
-    case spaceEnded
-    /// Nothing to name (no network, an old change).
-    case unknown
-}
-
 /// Fetches the "Quem conhece melhor?" answers changed since the last game push, with
 /// change tokens of its own (prefix `games-`). Remembers which rounds this person
 /// played, since the change feed brings each answer only once.
@@ -50,7 +41,7 @@ enum PartnerGameFetcher {
             if scope == .shared, try await ZoneChangeReader.spaceZones(in: database).isEmpty {
                 return .spaceEnded
             }
-            return .unknown
+            return .irrelevant
         } catch {
             log.error("Game fetch failed: \(error.localizedDescription, privacy: .public)")
             return .unknown

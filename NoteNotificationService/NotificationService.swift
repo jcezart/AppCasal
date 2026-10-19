@@ -42,7 +42,6 @@ final class NotificationService: UNNotificationServiceExtension {
             }
         } else if let scope = GameAlertContent.databaseScope(of: userInfo) {
             let partnerName = content.subtitle
-            content.subtitle = ""
             delivery.start(content: content, handler: contentHandler)
             Task {
                 let outcome = await PartnerGameFetcher.outcome(in: scope)
@@ -64,28 +63,44 @@ private enum AlertOutcome: Sendable {
     case answer(AnswerAlertOutcome, partnerName: String)
     case game(GameAlertOutcome, partnerName: String)
 
-    func apply(to content: UNMutableNotificationContent) {
+    private static let spaceEndedKey = "spaceEndedShownAt"
+    private static let spaceEndedLock = NSLock()
+
+    var isSpaceEnded: Bool {
         switch self {
-        case .note(.note(let note)):
-            content.subtitle = NoteAlertContent.subtitle(for: note)
-            content.body = NoteAlertContent.body(for: note)
-        case .note(.spaceEnded), .answer(.spaceEnded, _), .game(.spaceEnded, _):
-            content.title = NoteAlertContent.spaceEndedTitle
-            content.subtitle = ""
-            content.body = NoteAlertContent.spaceEndedBody
-        case .answer(.event(let event), let partnerName):
-            content.subtitle = AnswerAlertContent.subtitle(for: event) ?? ""
-            content.body = AnswerAlertContent.body(for: event, partnerName: partnerName)
+        case .note(.spaceEnded), .answer(.spaceEnded, _), .game(.spaceEnded, _): true
+        default: false
+        }
+    }
+
+    func apply(to content: UNMutableNotificationContent, now: Date = .now) {
+        // The three subscriptions all fire when the space ends: the first push says it,
+        // the next ones (same process or not, shared defaults) arrive quietly.
+        var isRepeat = false
+        if isSpaceEnded {
+            Self.spaceEndedLock.withLock {
+                let defaults = UserDefaults.standard
+                isRepeat = RemoteAlertPresentation.spaceEndedIsRepeat(lastShownAt: defaults.object(forKey: Self.spaceEndedKey) as? Date, now: now)
+                if !isRepeat { defaults.set(now, forKey: Self.spaceEndedKey) }
+            }
+        }
+        let presentation = switch self {
+        case .note(let outcome): RemoteAlertPresentation.note(outcome, spaceEndedIsRepeat: isRepeat)
+        case .answer(let outcome, let partnerName): RemoteAlertPresentation.answer(outcome, partnerName: partnerName, spaceEndedIsRepeat: isRepeat)
+        case .game(let outcome, let partnerName): RemoteAlertPresentation.game(outcome, partnerName: partnerName, spaceEndedIsRepeat: isRepeat)
+        }
+        if let title = presentation.title { content.title = title }
+        if let subtitle = presentation.subtitle { content.subtitle = subtitle }
+        if let body = presentation.body { content.body = body }
+        content.threadIdentifier = presentation.threadIdentifier
+        if presentation.isQuiet {
+            content.interruptionLevel = .passive
+            content.sound = nil
+        }
+        if !presentation.userInfo.isEmpty {
             var userInfo = content.userInfo
-            userInfo[AnswerAlertContent.routeKey] = AnswerAlertContent.route(for: event)
+            for (key, value) in presentation.userInfo { userInfo[key] = value }
             content.userInfo = userInfo
-        case .game(.event(let event), let partnerName):
-            content.body = GameAlertContent.body(for: event, partnerName: partnerName)
-            var userInfo = content.userInfo
-            userInfo[AnswerAlertContent.routeKey] = GameAlertContent.route
-            content.userInfo = userInfo
-        case .note(.unknown), .answer(.unknown, _), .game(.unknown, _):
-            break
         }
     }
 }

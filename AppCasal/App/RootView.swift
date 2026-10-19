@@ -40,9 +40,10 @@ struct RootView: View {
                 LaunchLog.mark("account resolved")
                 reload()
                 environment.prepareMoments()
+                // Also resyncs "Hoje, nós dois", which shares the pending limit.
                 await environment.syncReminderNotifications()
                 await environment.syncNoteAlerts()
-                await environment.syncMomentNotifications()
+                environment.scheduleNotificationRefresh()
             }
             .task { await account.observeAccountChanges() }
             .task { await environment.sync.observe(environment.persistence.container) }
@@ -53,11 +54,10 @@ struct RootView: View {
                     await environment.sync.refreshPendingChanges(in: environment.persistence.container)
                     // Reminders created or changed by the partner are scheduled here too.
                     await environment.syncReminderNotifications()
-                    // Registers the note alert once the partner joins.
+                    // Registers the note alert once the partner joins. "Hoje, nós dois"
+                    // reminders follow remote changes in `observeChangesForNotifications`,
+                    // which also runs when the app is woken in the background.
                     await environment.syncNoteAlerts()
-                    // New days for the owner; today's reminder off once answered elsewhere.
-                    environment.prepareMoments()
-                    await environment.syncMomentNotifications()
                 }
             }
             .task(id: isWaitingForSharedSpace) {

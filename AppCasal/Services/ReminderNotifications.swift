@@ -11,7 +11,7 @@ import UserNotifications
 @Observable
 final class ReminderNotifications {
     static let identifierPrefix = "reminder-"
-    /// With the 7 days of `MomentNotifications`, stays under the system limit of 64.
+    /// With at least 7 days of `MomentNotifications`, stays under the system limit of 64.
     static let maximumPending = 56
 
     private(set) var authorization: UNAuthorizationStatus = .notDetermined
@@ -60,6 +60,11 @@ final class ReminderNotifications {
                 try? await center.add(request)
             }
         }
+    }
+
+    /// How many requests `sync` would schedule, so other alerts can make room first.
+    static func plannedCount(_ schedules: [ReminderSchedule], now: Date = .now) -> Int {
+        min(maximumPending, schedules.reduce(0) { $0 + $1.triggers(after: now).count })
     }
 
     static func body(daysBefore: Int) -> String {

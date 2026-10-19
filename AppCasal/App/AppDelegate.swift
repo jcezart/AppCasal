@@ -15,6 +15,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         UNUserNotificationCenter.current().delegate = self
         // CloudKit mirroring relies on remote notifications to learn about changes.
         application.registerForRemoteNotifications()
+        // Runs in background launches too (no scene), so reminders follow remote changes.
+        Task { await AppEnvironment.shared.observeChangesForNotifications() }
         return true
     }
 
@@ -52,12 +54,17 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         completionHandler()
     }
 
-    /// Shows note alerts while the app is in the foreground too.
+    /// Shows alerts while the app is in the foreground too, except a reminder or a
+    /// "waiting for you" alert for an answer or round already sent from this account.
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-        completionHandler([.banner, .list, .sound])
+        if AppEnvironment.shared.isObsoleteMomentAlert(notification.request.content.userInfo) {
+            completionHandler([])
+        } else {
+            completionHandler([.banner, .list, .sound])
+        }
     }
 }

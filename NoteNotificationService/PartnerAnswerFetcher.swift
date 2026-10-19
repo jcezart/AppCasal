@@ -7,15 +7,6 @@ import CloudKit
 import Foundation
 import OSLog
 
-/// What a push from the answer alert subscription turned out to be.
-enum AnswerAlertOutcome: Sendable {
-    case event(AnswerAlertContent.Event)
-    /// The shared space is gone (the database subscription also fires then).
-    case spaceEnded
-    /// Nothing to name (no network, an old change).
-    case unknown
-}
-
 /// Fetches the daily answers changed since the last answer push. Change tokens of its
 /// own (prefix `answers-`), so note pushes and answer pushes never consume each other's
 /// changes. Remembers on which days this person answered, since the change feed brings
@@ -51,7 +42,7 @@ enum PartnerAnswerFetcher {
             if scope == .shared, try await ZoneChangeReader.spaceZones(in: database).isEmpty {
                 return .spaceEnded
             }
-            return .unknown
+            return .irrelevant
         } catch {
             log.error("Answer fetch failed: \(error.localizedDescription, privacy: .public)")
             return .unknown

@@ -3,8 +3,11 @@
 //  AppCasal
 //
 
+import BackgroundTasks
+import CoreData
 import Foundation
 import Observation
+import UIKit
 
 /// App-wide dependency graph, created once at launch.
 @Observable
@@ -70,7 +73,11 @@ final class AppEnvironment {
     func syncReminderNotifications() async {
         guard runMode != .tests, runMode != .preview else { return }
         let schedules = spaces.activeSpace().map(reminders.activeSchedules) ?? []
+        // Reminders and "Hoje, nós dois" share the pending limit: make room before
+        // adding reminders (iOS may drop requests past 64), then grow into what is left.
+        await syncMomentNotifications(reserving: ReminderNotifications.plannedCount(schedules))
         await reminderNotifications.sync(schedules)
+        await syncMomentNotifications()
     }
 
     /// Keeps the push subscriptions (partner notes and partner answers) in line with
@@ -144,43 +151,105 @@ final class AppEnvironment {
         }
     }()
 
-    /// Reschedules this device's "Hoje, nós dois" notifications (at most one a day).
-    func syncMomentNotifications(now: Date = .now) async {
+    /// Reschedules this device's "Hoje, nós dois" notifications (at most one a day) and
+    /// clears delivered ones that asked for something already done.
+    /// `reserving`: requests about to be added by reminders, counted as already pending.
+    func syncMomentNotifications(now: Date = .now, reserving: Int = 0) async {
         guard runMode != .tests, runMode != .preview else { return }
         await reminderNotifications.refreshAuthorization()
         guard let space = spaces.activeSpace(), let me = account.userRecordName else {
-            await momentNotifications.sync([], allowed: false)
+            await momentNotifications.sync(allowed: false) { _ in [] }
             return
         }
-        let zone = moments.timeZone(of: space)
-        let sessions = moments.allSessions(in: space)
-        var questions: [String: String] = [:]
+        let done = momentsDone(in: space, by: me)
+        await momentNotifications.sync(allowed: reminderNotifications.isAllowed) { [self] otherPending in
+            // Read when this sync's turn comes, so the latest answers count.
+            guard let space = spaces.activeSpace() else { return [] }
+            let zone = moments.timeZone(of: space)
+            var questions: [String: String] = [:]
+            for key in Set(moments.allSessions(in: space).compactMap(\.dayKey)) {
+                questions[key] = moments.session(for: key, in: space)?.questionText
+            }
+            let memories = (space.memories ?? []).compactMap { memory -> (id: UUID, title: String, date: Date)? in
+                guard memory.deletedAt == nil, let id = memory.id, let date = memory.date else { return nil }
+                return (id, memory.title ?? "", date)
+            }
+            return MomentReminderPlanner.plan(.init(
+                now: now,
+                calendar: .current,
+                preferences: momentNotifications.preferences,
+                spaceTimeZone: zone,
+                questions: questions,
+                answered: momentsDone(in: space, by: me).answeredDays,
+                memories: memories,
+                days: MomentReminderPlanner.horizon(otherPending: max(otherPending, reserving))
+            ))
+        }
+        await momentNotifications.removeObsoleteDelivered(answeredDays: done.answeredDays, playedRounds: done.playedRounds)
+    }
+
+    /// Days this person answered and quiz rounds they played (round IDs lowercased).
+    func momentsDone(in space: CoupleSpace, by me: String) -> (answeredDays: Set<String>, playedRounds: Set<String>) {
         var answered = Set<String>()
-        for key in Set(sessions.compactMap(\.dayKey)) {
-            guard let session = moments.session(for: key, in: space) else { continue }
-            questions[key] = session.questionText
-            if moments.state(of: session, for: me)?.mine != nil { answered.insert(key) }
+        for key in Set(moments.allSessions(in: space).compactMap(\.dayKey)) {
+            if let session = moments.session(for: key, in: space), moments.state(of: session, for: me)?.mine != nil {
+                answered.insert(key)
+            }
         }
-        let memories = (space.memories ?? []).compactMap { memory -> (id: UUID, title: String, date: Date)? in
-            guard memory.deletedAt == nil, let id = memory.id, let date = memory.date else { return nil }
-            return (id, memory.title ?? "", date)
-        }
-        let plan = MomentReminderPlanner.plan(.init(
-            now: now,
-            calendar: .current,
-            preferences: momentNotifications.preferences,
-            spaceTimeZone: zone,
-            questions: questions,
-            answered: answered,
-            memories: memories
-        ))
-        await momentNotifications.sync(plan, allowed: reminderNotifications.isAllowed)
+        let played = Set((space.gameAnswers ?? []).filter { $0.authorID == me }.compactMap { $0.roundID?.uuidString.lowercased() })
+        return (answered, played)
+    }
+
+    /// For an alert about to show while the app is open: true when it only asks for an
+    /// answer or a round already sent from this account.
+    func isObsoleteMomentAlert(_ userInfo: [AnyHashable: Any]) -> Bool {
+        guard let space = spaces.activeSpace(), let me = account.userRecordName else { return false }
+        let done = momentsDone(in: space, by: me)
+        return MomentNotifications.isObsolete(userInfo, answeredDays: done.answeredDays, playedRounds: done.playedRounds)
     }
 
     /// After a local change in "Hoje, nós dois" (an answer sent): today's reminder is
     /// cancelled on this device. The partner's device updates when the change syncs.
     func momentsDidChange() {
         Task { await syncMomentNotifications() }
+    }
+
+    nonisolated static let refreshTaskIdentifier = "jc.app.dev.AppCasal.notifications-refresh"
+
+    /// Asks iOS for a background refresh in about a day, to extend the reminders. Only a
+    /// hint: the system decides if and when it runs (rarely for an app left unopened, and
+    /// never after a force quit). The reminders already scheduled do not depend on it.
+    func scheduleNotificationRefresh() {
+        guard runMode == .production else { return }
+        let request = BGAppRefreshTaskRequest(identifier: Self.refreshTaskIdentifier)
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 20 * 60 * 60)
+        // Fails in the simulator and when Background App Refresh is off; nothing to do then.
+        try? BGTaskScheduler.shared.submit(request)
+    }
+
+    /// The background refresh: next request first, then the day and the reminders.
+    func refreshNotificationsInBackground() async {
+        scheduleNotificationRefresh()
+        prepareMoments()
+        await syncReminderNotifications()
+    }
+
+    /// Keeps notifications current without the interface: CloudKit's silent pushes can
+    /// wake the app in the background (not after a force quit, and as the system allows),
+    /// and the time zone or the day can change while it runs. Started once at launch.
+    func observeChangesForNotifications() async {
+        // New days for the owner; today's reminder off once answered elsewhere.
+        async let remote: Void = resyncMoments(on: .NSPersistentStoreRemoteChange, preparing: true)
+        async let timeZone: Void = resyncMoments(on: .NSSystemTimeZoneDidChange, preparing: false)
+        async let day: Void = resyncMoments(on: UIApplication.significantTimeChangeNotification, preparing: true)
+        _ = await (remote, timeZone, day)
+    }
+
+    private func resyncMoments(on name: Notification.Name, preparing: Bool) async {
+        for await _ in NotificationCenter.default.notifications(named: name) {
+            if preparing { prepareMoments() }
+            await syncMomentNotifications()
+        }
     }
 
     /// Owner's device: gives a question to today and the next days. Runs at launch and
