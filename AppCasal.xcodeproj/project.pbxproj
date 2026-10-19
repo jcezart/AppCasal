@@ -74,6 +74,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Data/Notifications/AnswerAlertContent.swift,
+				Data/Notifications/GameAlertContent.swift,
 				Data/Notifications/NoteAlertContent.swift,
 				Data/Notifications/NoteTimestamp.swift,
 			);

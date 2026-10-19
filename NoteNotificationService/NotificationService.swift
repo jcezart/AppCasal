@@ -13,7 +13,8 @@ import UserNotifications
 /// instead (an extension cannot hide a push without Apple's filtering entitlement).
 /// When nothing can be found in time (no network, an edit of an old note, a deletion),
 /// the generic alert is shown unchanged. Pushes of the answer alert subscription get
-/// "<par> respondeu à pergunta do dia…" the same way, never the answer itself.
+/// "<par> respondeu à pergunta do dia…" the same way, never the answer itself; pushes of
+/// the game alert subscription get "Um novo quiz foi iniciado!…", never the choices.
 final class NotificationService: UNNotificationServiceExtension {
     private let delivery = Delivery()
 
@@ -39,6 +40,14 @@ final class NotificationService: UNNotificationServiceExtension {
                 let outcome = await PartnerAnswerFetcher.outcome(in: scope)
                 delivery.finish(.answer(outcome, partnerName: partnerName))
             }
+        } else if let scope = GameAlertContent.databaseScope(of: userInfo) {
+            let partnerName = content.subtitle
+            content.subtitle = ""
+            delivery.start(content: content, handler: contentHandler)
+            Task {
+                let outcome = await PartnerGameFetcher.outcome(in: scope)
+                delivery.finish(.game(outcome, partnerName: partnerName))
+            }
         } else {
             contentHandler(content)
         }
@@ -53,13 +62,14 @@ final class NotificationService: UNNotificationServiceExtension {
 private enum AlertOutcome: Sendable {
     case note(NoteAlertOutcome)
     case answer(AnswerAlertOutcome, partnerName: String)
+    case game(GameAlertOutcome, partnerName: String)
 
     func apply(to content: UNMutableNotificationContent) {
         switch self {
         case .note(.note(let note)):
             content.subtitle = NoteAlertContent.subtitle(for: note)
             content.body = NoteAlertContent.body(for: note)
-        case .note(.spaceEnded), .answer(.spaceEnded, _):
+        case .note(.spaceEnded), .answer(.spaceEnded, _), .game(.spaceEnded, _):
             content.title = NoteAlertContent.spaceEndedTitle
             content.subtitle = ""
             content.body = NoteAlertContent.spaceEndedBody
@@ -69,7 +79,12 @@ private enum AlertOutcome: Sendable {
             var userInfo = content.userInfo
             userInfo[AnswerAlertContent.routeKey] = AnswerAlertContent.route(for: event)
             content.userInfo = userInfo
-        case .note(.unknown), .answer(.unknown, _):
+        case .game(.event(let event), let partnerName):
+            content.body = GameAlertContent.body(for: event, partnerName: partnerName)
+            var userInfo = content.userInfo
+            userInfo[AnswerAlertContent.routeKey] = GameAlertContent.route
+            content.userInfo = userInfo
+        case .note(.unknown), .answer(.unknown, _), .game(.unknown, _):
             break
         }
     }

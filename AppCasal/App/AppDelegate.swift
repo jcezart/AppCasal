@@ -46,6 +46,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
             AppEnvironment.shared.pendingRoute = route
         } else if AnswerAlerts.isAnswerAlert(userInfo) {
             AppEnvironment.shared.pendingRoute = .explore
+        } else if AnswerAlerts.isGameAlert(userInfo) {
+            AppEnvironment.shared.pendingRoute = .game
         }
         completionHandler()
     }

@@ -95,7 +95,7 @@ struct NotificationSettingsView: View {
                 Toggle("Pergunta nova todo dia", isOn: momentToggle($moments.preferences.dailyQuestion))
                     .accessibilityIdentifier("notifications.dailyQuestion")
                 if notifications.isAllowed {
-                    Toggle("Quando seu par responder", isOn: $answerAlerts.isEnabled)
+                    Toggle("Quando seu par responder (pergunta e quiz)", isOn: $answerAlerts.isEnabled)
                         .accessibilityIdentifier("notifications.answers")
                         .onChange(of: answerAlerts.isEnabled) {
                             Task { await environment.syncNoteAlerts() }
@@ -109,7 +109,7 @@ struct NotificationSettingsView: View {
             } header: {
                 Text("Hoje, nós dois")
             } footer: {
-                Text("A pergunta nova chega no horário escolhido, a não ser que você já tenha respondido; é no máximo um lembrete por dia neste iPhone, e a pergunta vem primeiro. O aviso de que seu par respondeu chega pelo iCloud e pode levar alguns instantes.")
+                Text("A pergunta nova chega no horário escolhido, a não ser que você já tenha respondido; é no máximo um lembrete por dia neste iPhone, e a pergunta vem primeiro. Os avisos de que seu par respondeu a pergunta ou terminou o quiz chegam pelo iCloud e podem levar alguns instantes.")
             }
             .listRowBackground(Palette.surface)
             .onChange(of: moments.preferences) {

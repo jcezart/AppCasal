@@ -7,9 +7,10 @@ import CloudKit
 import Foundation
 import Observation
 
-/// Push alert when the partner answers the daily question ("… está esperando a sua
-/// resposta"), through a `CKDatabaseSubscription` scoped to the daily answer record
-/// type. Same databases and limits as `NoteAlerts`: the owner watches the private
+/// Push alerts when the partner answers: the daily question ("… está esperando a sua
+/// resposta") and "Quem conhece melhor?" ("Um novo quiz foi iniciado!…"), through two
+/// `CKDatabaseSubscription`s scoped to the daily answer and game answer record types,
+/// under one preference. Same databases and limits as `NoteAlerts`: the owner watches the private
 /// database, the participant the shared one; own subscription ID, never the ones of
 /// `NSPersistentCloudKitContainer`.
 ///
@@ -21,6 +22,8 @@ import Observation
 @Observable
 final class AnswerAlerts {
     nonisolated static let subscriptionID = AnswerAlertContent.subscriptionID
+    nonisolated static let gameSubscriptionID = GameAlertContent.subscriptionID
+    private static let subscriptionIDs = [subscriptionID, gameSubscriptionID]
     private static let enabledKey = "notifications.answers.enabled"
 
     /// Personal preference, on by default. Only takes effect with notification permission.
@@ -52,6 +55,21 @@ final class AnswerAlerts {
         return subscription
     }
 
+    /// The partner finished a "Quem conhece melhor?" round.
+    static func makeGameSubscription(partnerName: String) -> CKDatabaseSubscription {
+        let subscription = CKDatabaseSubscription(subscriptionID: gameSubscriptionID)
+        subscription.recordType = GameAlertContent.recordType
+        let info = CKSubscription.NotificationInfo()
+        info.title = GameAlertContent.title
+        // The extension reads the partner's name from here, then clears it.
+        info.subtitle = partnerName
+        info.alertBody = GameAlertContent.fallbackBody
+        info.soundName = "default"
+        info.shouldSendMutableContent = true
+        subscription.notificationInfo = info
+        return subscription
+    }
+
     /// Saves or removes the subscription to match the preference, the permission and
     /// whether the partner already joined. Network errors are kept, not thrown: the
     /// next launch or data change tries again.
@@ -60,7 +78,7 @@ final class AnswerAlerts {
         guard isEnabled, allowed, let partnerName else {
             guard registered != "removed" else { return }
             do {
-                _ = try await database.modifySubscriptions(saving: [], deleting: [Self.subscriptionID])
+                _ = try await database.modifySubscriptions(saving: [], deleting: Self.subscriptionIDs)
                 registered = "removed"
             } catch {
                 lastError = error.localizedDescription
@@ -70,8 +88,13 @@ final class AnswerAlerts {
         let signature = "\(role)|\(partnerName)"
         guard registered != signature else { return }
         do {
-            let (saved, _) = try await database.modifySubscriptions(saving: [Self.makeSubscription(partnerName: partnerName)], deleting: [])
-            if case .failure(let error) = saved[Self.subscriptionID] { throw error }
+            let (saved, _) = try await database.modifySubscriptions(
+                saving: [Self.makeSubscription(partnerName: partnerName), Self.makeGameSubscription(partnerName: partnerName)],
+                deleting: []
+            )
+            for id in Self.subscriptionIDs {
+                if case .failure(let error) = saved[id] { throw error }
+            }
             registered = signature
             lastError = nil
         } catch {
@@ -84,7 +107,7 @@ final class AnswerAlerts {
         guard registered != "removed" else { return }
         do {
             for database in [container.privateCloudDatabase, container.sharedCloudDatabase] {
-                _ = try await database.modifySubscriptions(saving: [], deleting: [Self.subscriptionID])
+                _ = try await database.modifySubscriptions(saving: [], deleting: Self.subscriptionIDs)
             }
             registered = "removed"
         } catch {
@@ -92,8 +115,13 @@ final class AnswerAlerts {
         }
     }
 
-    /// True when a remote notification came from this subscription.
+    /// True when a remote notification came from the daily answer subscription.
     nonisolated static func isAnswerAlert(_ userInfo: [AnyHashable: Any]) -> Bool {
         CKNotification(fromRemoteNotificationDictionary: userInfo)?.subscriptionID == subscriptionID
+    }
+
+    /// True when a remote notification came from the game subscription.
+    nonisolated static func isGameAlert(_ userInfo: [AnyHashable: Any]) -> Bool {
+        CKNotification(fromRemoteNotificationDictionary: userInfo)?.subscriptionID == gameSubscriptionID
     }
 }
