@@ -58,6 +58,7 @@ struct NotificationSettingsView: View {
     var body: some View {
         @Bindable var noteAlerts = environment.noteAlerts
         @Bindable var moments = environment.momentNotifications
+        @Bindable var answerAlerts = environment.answerAlerts
         Form {
             Section {
                 VStack(alignment: .leading, spacing: Spacing.xs) {
@@ -91,8 +92,15 @@ struct NotificationSettingsView: View {
                 .listRowBackground(Palette.surface)
             }
             Section {
-                Toggle("Lembrete da pergunta do dia", isOn: momentToggle($moments.preferences.dailyQuestion))
+                Toggle("Pergunta nova todo dia", isOn: momentToggle($moments.preferences.dailyQuestion))
                     .accessibilityIdentifier("notifications.dailyQuestion")
+                if notifications.isAllowed {
+                    Toggle("Quando seu par responder", isOn: $answerAlerts.isEnabled)
+                        .accessibilityIdentifier("notifications.answers")
+                        .onChange(of: answerAlerts.isEnabled) {
+                            Task { await environment.syncNoteAlerts() }
+                        }
+                }
                 if moments.preferences.dailyQuestion || moments.preferences.weeklyIdea || moments.preferences.memoryAnniversaries {
                     DatePicker("Horário", selection: timeBinding($moments.preferences.minutes), displayedComponents: .hourAndMinute)
                 }
@@ -101,13 +109,13 @@ struct NotificationSettingsView: View {
             } header: {
                 Text("Hoje, nós dois")
             } footer: {
-                Text("No máximo um lembrete por dia, só neste iPhone; a pergunta do dia vem primeiro. O lembrete some quando você responde. Avisos de que seu par respondeu ainda não estão disponíveis: vocês veem isso no app.")
+                Text("A pergunta nova chega no horário escolhido, a não ser que você já tenha respondido; é no máximo um lembrete por dia neste iPhone, e a pergunta vem primeiro. O aviso de que seu par respondeu chega pelo iCloud e pode levar alguns instantes.")
             }
             .listRowBackground(Palette.surface)
             .onChange(of: moments.preferences) {
                 Task { await environment.syncMomentNotifications() }
             }
-            if let error = environment.noteAlerts.lastError, notifications.isAllowed {
+            if let error = environment.noteAlerts.lastError ?? environment.answerAlerts.lastError, notifications.isAllowed {
                 Section { Text(error).foregroundStyle(Palette.accentText) }
                     .listRowBackground(Palette.surface)
             }

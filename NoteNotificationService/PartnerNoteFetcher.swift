@@ -28,11 +28,12 @@ enum PartnerNoteFetcher {
         let database = container.database(with: scope)
         let tokens = TokenStore(scope: scope)
         do {
-            let me = try await currentUserRecordName(in: container)
-            let changes = try await changedZones(in: database, tokens: tokens)
+            let me = try await ZoneChangeReader.currentUserRecordName(in: container)
+            let changes = try await ZoneChangeReader.changedZones(in: database, tokens: tokens)
             var notes: [NoteAlertContent.Note] = []
             for zoneID in changes.modified {
-                notes += try await changedNotes(in: zoneID, of: database, tokens: tokens)
+                notes += try await ZoneChangeReader.changedRecords(in: zoneID, of: database, tokens: tokens, desiredKeys: NoteAlertContent.desiredKeys)
+                    .compactMap(NoteAlertContent.note(from:))
             }
             if let note = NoteAlertContent.latestFromPartner(notes, me: me, now: now) {
                 return .note(note)
@@ -42,7 +43,7 @@ enum PartnerNoteFetcher {
             if !changes.deleted.isEmpty {
                 return .spaceEnded
             }
-            if scope == .shared, try await spaceZones(in: database).isEmpty {
+            if scope == .shared, try await ZoneChangeReader.spaceZones(in: database).isEmpty {
                 return .spaceEnded
             }
             return .unknown
@@ -51,13 +52,18 @@ enum PartnerNoteFetcher {
             return .unknown
         }
     }
+}
 
+/// Reads what changed in the space zone since the last push, with change tokens of its
+/// own per alert kind, so a note push and an answer push never consume each other's
+/// changes.
+enum ZoneChangeReader {
     /// The participant's shared database holds only the couple space zone.
-    private static func spaceZones(in database: CKDatabase) async throws -> [CKRecordZone] {
+    static func spaceZones(in database: CKDatabase) async throws -> [CKRecordZone] {
         try await database.allRecordZones().filter { $0.zoneID != CKRecordZone.default().zoneID }
     }
 
-    private static func currentUserRecordName(in container: CKContainer) async throws -> String {
+    static func currentUserRecordName(in container: CKContainer) async throws -> String {
         let key = "userRecordName"
         if let cached = UserDefaults.standard.string(forKey: key) {
             return cached
@@ -67,7 +73,7 @@ enum PartnerNoteFetcher {
         return name
     }
 
-    private static func changedZones(
+    static func changedZones(
         in database: CKDatabase,
         tokens: TokenStore
     ) async throws -> (modified: [CKRecordZone.ID], deleted: [CKRecordZone.ID]) {
@@ -90,41 +96,47 @@ enum PartnerNoteFetcher {
         return (modified.filter(isSpaceZone), deleted.filter(isSpaceZone))
     }
 
-    private static func changedNotes(
+    static func changedRecords(
         in zoneID: CKRecordZone.ID,
         of database: CKDatabase,
-        tokens: TokenStore
-    ) async throws -> [NoteAlertContent.Note] {
+        tokens: TokenStore,
+        desiredKeys: [CKRecord.FieldKey]
+    ) async throws -> [CKRecord] {
         var token = tokens.zoneToken(for: zoneID)
-        var notes: [NoteAlertContent.Note] = []
+        var records: [CKRecord] = []
         var moreComing = true
         while moreComing {
             let changes = try await database.recordZoneChanges(
                 inZoneWith: zoneID,
                 since: token,
-                desiredKeys: NoteAlertContent.desiredKeys
+                desiredKeys: desiredKeys
             )
             for case .success(let modification) in changes.modificationResultsByID.values {
-                if let note = NoteAlertContent.note(from: modification.record) {
-                    notes.append(note)
-                }
+                records.append(modification.record)
             }
             token = changes.changeToken
             moreComing = changes.moreComing
         }
         tokens.setZoneToken(token, for: zoneID)
-        return notes
+        return records
     }
 }
 
-/// Server change tokens, archived in this extension's own defaults.
-private struct TokenStore {
+/// Server change tokens, archived in this extension's own defaults. Notes keep the
+/// original keys (empty prefix); each other alert kind has its own prefix.
+struct TokenStore {
     let scope: CKDatabase.Scope
+    let prefix: String
     private let defaults = UserDefaults.standard
 
+    init(scope: CKDatabase.Scope, prefix: String = "") {
+        self.scope = scope
+        self.prefix = prefix
+    }
+
     var databaseToken: CKServerChangeToken? {
-        get { token(forKey: "db-\(scope.rawValue)") }
-        nonmutating set { set(newValue, forKey: "db-\(scope.rawValue)") }
+        get { token(forKey: "\(prefix)db-\(scope.rawValue)") }
+        nonmutating set { set(newValue, forKey: "\(prefix)db-\(scope.rawValue)") }
     }
 
     func zoneToken(for zoneID: CKRecordZone.ID) -> CKServerChangeToken? {
@@ -136,7 +148,7 @@ private struct TokenStore {
     }
 
     private func zoneKey(_ zoneID: CKRecordZone.ID) -> String {
-        "zone-\(scope.rawValue)-\(zoneID.ownerName)-\(zoneID.zoneName)"
+        "\(prefix)zone-\(scope.rawValue)-\(zoneID.ownerName)-\(zoneID.zoneName)"
     }
 
     private func token(forKey key: String) -> CKServerChangeToken? {

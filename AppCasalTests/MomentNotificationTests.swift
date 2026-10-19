@@ -19,13 +19,22 @@ struct MomentNotificationTests {
         .init(now: now, calendar: calendar, preferences: preferences, spaceTimeZone: zone, questions: questions, answered: answered, memories: memories)
     }
 
-    @Test func nothingIsPlannedWithoutOptIn() throws {
-        #expect(MomentReminderPlanner.plan(inputs(now: try date(2026, 10, 18, 9), preferences: .init())).isEmpty)
+    @Test func nothingIsPlannedWithEverythingOff() throws {
+        var preferences = MomentNotificationPreferences()
+        preferences.dailyQuestion = false
+        #expect(MomentReminderPlanner.plan(inputs(now: try date(2026, 10, 18, 9), preferences: preferences)).isEmpty)
+    }
+
+    @Test func newQuestionIsOnByDefaultInTheMorning() {
+        let preferences = MomentNotificationPreferences()
+        #expect(preferences.dailyQuestion)
+        #expect(preferences.minutes == 9 * 60)
+        #expect(!preferences.weeklyIdea && !preferences.memoryAnniversaries)
     }
 
     @Test func oneReminderPerDayWithinTheWindowSkippingAnsweredDays() throws {
         var preferences = MomentNotificationPreferences()
-        preferences.dailyQuestion = true
+        preferences.minutes = 20 * 60
         let now = try date(2026, 10, 18, 9)
         let plan = MomentReminderPlanner.plan(inputs(
             now: now,
@@ -44,14 +53,14 @@ struct MomentNotificationTests {
 
     @Test func todayIsSkippedOnceTheTimeHasPassed() throws {
         var preferences = MomentNotificationPreferences()
-        preferences.dailyQuestion = true
+        preferences.minutes = 20 * 60
         let plan = MomentReminderPlanner.plan(inputs(now: try date(2026, 10, 18, 21), preferences: preferences))
         #expect(plan.first?.components.day == 19)
     }
 
     @Test func questionWinsOverAnniversaryAndWeeklyIdeaOnTheSameDay() throws {
         var preferences = MomentNotificationPreferences()
-        preferences.dailyQuestion = true
+        preferences.minutes = 20 * 60
         preferences.memoryAnniversaries = true
         preferences.weeklyIdea = true
         preferences.weekday = 1 // Sunday
@@ -70,6 +79,7 @@ struct MomentNotificationTests {
 
     @Test func memoryFromThisYearIsNotAnAnniversary() throws {
         var preferences = MomentNotificationPreferences()
+        preferences.dailyQuestion = false
         preferences.memoryAnniversaries = true
         let memory = (id: UUID(), title: "Hoje", date: try date(2026, 10, 18))
         #expect(MomentReminderPlanner.plan(inputs(now: try date(2026, 10, 18, 9), preferences: preferences, memories: [memory])).isEmpty)
@@ -92,11 +102,11 @@ struct MomentNotificationTests {
         let defaults = try #require(UserDefaults(suiteName: suite))
         defer { defaults.removePersistentDomain(forName: suite) }
         let notifications = MomentNotifications(defaults: defaults)
-        #expect(!notifications.preferences.isAnyEnabled)
-        notifications.preferences.dailyQuestion = true
+        #expect(notifications.preferences.dailyQuestion)
+        notifications.preferences.dailyQuestion = false
         notifications.preferences.minutes = 8 * 60 + 30
         let reloaded = MomentNotifications(defaults: defaults)
-        #expect(reloaded.preferences.dailyQuestion)
+        #expect(!reloaded.preferences.dailyQuestion)
         #expect(reloaded.preferences.minutes == 510)
     }
 }

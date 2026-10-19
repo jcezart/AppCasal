@@ -73,6 +73,7 @@
 		A7C3E17E2FCB9230003B7BEA /* Exceptions for "AppCasal" folder in "NoteNotificationService" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Data/Notifications/AnswerAlertContent.swift,
 				Data/Notifications/NoteAlertContent.swift,
 				Data/Notifications/NoteTimestamp.swift,
 			);

@@ -23,7 +23,7 @@ Referência comum para todos os agentes (Claude, Codex e outros) que trabalham n
 
 - **App completo em uso local:** todas as funcionalidades previstas, mais Lembretes (anuais e mensais) e notificações (permissão, tela de Notificações, push de recadinho), estão implementadas e validadas localmente (build, 60 testes unitários, 4 testes de UI de ponta a ponta).
 - **Primeiro teste com dois iPhones (2026-10-18, relato do usuário):** convite pelo WhatsApp chegou e foi aceito, mas o WhatsApp demorou a abrir, a folha de compartilhamento mostrava um ícone de documento e a participante só viu o espaço após reabrir o app. Os três problemas foram corrigidos e **precisam ser revalidados** (S1, S2).
-- **Hoje, nós dois (branch `feature/hoje-nos-dois`, commits locais, sem push):** pergunta do dia com revelação, histórico, Escolhe por nós (catálogo, Queremos ir, ideias próprias, planos e convites internos), Pequeno gesto, Vamos reviver?, Quem conhece melhor?, lembretes locais opcionais e rotas diretas. Validado localmente (101 testes unitários, 6 de UI, Debug e Release); nada validado entre duas contas (H1–H10).
+- **Hoje, nós dois (branch `feature/hoje-nos-dois`, commits locais, sem push):** pergunta do dia com revelação, histórico, Escolhe por nós (catálogo, Queremos ir, ideias próprias, planos e convites internos), Pequeno gesto, Vamos reviver?, Quem conhece melhor?, aviso diário de pergunta nova (ligado por padrão), push de "seu par respondeu" e rotas diretas. Validado localmente (testes unitários e de UI, Debug e Release); nada validado entre duas contas (H1–H13).
 - **Pendente:** apenas o que exige o segundo celular (convite, aceitação, sincronização entre parceiros, avisos, conflitos, sair/encerrar/apagar com o parceiro conectado).
 - **Commits:** `71bfd68` (design system, navegação, demonstração, ícone, abertura). Memórias e o restante das funcionalidades estão **sem commit** (aguardando autorização do usuário).
 - **Última atualização:** 2026-10-18.
@@ -162,7 +162,8 @@ Legenda: **validado localmente** = build + testes automatizados (unitários e/ou
 | Hoje, nós dois: cartão no Início, Explorar momentos, pergunta do dia (rascunho local, envio com confirmação, espera, revelação, reação, guardar como memória), histórico | sim | sim (unitários: planejador, fuso, horário de verão, revelação, idempotência, duplicatas, isolamento; UI: responder, reabrir) | H1–H4 |
 | Escolhe por nós (filtros, três fontes, sem repetir), ideias próprias, planos e convites internos, guardar memória do date | sim | sim (unitários: filtros, sorteio, deduplicação, planos, convites, lugar não vira visitado; UI: sortear e combinar) | H5–H6 |
 | Pequeno gesto, Vamos reviver?, Quem conhece melhor? | sim | sim (unitários: gestos recentes, aniversários com 29/2, rodada, pontuação com pulos) | H7–H8 |
-| Lembretes locais de Hoje, nós dois (opt-in; um por dia; rotas diretas) | sim | sim (planejador e rotas testados; entrega só no aparelho) | H9 |
+| Lembretes locais de Hoje, nós dois (pergunta nova ligada por padrão; demais opt-in; um por dia; rotas diretas) | sim | sim (planejador e rotas testados; entrega só no aparelho) | H9 |
+| Push "seu par respondeu" (`CKDatabaseSubscription` `answer-alerts-v1` + extensão) | sim | parcial (escolha do evento, textos, rota e assinatura testados) | H11–H13 |
 | Push de recadinho com o texto do recado (`CKDatabaseSubscription` + `recordType` + `NoteNotificationService`) | sim | parcial (assinatura, banco por papel, escolha do recado e texto testados) | N1–N9 |
 
 ## Compartilhamento
@@ -223,9 +224,9 @@ Legenda: **validado localmente** = build + testes automatizados (unitários e/ou
 
 **Memória a partir da área:** "Guardar como memória" (descoberta) e "Guardar esse momento" (date feito) abrem o editor existente preenchido; nada é gravado sem "Salvar"; o editor ignora toque duplo; o vínculo (`memoryID`) guarda só o primeiro.
 
-**Notificações (locais, opt-in em Nosso espaço > Notificações):** lembrete da pergunta do dia no horário escolhido (padrão 20h), ideia de encontro às sextas, aniversário de memórias. No máximo uma por dia (prioridade: pergunta > aniversário > ideia), janela de 7 dias (`moments-*`), refeita ao abrir, após responder e a cada mudança remota; dia já respondido não recebe lembrete. Texto da pergunta só se aquele dia já estiver no aparelho; nunca respostas. `ReminderNotifications.maximumPending` passou de 60 para 56 (56 + 7 < 64). Toque abre a tela certa (`MomentsRoute`); dado ausente (apagado, outro espaço, não sincronizado) mostra indisponível.
+**Notificações locais (Nosso espaço > Notificações):** "Pergunta nova todo dia" ligada por padrão (pedido do usuário, 2026-10-19; vale só com a permissão do sistema), título "Pergunta nova", no horário escolhido (padrão 9h); ideia de encontro às sextas e aniversário de memórias continuam opt-in. No máximo uma por dia (prioridade: pergunta > aniversário > ideia), janela de 7 dias (`moments-*`), refeita ao abrir, após responder e a cada mudança remota; dia já respondido não recebe lembrete. Texto da pergunta só se aquele dia já estiver no aparelho; nunca respostas. `ReminderNotifications.maximumPending` passou de 60 para 56 (56 + 7 < 64). Toque abre a tela certa (`MomentsRoute`); dado ausente (apagado, outro espaço, não sincronizado) mostra indisponível.
 
-**Avisos remotos (par respondeu, convite de date/jogo): não implementados, de propósito.** A única via sem servidor é `CKDatabaseSubscription` por tipo de registro, que dispara em qualquer alteração da zona daquele tipo (inclusive reações, cancelamentos e exclusão do espaço, como visto em N9) e não pode ser escondida pela extensão sem o entitlement de filtragem. Resultado provável: avisos falsos ("seu par respondeu" quando só reagiu). Até haver o entitlement `com.apple.developer.usernotifications.filtering` (pedido à Apple) ou outra aprovação, o estado aparece só dentro do app (cartão, Explorar, Planos). Sem push silencioso + notificação local.
+**Push "seu par respondeu" (pedido do usuário, 2026-10-19; substitui o adiamento):** `AnswerAlerts` salva `CKDatabaseSubscription` `answer-alerts-v1` com `recordType = CD_DailyAnswer` (dono no banco privado, participante no compartilhado), preferência pessoal ligada por padrão ("Quando seu par responder"), salva com permissão, preferência e parceiro no espaço; sincronizada junto com `NoteAlerts` (`syncNoteAlerts`) e removida dos dois bancos sem espaço. Título "Hoje, nós dois"; a assinatura leva o nome do par no subtítulo. A extensão (`PartnerAnswerFetcher`, `AnswerAlertContent`, testado) lê as respostas alteradas com tokens próprios (prefixo `answers-`, para não consumir as mudanças do aviso de recadinho; `ZoneChangeReader` comum), só `CD_authorID`, `CD_dayKey`, `CD_questionText`, `CD_submittedAt`, `CD_reactedAt` (nunca o texto da resposta) e guarda os dias que a própria pessoa respondeu (últimos 60). Textos: "<par> respondeu à pergunta do dia e está esperando a sua resposta." (subtítulo: a pergunta) ou, se a pessoa já respondeu, "… Vejam as respostas de vocês!"; reação: "<par> reagiu às respostas de hoje."; aviso no próprio aparelho que respondeu (se o servidor não o excluir): "Sua resposta foi enviada…"; espaço encerrado: o mesmo aviso do recadinho (podem chegar dois, um de cada assinatura); sem rede ou fora do prazo: "Tem novidade na pergunta do dia. Toque para ver." A extensão põe `momentsRoute = daily:<dia>` no aviso: o toque abre a pergunta; sem isso, abre a aba Hoje. Limites: a extensão não esconde avisos (sem o entitlement de filtragem), entrega pode atrasar ou ser agrupada; o tipo `CD_DailyAnswer` precisa estar no esquema de Produção antes do TestFlight. Convites de date/jogo continuam sem push.
 
 **Limites conhecidos:** a revelação é regra de interface, não sigilo; controle de autoria é no cliente (o compartilhamento atual não dá autorização por registro no servidor); duas rodadas iniciadas offline pelos dois: vale a mais antiga e a outra fica incompleta no histórico; relógio errado mostra "ainda não disponível"; o participante depende do dono ter aberto o app nos últimos 14 dias; o String Catalog só recebe os textos novos quando o projeto é aberto no Xcode (CLI não sincroniza); preços nunca são prometidos.
 
@@ -284,6 +285,9 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 | H8 | "Vamos reviver?" e gestos não mostram nada ao par | não testado |
 | H9 | Lembrete local do dia chega no horário e some após responder; toque abre a pergunta | não testado |
 | H10 | Atualização do app nos iPhones atuais: migração v1 → v2 preserva memórias, fotos, recados, metas, lugares e o vínculo | não testado (coberto por teste local com store v1) |
+| H11 | A responde a pergunta do dia: B recebe "A respondeu à pergunta do dia e está esperando a sua resposta." com a pergunta; toque abre a pergunta | não testado |
+| H12 | B responde depois: A recebe "B respondeu… Vejam as respostas de vocês!"; reação gera "reagiu", nunca "respondeu" | não testado |
+| H13 | Desligar "Quando seu par responder" para de avisar; apagar o espaço não gera "respondeu" | não testado |
 | C1–C4 | Conflitos: mesmo campo offline, exclusão × edição, exclusão física × edição, criação offline | não testado |
 
 ## Decisões vigentes
@@ -310,7 +314,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 | Hoje, nós dois: catálogo embarcado; dados do casal no espaço (CloudKit pelo espelhamento atual); modelo v2 aditivo com v1 mantida | pedido aprovado; sem copiar 625 itens por espaço; migração leve sem apagar dados |
 | Pergunta do dia preparada pelo dono (14 dias), dia no fuso do espaço, duplicatas resolvidas por criação + ID | mesma pergunta para os dois sem servidor; offline sem inventar pergunta |
 | Resposta enviada imutável; revelação quando os dois enviaram | evita mudança silenciosa depois de revelar |
-| Avisos de Hoje, nós dois só locais; remotos adiados | assinatura de banco não distingue eventos e a extensão não esconde avisos |
+| Push "seu par respondeu" por `CKDatabaseSubscription` + extensão; pergunta nova diária ligada por padrão | pedido do usuário (2026-10-19); a extensão identifica o evento pelos registros e cai em texto genérico verdadeiro quando não consegue |
 | "Hoje, nós dois" como aba "Hoje" na barra; Metas no fim do Início | pedido do usuário (escolheu tirar Metas da barra); no iPhone a sexta aba vai para "Mais" (observado no simulador, iOS 26) |
 | Modo demonstração só DEBUG, por argumento explícito, stores próprios | nunca misturar com dados reais |
 
@@ -319,8 +323,8 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 - Autorizar commit das memórias e das demais funcionalidades.
 - Com os dois iPhones: revalidar S1–S2 (convite e entrada) e executar S3–S8, M1–M2, G1, R1–R2, P1, N1–N6, depois C1–C4. Em cada aparelho: iCloud ativo, Modo de Desenvolvedor, rodar pelo Xcode.
 - Antes do TestFlight: publicar o esquema CloudKit em Production no CloudKit Console (agora com os tipos `CD_DailyQuestion`, `CD_DailyAnswer`, `CD_GameRound`, `CD_GameAnswer`, `CD_DatePlan`, `CD_DateIdea` e os campos novos; criados no ambiente de desenvolvimento ao usar o app).
-- Hoje, nós dois: abrir o projeto no Xcode uma vez (sincroniza o String Catalog), revisar a branch `feature/hoje-nos-dois`, decidir merge/push e executar H1–H10.
-- Para avisos remotos de "seu par respondeu": decidir se pede à Apple o entitlement de filtragem de notificações.
+- Hoje, nós dois: abrir o projeto no Xcode uma vez (sincroniza o String Catalog), revisar a branch `feature/hoje-nos-dois`, decidir merge/push e executar H1–H13.
+- Para esconder avisos genéricos (reação, espaço encerrado em dobro): decidir se pede à Apple o entitlement de filtragem de notificações.
 
 ## Problemas conhecidos
 
@@ -348,6 +352,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 | 2026-10-17 | Suíte completa após todas as funcionalidades | 35 testes unitários em 8 suítes e 3 testes de UI passaram: `MemoryFlowUITests` (criar, editar, fechar e reabrir), `NotesAndGoalsUITests` (escrever recadinho, criar meta com etapa, marcar, fechar e reabrir), capturas de memórias |
 | 2026-10-17 | Lembretes | 42 testes unitários e 4 de UI passaram (`RemindersUITests`: criar pela tela, fechar e reabrir); Release BUILD SUCCEEDED |
 | 2026-10-18 | Progresso das metas e texto do recadinho no aviso (extensão) | 56 testes unitários e 4 de UI passaram (UI: marcar, desmarcar e marcar etapa com progresso na hora); Release BUILD SUCCEEDED com a extensão embutida |
+| 2026-10-19 | Pergunta nova diária (padrão ligado, 9h) e push "seu par respondeu" | 116 testes (unitários e de UI) passaram, 6 novos de `AnswerAlertContent`; Release BUILD SUCCEEDED; entrega só validável com dois iPhones (H11–H13) |
 | 2026-10-18 | Aba "Hoje" na barra no lugar de Metas; Metas no fim do Início | 102 testes unitários e 6 de UI afetados passaram (Moments abre pela aba; NotesAndGoals cria e reabre a meta pelo Início) |
 | 2026-10-18 | Ajustes pedidos: recorte com zoom/afastar/deslocar, lista de lugares no Mapa, ano em Memórias, botão de Hoje, nós dois na barra, filtros reduzidos, cartão some após responder | 102 testes unitários e 7 de UI passaram (novos: recorte afastado, seletor de ano, cartão some do Início e a área abre pelo botão da barra); lista do Mapa sem teste de UI (permissão de localização) |
 | 2026-10-18 | Hoje, nós dois — incrementos 3 a 8 (telas, dates, gestos, reviver, jogo, lembretes, rotas, acessibilidade) | 101 testes unitários e 6 de UI passaram (`MomentsUITests`: responder e reabrir; sortear e combinar date); Debug e Release BUILD SUCCEEDED; Release sem conteúdo de demonstração; sem capturas (preferência do usuário) |
@@ -376,7 +381,8 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 - **2026-10-18:** Hoje, nós dois implementado na branch `feature/hoje-nos-dois` (commits locais `c9b4373`, `f507a36` e seguintes; sem push).
 - **2026-10-18:** ajustes do usuário na branch: recorte estilo Instagram/WhatsApp, lista no Mapa, ano em Memórias, botão "Hoje, nós dois" na barra, filtros reduzidos, cartão do Início some após responder.
 - **2026-10-18:** "Hoje, nós dois" virou a aba "Hoje" da barra (o botão acessório saiu); Metas saiu da barra e fica como última seção do Início.
-- **Retomar em:** usuário revisa a branch de Hoje, nós dois, decide merge/push e testa H1–H10 com os dois iPhones; revalidação dos testes S/N pendentes.
+- **2026-10-19:** aviso diário de pergunta nova ligado por padrão (9h) e push "seu par respondeu" pela assinatura `answer-alerts-v1`.
+- **Retomar em:** usuário revisa a branch de Hoje, nós dois, decide merge/push e testa H1–H13 com os dois iPhones; revalidação dos testes S/N pendentes.
 
 ## Próximos passos
 

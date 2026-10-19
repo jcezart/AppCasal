@@ -27,11 +27,12 @@ nonisolated struct MomentReminder: Equatable, Sendable {
     let route: String
 }
 
-/// Personal choices, on this iPhone only. All off by default (opt-in).
+/// Personal choices, on this iPhone only. The new question of each day is on by default
+/// (user's request); the others are opt-in. Nothing fires without the system permission.
 nonisolated struct MomentNotificationPreferences: Equatable, Sendable {
-    var dailyQuestion = false
-    /// Minutes after midnight, local time. Default 20:00.
-    var minutes = 20 * 60
+    var dailyQuestion = true
+    /// Minutes after midnight, local time. Default 09:00, early in the question's day.
+    var minutes = 9 * 60
     var weeklyIdea = false
     /// 1 = Sunday … 7 = Saturday (Gregorian). Default Friday.
     var weekday = 6
@@ -81,7 +82,7 @@ nonisolated enum MomentReminderPlanner {
                     candidates.append(MomentReminder(
                         kind: .dailyQuestion,
                         components: components,
-                        title: String(localized: "Hoje, nós dois"),
+                        title: String(localized: "Pergunta nova"),
                         body: text.map { String(localized: "Pergunta de hoje: \($0)") } ?? String(localized: "A pergunta de hoje está esperando por vocês."),
                         route: key.map { MomentsRoute.daily(dayKey: $0).payload } ?? MomentsRoute.explore.payload
                     ))
@@ -141,7 +142,7 @@ final class MomentNotifications {
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         var preferences = MomentNotificationPreferences()
-        preferences.dailyQuestion = defaults.bool(forKey: "moments.notify.daily")
+        preferences.dailyQuestion = defaults.object(forKey: "moments.notify.daily") as? Bool ?? true
         if let minutes = defaults.object(forKey: "moments.notify.minutes") as? Int { preferences.minutes = minutes }
         preferences.weeklyIdea = defaults.bool(forKey: "moments.notify.weekly")
         preferences.memoryAnniversaries = defaults.bool(forKey: "moments.notify.anniversaries")

@@ -32,7 +32,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
     // main thread, and the nonisolated `async` variants resume them from a background
     // executor, which can drop the tap instead of opening the app.
 
-    /// A tapped note alert opens Recados.
+    /// A tapped note alert opens Recados; a "Hoje, nós dois" one opens its screen.
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse,
@@ -42,7 +42,10 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         if NoteAlerts.isNoteAlert(userInfo) {
             AppEnvironment.shared.pendingTab = .notes
         } else if let route = MomentNotifications.route(from: userInfo) {
+            // Local reminders, and answer alerts whose day the extension filled in.
             AppEnvironment.shared.pendingRoute = route
+        } else if AnswerAlerts.isAnswerAlert(userInfo) {
+            AppEnvironment.shared.pendingRoute = .explore
         }
         completionHandler()
     }

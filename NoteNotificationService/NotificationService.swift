@@ -12,7 +12,8 @@ import UserNotifications
 /// When the push came from the shared space being deleted or no longer shared, says so
 /// instead (an extension cannot hide a push without Apple's filtering entitlement).
 /// When nothing can be found in time (no network, an edit of an old note, a deletion),
-/// the generic alert is shown unchanged.
+/// the generic alert is shown unchanged. Pushes of the answer alert subscription get
+/// "<par> respondeu à pergunta do dia…" the same way, never the answer itself.
 final class NotificationService: UNNotificationServiceExtension {
     private let delivery = Delivery()
 
@@ -21,20 +22,56 @@ final class NotificationService: UNNotificationServiceExtension {
         withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void
     ) {
         let content = (request.content.mutableCopy() as? UNMutableNotificationContent) ?? UNMutableNotificationContent()
-        guard let scope = NoteAlertContent.databaseScope(of: request.content.userInfo) else {
-            contentHandler(content)
-            return
-        }
-        delivery.start(content: content, handler: contentHandler)
+        let userInfo = request.content.userInfo
         let delivery = delivery
-        Task {
-            let outcome = await PartnerNoteFetcher.outcome(in: scope)
-            delivery.finish(outcome)
+        if let scope = NoteAlertContent.databaseScope(of: userInfo) {
+            delivery.start(content: content, handler: contentHandler)
+            Task {
+                let outcome = await PartnerNoteFetcher.outcome(in: scope)
+                delivery.finish(.note(outcome))
+            }
+        } else if let scope = AnswerAlertContent.databaseScope(of: userInfo) {
+            // The subscription carries the partner's name as the subtitle; it stays there
+            // when nothing better is found in time.
+            let partnerName = content.subtitle
+            delivery.start(content: content, handler: contentHandler)
+            Task {
+                let outcome = await PartnerAnswerFetcher.outcome(in: scope)
+                delivery.finish(.answer(outcome, partnerName: partnerName))
+            }
+        } else {
+            contentHandler(content)
         }
     }
 
     override func serviceExtensionTimeWillExpire() {
-        delivery.finish(.unknown)
+        delivery.finish(nil)
+    }
+}
+
+/// What the fetch found, for the alert being delivered.
+private enum AlertOutcome: Sendable {
+    case note(NoteAlertOutcome)
+    case answer(AnswerAlertOutcome, partnerName: String)
+
+    func apply(to content: UNMutableNotificationContent) {
+        switch self {
+        case .note(.note(let note)):
+            content.subtitle = NoteAlertContent.subtitle(for: note)
+            content.body = NoteAlertContent.body(for: note)
+        case .note(.spaceEnded), .answer(.spaceEnded, _):
+            content.title = NoteAlertContent.spaceEndedTitle
+            content.subtitle = ""
+            content.body = NoteAlertContent.spaceEndedBody
+        case .answer(.event(let event), let partnerName):
+            content.subtitle = AnswerAlertContent.subtitle(for: event) ?? ""
+            content.body = AnswerAlertContent.body(for: event, partnerName: partnerName)
+            var userInfo = content.userInfo
+            userInfo[AnswerAlertContent.routeKey] = AnswerAlertContent.route(for: event)
+            content.userInfo = userInfo
+        case .note(.unknown), .answer(.unknown, _):
+            break
+        }
     }
 }
 
@@ -58,18 +95,10 @@ private final class Delivery: @unchecked Sendable {
         lock.withLock { pending = Pending(handler: handler, content: content) }
     }
 
-    func finish(_ outcome: NoteAlertOutcome) {
+    /// Nil: the system deadline came first, so the generic alert goes out unchanged.
+    func finish(_ outcome: AlertOutcome?) {
         guard let taken = take() else { return }
-        switch outcome {
-        case .note(let note):
-            taken.content.subtitle = NoteAlertContent.subtitle(for: note)
-            taken.content.body = NoteAlertContent.body(for: note)
-        case .spaceEnded:
-            taken.content.title = NoteAlertContent.spaceEndedTitle
-            taken.content.body = NoteAlertContent.spaceEndedBody
-        case .unknown:
-            break
-        }
+        outcome?.apply(to: taken.content)
         taken.handler(taken.content)
     }
 

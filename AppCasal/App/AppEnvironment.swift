@@ -54,6 +54,7 @@ final class AppEnvironment {
     let location = LocationService()
     let reminderNotifications = ReminderNotifications()
     let noteAlerts = NoteAlerts()
+    let answerAlerts = AnswerAlerts()
     let momentNotifications = MomentNotifications()
     /// Tab to open next, set when a notification is tapped.
     var pendingTab: AppTab?
@@ -72,23 +73,23 @@ final class AppEnvironment {
         await reminderNotifications.sync(schedules)
     }
 
-    /// Keeps the partner-note push subscription in line with permission and preference.
-    /// Production only: demo, previews and tests never talk to CloudKit.
+    /// Keeps the push subscriptions (partner notes and partner answers) in line with
+    /// permission and preferences. Production only: demo, previews and tests never talk
+    /// to CloudKit.
     func syncNoteAlerts() async {
         guard runMode == .production, let me = account.userRecordName else { return }
         guard let space = spaces.activeSpace() else {
-            // The space was deleted or left: no more note alerts until a new one is shared.
+            // The space was deleted or left: no more alerts until a new one is shared.
             await noteAlerts.removeEverywhere(container: persistence.cloudKitContainer)
+            await answerAlerts.removeEverywhere(container: persistence.cloudKitContainer)
             return
         }
         await reminderNotifications.refreshAuthorization()
         let partner = spaces.partner(of: me, in: space)
-        await noteAlerts.update(
-            role: spaces.role(in: space),
-            partnerName: partner.map { $0.displayName ?? "" },
-            allowed: reminderNotifications.isAllowed,
-            container: persistence.cloudKitContainer
-        )
+        let role = spaces.role(in: space)
+        let partnerName = partner.map { $0.displayName ?? "" }
+        await noteAlerts.update(role: role, partnerName: partnerName, allowed: reminderNotifications.isAllowed, container: persistence.cloudKitContainer)
+        await answerAlerts.update(role: role, partnerName: partnerName, allowed: reminderNotifications.isAllowed, container: persistence.cloudKitContainer)
     }
 
     init(runMode: RunMode) {
