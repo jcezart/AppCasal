@@ -80,7 +80,19 @@
     "%@ já respondeu. A resposta aparece depois que você enviar a sua." : {
 
     },
+    "%@ reagiu às respostas de hoje." : {
+
+    },
+    "%@ respondeu à pergunta do dia e está esperando a sua resposta." : {
+
+    },
+    "%@ respondeu à pergunta do dia. Vejam as respostas de vocês!" : {
+
+    },
     "%@ Suas alterações continuam salvas neste iPhone." : {
+
+    },
+    "%@ terminou o quiz. O resultado de vocês está pronto!" : {
 
     },
     "%@: %@" : {
@@ -184,6 +196,9 @@
 
     },
     "A pergunta deste dia ainda não chegou a este iPhone. Ela aparece depois que o iCloud sincronizar; não criamos outra pergunta só para você." : {
+
+    },
+    "A pergunta nova chega no horário escolhido, a não ser que você já tenha respondido; é no máximo um lembrete por dia neste iPhone, e a pergunta vem primeiro. Os avisos de que seu par respondeu a pergunta ou terminou o quiz chegam pelo iCloud e podem levar alguns instantes." : {
 
     },
     "A resposta pode ter até %lld caracteres." : {
@@ -866,9 +881,6 @@
     "Lembrar do aniversário de namoro?" : {
 
     },
-    "Lembrete da pergunta do dia" : {
-
-    },
     "Lembretes" : {
 
     },
@@ -1014,9 +1026,6 @@
 
     },
     "No dia" : {
-
-    },
-    "No máximo um lembrete por dia, só neste iPhone; a pergunta do dia vem primeiro. O lembrete some quando você responde. Avisos de que seu par respondeu ainda não estão disponíveis: vocês veem isso no app." : {
 
     },
     "No WhatsApp, toque em Continuar: só quem abrir o link primeiro entra." : {
@@ -1212,6 +1221,12 @@
     "Pergunta do dia" : {
 
     },
+    "Pergunta nova" : {
+
+    },
+    "Pergunta nova todo dia" : {
+
+    },
     "Perguntas anteriores" : {
 
     },
@@ -1264,6 +1279,9 @@
 
     },
     "Qualquer lugar" : {
+
+    },
+    "Quando seu par responder (pergunta e quiz)" : {
 
     },
     "Quando vocês dois tiverem respondido, as respostas aparecem aqui." : {
@@ -1452,6 +1470,9 @@
     "Sua resposta" : {
 
     },
+    "Sua resposta foi enviada. Quando %@ responder, vocês veem as duas." : {
+
+    },
     "Suas alterações estão salvas no iCloud." : {
 
     },
@@ -1459,6 +1480,15 @@
 
     },
     "Suas escolhas ficam guardadas só neste iPhone até você enviar." : {
+
+    },
+    "Suas respostas foram enviadas. Quando %@ terminar, o resultado aparece." : {
+
+    },
+    "Tem novidade na pergunta do dia. Toque para ver." : {
+
+    },
+    "Tem novidade no quiz de vocês. Toque para ver." : {
 
     },
     "Tentar novamente" : {
@@ -1507,6 +1537,9 @@
 
     },
     "Um espaço só nosso" : {
+
+    },
+    "Um novo quiz foi iniciado! %@ já respondeu. Toque para responder." : {
 
     },
     "Um recadinho novo, um aniversário chegando: o iPhone avisa vocês dois." : {
