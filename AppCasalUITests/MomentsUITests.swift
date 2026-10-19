@@ -15,7 +15,7 @@ final class MomentsUITests: XCTestCase {
 
     /// Answer today's question from Início; the sent answer waits for the partner, never
     /// shows theirs, and survives a relaunch. Once answered, the card leaves Início and
-    /// stays in "Hoje, nós dois" (bottom bar button).
+    /// stays in the "Hoje" tab.
     @MainActor
     func testAnswerDailyQuestionWaitsForPartnerAfterRelaunch() {
         let app = XCUIApplication()
@@ -76,8 +76,7 @@ final class MomentsUITests: XCTestCase {
 
     @MainActor
     private func openMoments(in app: XCUIApplication) {
-        // Its own button in the bottom bar (tab bar accessory), on every tab.
-        let button = app.buttons["moments.open"]
+        let button = app.tabBars.buttons["Hoje"]
         XCTAssertTrue(button.waitForExistence(timeout: 10))
         button.tap()
     }

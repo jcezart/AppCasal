@@ -6,8 +6,8 @@
 import CoreData
 import SwiftUI
 
-/// Início: couple photo and names, days together, latest note, goal in progress and
-/// latest memory.
+/// Início: couple photo and names, days together, latest note, latest memory and, last,
+/// the goal in progress with the way into Metas.
 struct HomeView: View {
     let environment: AppEnvironment
     @ObservedObject var space: CoupleSpace
@@ -82,13 +82,23 @@ struct HomeView: View {
                         MomentsHomeCard(context: momentsContext)
                     }
                     latestNote
-                    goalSummary
                     SectionLabel(title: "Última memória")
                         .padding(.top, Spacing.xs)
                     latestMemory
                     Button("Nova memória", systemImage: "plus") { isCreatingMemory = true }
                         .buttonStyle(.primary)
                         .padding(.top, Spacing.xs)
+                    SectionLabel(title: "Metas")
+                        .padding(.top, Spacing.m)
+                    goalSummary
+                    NavigationLink {
+                        GoalsView(environment: environment, space: space, userRecordName: userRecordName)
+                    } label: {
+                        Label("Ver todas as metas", systemImage: "target")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.soft)
+                    .accessibilityIdentifier("home.goals")
                 }
                 .padding(.horizontal, Spacing.screen)
                 .padding(.top, space.coverPhotoData == nil ? -Spacing.xxxl * 2 : -Spacing.xl)
@@ -156,7 +166,9 @@ struct HomeView: View {
     @ViewBuilder
     private var goalSummary: some View {
         if let goal = activeGoals.first {
-            Button { showTab(.goals) } label: {
+            NavigationLink {
+                GoalsView(environment: environment, space: space, userRecordName: userRecordName)
+            } label: {
                 GoalSummaryRow(goal: goal)
             }
             .buttonStyle(.plain)

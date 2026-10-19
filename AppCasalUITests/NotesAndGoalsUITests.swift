@@ -30,8 +30,9 @@ final class NotesAndGoalsUITests: XCTestCase {
         app.buttons["Enviados"].tap()
         XCTAssertTrue(app.staticTexts["Bom dia, amor"].waitForExistence(timeout: 5))
 
-        // Create a goal with one step and tick it.
-        app.tabBars.buttons["Metas"].tap()
+        // Create a goal with one step and tick it (Metas is at the end of Início).
+        app.tabBars.buttons["Início"].tap()
+        openGoals(in: app)
         let add = app.buttons["goals.add"]
         XCTAssertTrue(add.waitForExistence(timeout: 5))
         add.tap()
@@ -58,13 +59,26 @@ final class NotesAndGoalsUITests: XCTestCase {
         // Reopen and check both survived.
         app.terminate()
         let reopened = XCUIApplication()
-        reopened.launchArguments = baseArguments + ["-AppCasalInitialTab", "goals"]
+        reopened.launchArguments = baseArguments
         reopened.launch()
+        openGoals(in: reopened)
         let reopenedStep = reopened.switches["Escolher destino"]
         XCTAssertTrue(reopenedStep.waitForExistence(timeout: 15))
         XCTAssertEqual(reopenedStep.value as? String, "Feita")
         reopened.tabBars.buttons["Recados"].tap()
         reopened.buttons["Enviados"].tap()
         XCTAssertTrue(reopened.staticTexts["Bom dia, amor"].waitForExistence(timeout: 5))
+    }
+
+    @MainActor
+    private func openGoals(in app: XCUIApplication) {
+        let link = app.buttons["home.goals"]
+        var attempts = 0
+        while !(link.exists && link.isHittable) && attempts < 8 {
+            app.swipeUp()
+            attempts += 1
+        }
+        XCTAssertTrue(link.waitForExistence(timeout: 10))
+        link.tap()
     }
 }

@@ -195,6 +195,9 @@
     "Abraço" : {
 
     },
+    "Abre a pergunta do dia e os outros momentos" : {
+
+    },
     "Abre as metas" : {
 
     },
@@ -261,6 +264,9 @@
     "Aniversários, datas especiais e tudo o que vocês não querem esquecer." : {
 
     },
+    "Ano %@" : {
+
+    },
     "Apagar" : {
 
     },
@@ -273,7 +279,7 @@
     "Aqui é onde a nossa história continua." : {
 
     },
-    "Arraste para posicionar e use dois dedos para aproximar." : {
+    "Arraste para posicionar. Use dois dedos para aproximar ou afastar; toque duas vezes para ampliar." : {
 
     },
     "As memórias que vocês guardarem voltam aqui depois de algumas semanas, e no aniversário de cada uma." : {
@@ -718,9 +724,6 @@
     "Excluir lembrete" : {
 
     },
-    "Explorar momentos" : {
-
-    },
     "Faltam %lld dias." : {
 
     },
@@ -728,6 +731,9 @@
 
     },
     "Favoritos" : {
+
+    },
+    "Fechar" : {
 
     },
     "Feita" : {
@@ -875,6 +881,9 @@
     "Limpar filtros" : {
 
     },
+    "Lista de lugares" : {
+
+    },
     "Lugar" : {
 
     },
@@ -915,6 +924,12 @@
 
     },
     "Modo demonstração" : {
+
+    },
+    "Mostra no mapa" : {
+
+    },
+    "Mostrar a foto inteira" : {
 
     },
     "Nada combinado ainda" : {
@@ -963,6 +978,9 @@
 
     },
     "Nenhum lembrete ainda" : {
+
+    },
+    "Nenhum lugar aqui" : {
 
     },
     "Nenhum lugar salvo ainda" : {
@@ -1125,6 +1143,9 @@
 
     },
     "Os filtros continuam valendo: nenhuma ideia cabe em todos eles ao mesmo tempo." : {
+
+    },
+    "Os lugares salvos pela busca do Mapa aparecem nesta lista." : {
 
     },
     "Os planos de vocês e o progresso de cada um aparecem aqui." : {
