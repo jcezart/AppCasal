@@ -23,7 +23,7 @@ Referência comum para todos os agentes (Claude, Codex e outros) que trabalham n
 
 - **App completo em uso local:** todas as funcionalidades previstas, mais Lembretes (anuais e mensais) e notificações (permissão, tela de Notificações, push de recadinho), estão implementadas e validadas localmente (build, 60 testes unitários, 4 testes de UI de ponta a ponta).
 - **Primeiro teste com dois iPhones (2026-10-18, relato do usuário):** convite pelo WhatsApp chegou e foi aceito, mas o WhatsApp demorou a abrir, a folha de compartilhamento mostrava um ícone de documento e a participante só viu o espaço após reabrir o app. Os três problemas foram corrigidos e **precisam ser revalidados** (S1, S2).
-- **Hoje, nós dois (branch `feature/hoje-nos-dois`, commits locais, sem push):** pergunta do dia com revelação, histórico, Escolhe por nós (catálogo, Queremos ir, ideias próprias, planos e convites internos), Pequeno gesto, Vamos reviver?, Quem conhece melhor?, aviso diário de pergunta nova (ligado por padrão), push de "seu par respondeu" e rotas diretas. Validado localmente (testes unitários e de UI, Debug e Release); nada validado entre duas contas (H1–H13).
+- **Hoje, nós dois (na `main` e no GitHub desde 2026-10-19):** pergunta do dia com revelação, histórico, Escolhe por nós (catálogo, Queremos ir, ideias próprias, planos e convites internos), Pequeno gesto, Vamos reviver?, Quem conhece melhor?, aviso diário de pergunta nova (ligado por padrão), push de "seu par respondeu" e rotas diretas. Validado localmente (testes unitários e de UI, Debug e Release); nada validado entre duas contas (H1–H13).
 - **Pendente:** apenas o que exige o segundo celular (convite, aceitação, sincronização entre parceiros, avisos, conflitos, sair/encerrar/apagar com o parceiro conectado).
 - **Commits:** `71bfd68` (design system, navegação, demonstração, ícone, abertura). Memórias e o restante das funcionalidades estão **sem commit** (aguardando autorização do usuário).
 - **Última atualização:** 2026-10-18.
@@ -327,7 +327,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 - Autorizar commit das memórias e das demais funcionalidades.
 - Com os dois iPhones: revalidar S1–S2 (convite e entrada) e executar S3–S8, M1–M2, G1, R1–R2, P1, N1–N6, depois C1–C4. Em cada aparelho: iCloud ativo, Modo de Desenvolvedor, rodar pelo Xcode.
 - Antes do TestFlight: publicar o esquema CloudKit em Production no CloudKit Console (agora com os tipos `CD_DailyQuestion`, `CD_DailyAnswer`, `CD_GameRound`, `CD_GameAnswer`, `CD_DatePlan`, `CD_DateIdea` e os campos novos; criados no ambiente de desenvolvimento ao usar o app).
-- Hoje, nós dois: abrir o projeto no Xcode uma vez (sincroniza o String Catalog), revisar a branch `feature/hoje-nos-dois`, decidir merge/push e executar H1–H14.
+- Hoje, nós dois: abrir o projeto no Xcode uma vez (sincroniza o String Catalog), executar H1–H14 com os dois iPhones.
 - Para esconder avisos genéricos (reação, espaço encerrado em dobro): decidir se pede à Apple o entitlement de filtragem de notificações.
 
 ## Problemas conhecidos
@@ -388,7 +388,8 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 - **2026-10-18:** "Hoje, nós dois" virou a aba "Hoje" da barra (o botão acessório saiu); Metas saiu da barra e fica como última seção do Início.
 - **2026-10-19:** aviso diário de pergunta nova ligado por padrão (9h) e push "seu par respondeu" pela assinatura `answer-alerts-v1`.
 - **2026-10-19:** push do quiz "Quem conhece melhor?" quando o par termina a rodada (`game-alerts-v1`).
-- **Retomar em:** usuário revisa a branch de Hoje, nós dois, decide merge/push e testa H1–H14 com os dois iPhones; revalidação dos testes S/N pendentes.
+- **2026-10-19:** branch `feature/hoje-nos-dois` juntada na `main` (fast-forward) e enviada ao GitHub, a pedido do usuário. Segundo iPhone disponível na quarta-feira (2026-10-21).
+- **Retomar em:** testar H1–H14 com os dois iPhones na quarta-feira (2026-10-21); antes do TestFlight, publicar o esquema do CloudKit em Produção com os dois iPhones; revalidação dos testes S/N pendentes.
 
 ## Próximos passos
 
