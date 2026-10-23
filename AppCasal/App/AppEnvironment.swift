@@ -63,6 +63,8 @@ final class AppEnvironment {
     var pendingTab: AppTab?
     /// "Hoje, nós dois" screen to open next, set when its notification is tapped.
     var pendingRoute: MomentsRoute?
+    /// Map filter to apply next, set when "Escolhe por nós" sends the couple to "Queremos ir".
+    var pendingMapFilter: MapTabView.Filter?
     /// Set when this person just created the space: the invitation is offered first.
     var offersInvitation = false
 

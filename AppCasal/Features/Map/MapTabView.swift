@@ -87,6 +87,12 @@ struct MapTabView: View {
         .safeAreaInset(edge: .bottom) { bottomContent }
         .toolbar(.hidden, for: .navigationBar)
         .task { await environment.location.updateLocation() }
+        .onChange(of: environment.pendingMapFilter, initial: true) {
+            if let pending = environment.pendingMapFilter {
+                filter = pending
+                environment.pendingMapFilter = nil
+            }
+        }
         .sheet(item: selectedPlace) { place in
             PlaceDetailView(environment: environment, space: space, place: place, userRecordName: userRecordName)
                 .presentationDetents([.height(320), .large])

@@ -20,6 +20,7 @@ struct DatesView: View {
     @State private var errorMessage: String?
     @State private var generator = SystemRandomNumberGenerator()
     @State private var didSetSources = false
+    @State private var isAddingIdea = false
 
     var body: some View {
         MomentsObserver(context: context.environment.persistence.viewContext) {
@@ -35,6 +36,11 @@ struct DatesView: View {
                 }
                 .accessibilityLabel(Text("Nossas ideias"))
             }
+        }
+        .sheet(isPresented: $isAddingIdea, onDismiss: {
+            if !context.repository.ideas(in: context.space).isEmpty { filters.sources.insert(.idea) }
+        }) {
+            DateIdeaEditorView(context: context, mode: .new)
         }
         .onChange(of: filters) {
             current = nil
@@ -127,7 +133,13 @@ struct DatesView: View {
         Binding {
             filters.sources.contains(kind)
         } set: { isOn in
-            if isOn {
+            // An empty source of their own leads to where it is filled instead.
+            if isOn, kind == .idea, context.repository.ideas(in: context.space).isEmpty {
+                isAddingIdea = true
+            } else if isOn, kind == .place, wishlistPlaces.isEmpty {
+                context.environment.pendingMapFilter = .wishlist
+                context.environment.pendingTab = .map
+            } else if isOn {
                 filters.sources.insert(kind)
             } else if filters.sources.count > 1 {
                 filters.sources.remove(kind)
@@ -258,11 +270,6 @@ struct DateCandidateCard: View {
             .foregroundStyle(Palette.textSecondary)
             if !candidate.materials.isEmpty {
                 Text("Vocês vão precisar: \(candidate.materials.joined(separator: ", ")).")
-                    .font(.footnote)
-                    .foregroundStyle(Palette.textSecondary)
-            }
-            if let note = candidate.costNote {
-                Text(note)
                     .font(.footnote)
                     .foregroundStyle(Palette.textSecondary)
             }
