@@ -198,6 +198,9 @@
     "A pergunta deste dia ainda não chegou a este iPhone. Ela aparece depois que o iCloud sincronizar; não criamos outra pergunta só para você." : {
 
     },
+    "A pergunta do dia foi atualizada." : {
+
+    },
     "A pergunta nova chega no horário escolhido, a não ser que você já tenha respondido; é no máximo um lembrete por dia neste iPhone, e a pergunta vem primeiro. Os avisos de que seu par respondeu a pergunta ou terminou o quiz chegam pelo iCloud e podem levar alguns instantes." : {
 
     },
@@ -482,6 +485,9 @@
 
     },
     "Convite enviado para %@. Aparece quando o iCloud sincronizar." : {
+
+    },
+    "Convite não aceito" : {
 
     },
     "Convite recusado" : {
@@ -1118,10 +1124,16 @@
     "O que vocês viveram nesse dia?" : {
 
     },
+    "O quiz de vocês foi atualizado." : {
+
+    },
     "O último recadinho entre vocês aparece aqui." : {
 
     },
     "O uso do iCloud está restrito neste iPhone." : {
+
+    },
+    "OK" : {
 
     },
     "Ontem" : {
@@ -1152,6 +1164,9 @@
 
     },
     "Os planos de vocês e o progresso de cada um aparecem aqui." : {
+
+    },
+    "Os recadinhos de vocês foram atualizados." : {
 
     },
     "Os recadinhos do seu par aparecem aqui." : {
@@ -1618,6 +1633,9 @@
 
     },
     "Você deixa de ver o espaço neste iPhone. Nada é apagado do iCloud do seu par." : {
+
+    },
+    "Você já participa de um espaço. Para entrar em outro, saia do atual em Nosso espaço." : {
 
     },
     "Você já respondeu. A resposta enviada não muda." : {
