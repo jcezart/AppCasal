@@ -41,7 +41,7 @@ Referência comum para todos os agentes (Claude, Codex e outros) que trabalham n
 |---|---|
 | Xcode / SDK | 27.0 (27A266a) / iPhoneOS 27.0 |
 | iOS mínimo | 26.0 |
-| Dispositivos | iPhone (`TARGETED_DEVICE_FAMILY = 1`) |
+| Dispositivos | só iPhone (`TARGETED_DEVICE_FAMILY = 1`, `SUPPORTED_PLATFORMS = iphoneos iphonesimulator`; sem Mac Catalyst, sem "Designed for iPhone" no Mac e no Vision Pro) |
 | Modelo Core Data | `AppCasal 2` (atual, aditiva) + `AppCasal` (v1, mantida para migração leve automática) |
 | Swift | 6.0; `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` no app e nos testes unitários; approachable concurrency |
 | Idioma | `developmentRegion = pt-BR`; `Localizable.xcstrings` (fonte pt-BR, sincronizado pelo Xcode) |
@@ -386,6 +386,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 
 | Data | O quê | Resultado |
 |---|---|---|
+| 2026-10-24 | Destinos só iPhone (Mac Catalyst, Mac e Vision Pro removidos); tentativa de iOS mínimo 18.6 desfeita (sem simulador iOS 18 no Xcode 27) | 131 testes unitários (18 suítes) e 7 de UI passaram no iPhone 17 Pro, iOS 26.3; Release iPhone (sem assinatura) BUILD SUCCEEDED sem avisos |
 | 2026-10-17 | Etapa 0: builds, perfil com container, Info.plist | OK |
 | 2026-10-17 | Design system: contraste (22 casos), Release sem código de demonstração | OK |
 | 2026-10-17 | Abertura: ~120 ms até o espaço (simulador, Debug); sem tela preta | OK |
