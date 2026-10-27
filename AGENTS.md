@@ -26,7 +26,7 @@ Referência comum para todos os agentes (Claude, Codex e outros) que trabalham n
 - **Hoje, nós dois (na `main` e no GitHub desde 2026-10-19):** pergunta do dia com revelação, histórico, Escolhe por nós (catálogo, Queremos ir, ideias próprias, planos e convites internos), Pequeno gesto, Vamos reviver?, Quem conhece melhor?, aviso diário de pergunta nova (ligado por padrão), push de "seu par respondeu" e rotas diretas. Validado localmente (testes unitários e de UI, Debug e Release); nada validado entre duas contas (H1–H13).
 - **Pendente:** apenas o que exige o segundo celular (convite, aceitação, sincronização entre parceiros, avisos, conflitos, sair/encerrar/apagar com o parceiro conectado).
 - **Commits:** `71bfd68` (design system, navegação, demonstração, ícone, abertura). Memórias e o restante das funcionalidades estão **sem commit** (aguardando autorização do usuário).
-- **Última atualização:** 2026-10-23.
+- **Última atualização:** 2026-10-26 (assinatura com Superwall configurada; esquema CloudKit publicado; ficha da App Store completa, com site de suporte e privacidade e rótulos de privacidade publicados; pronto para commit quando o usuário pedir — o commit vai para o TestFlight pelo Xcode Cloud).
 
 ## Produto
 
@@ -42,7 +42,7 @@ Referência comum para todos os agentes (Claude, Codex e outros) que trabalham n
 | Xcode / SDK | 27.0 (27A266a) / iPhoneOS 27.0 |
 | iOS mínimo | 26.0 |
 | Dispositivos | só iPhone (`TARGETED_DEVICE_FAMILY = 1`, `SUPPORTED_PLATFORMS = iphoneos iphonesimulator`; sem Mac Catalyst, sem "Designed for iPhone" no Mac e no Vision Pro) |
-| Modelo Core Data | `AppCasal 2` (atual, aditiva) + `AppCasal` (v1, mantida para migração leve automática) |
+| Modelo Core Data | `AppCasal 3` (atual; só `CoupleSpace.accessExpiresAt`) + `AppCasal 2` e `AppCasal` (v1), mantidas para migração leve automática |
 | Swift | 6.0; `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` no app e nos testes unitários; approachable concurrency |
 | Idioma | `developmentRegion = pt-BR`; `Localizable.xcstrings` (fonte pt-BR, sincronizado pelo Xcode) |
 | Targets | `AppCasal`, `AppCasalTests` (Swift Testing, hospedado), `AppCasalUITests` (XCTest UI; sem isolamento padrão, métodos `@MainActor`), `NoteNotificationService` (Notification Service Extension embutida no app; `jc.app.dev.AppCasal.NoteNotificationService`; entitlements próprios com o container CloudKit; sem isolamento padrão; compila também `AppCasal/Data/Notifications/NoteAlertContent.swift` e `NoteTimestamp.swift` por exceção de pasta sincronizada) |
@@ -58,7 +58,7 @@ Referência comum para todos os agentes (Claude, Codex e outros) que trabalham n
 
 ## Tecnologias
 
-SwiftUI (Liquid Glass do iOS 26), Core Data + `NSPersistentCloudKitContainer` (sem SwiftData), CloudKit (espelhamento e `CKShare` pelo framework), MapKit (iOS 26: `MKMapItem.location`/`address`), CoreLocation (`CLLocationUpdate`), PhotosUI, ImageIO, Network (`NWPathMonitor`), UserNotifications (lembretes locais; push de recadinho por `CKDatabaseSubscription`), LinkPresentation (prévia do convite na folha de compartilhamento). Nenhuma dependência externa.
+SwiftUI (Liquid Glass do iOS 26), Core Data + `NSPersistentCloudKitContainer` (sem SwiftData), CloudKit (espelhamento e `CKShare` pelo framework), MapKit (iOS 26: `MKMapItem.location`/`address`), CoreLocation (`CLLocationUpdate`), PhotosUI, ImageIO, Network (`NWPathMonitor`), UserNotifications (lembretes locais; push de recadinho por `CKDatabaseSubscription`), LinkPresentation (prévia do convite na folha de compartilhamento), StoreKit 2 (estado da assinatura). Única dependência externa: **SuperwallKit** (SPM, `Superwall-iOS` até a próxima major a partir de 4.0.0; resolvido 4.18.2), só no target do app.
 
 ## Arquitetura
 
@@ -166,6 +166,45 @@ Legenda: **validado localmente** = build + testes automatizados (unitários e/ou
 | Push "seu par respondeu" (`CKDatabaseSubscription` `answer-alerts-v1` + extensão) | sim | parcial (escolha do evento, textos, rota e assinatura testados) | H11–H13 |
 | Push do quiz "Quem conhece melhor?" (`game-alerts-v1` + extensão) | sim | parcial (evento, textos, rota e assinatura testados) | H14 |
 | Push de recadinho com o texto do recado (`CKDatabaseSubscription` + `recordType` + `NoteNotificationService`) | sim | parcial (assinatura, banco por papel, escolha do recado e texto testados) | N1–N9 |
+
+## Assinatura (Superwall; em implementação desde 2026-10-26)
+
+**Decisões do usuário (2026-10-26):** app 100% pago com 7 dias grátis; planos mensal e anual no mesmo grupo, teste de 7 dias como oferta introdutória nos dois; **uma assinatura cobre o casal**; paywall **na primeira abertura, antes de tudo**. Projeto Superwall "OnlyUs" (org `28370`, projeto `43628`, app iOS `58713`, bundle `jc.app.dev.AppCasal`, Apple App ID `6825528600`, Team `F44CYBRGC2`), criado pelo Claude in Chrome; chave pública no código (`SubscriptionService.superwallAPIKey`). **Proibido mexer no projeto Superwall "Orante"** (mesma organização; projeto `43112`, apps `57966`/`57967`; no CLI sempre passar `--app 58713`/`--project 43628`). As chaves Apple (App Store Connect API e In-App Purchase) foram importadas da organização pela própria Superwall, e ela configurou a URL de notificações do servidor (produção e sandbox) do app.
+
+**Implementado:**
+- `SubscriptionService` (`Services/Subscription`): `Superwall.configure` em `AppCasalApp.init` (só `.production`); `identify` com UUID v5 derivado do `userRecordName` (SHA-256; o ID do iCloud não sai do aparelho); estado lido do StoreKit 2 (`Transaction.currentEntitlements`, funciona offline) somado ao `subscriptionStatus` da Superwall; observa `Transaction.updates` e o publisher da Superwall; `presentPaywall()` registra o placement `app_launch_gate`; `restore()`.
+- `AccessRules` (pura, testada): demo/preview/testes nunca bloqueiam; assinatura própria libera; convite sendo aceito nunca é bloqueado; sem assinatura, o espaço libera até `accessExpiresAt` + 7 dias de tolerância; estado desconhecido mostra a abertura em vez do paywall.
+- Uma assinatura para os dois: quem assina grava `CoupleSpace.accessExpiresAt` (só avança; `SpaceRepository.recordAccess`) ao abrir, a cada mudança da assinatura e no `BGAppRefreshTask`. Verificação só no cliente (sem servidor): limitação aceita.
+- `PaywallGateView`: tela nativa atrás do paywall (abre o paywall ao aparecer; "Começar 7 dias grátis", "Recebi um convite do meu par", "Restaurar compras", Termos de uso da Apple). A liberação vem só do StoreKit/Superwall, nunca do callback do paywall (sem campanha, a Superwall executa o bloco na hora).
+- `Products.storekit` na raiz (fora do target, mesmos preços da loja: R$ 14,90 / R$ 89,90) para testar compras no simulador; ativar em Scheme > Run > Options > StoreKit Configuration (não está ligado no scheme compartilhado).
+- Preços (decisão do usuário, 2026-10-26, para converter o máximo): **R$ 14,90/mês** e **R$ 89,90/ano**, 7 dias grátis nos dois.
+- App Store Connect (criado pelo `superwall asc`): grupo `22516583` "OnlyUs Premium" (localização pt-BR); anual `jc.app.dev.AppCasal.premium.yearly` (`6827262098`, nível 1) e mensal `jc.app.dev.AppCasal.premium.monthly` (`6827262314`, nível 2); oferta introdutória grátis de 1 semana; **vendidas só no Brasil** (decisão do usuário, 2026-10-26: app sem inglês, distribuição só no Brasil; `availability set --available-territories BRA`, sem territórios novos automáticos). Localizações só pt-BR ("Premium Anual"/"Premium Mensal", "Acesso completo para o casal"). Captura de revisão enviada (print do paywall em 1290×2796): estado `READY_TO_SUBMIT`; falta enviar junto com a primeira versão do app para a App Store. O app em si ainda não tem disponibilidade de territórios definida (só TestFlight); ao publicar, escolher só Brasil.
+- Superwall: entitlement `pro` (`62714`) nos dois produtos; campanha `115007` "Abertura do app (paywall obrigatório)", placement `app_launch_gate`, audiência `196304` com 100% no paywall `285202` "OnlyUs - Abertura" (identificador `onlyus-abertura`, tela cheia, **Gated**, publicado; espera/holdout em 0%). Paywall em pt-BR nas cores do app: benefícios, anual em destaque ("Economize 50%", preço mensal equivalente) e mensal, seleção por toque, botão compra o plano selecionado, texto do teste trocado para "Assinar agora" sem oferta introdutória, "Restaurar compras", "Termos de uso" e "Privacidade" (versão 4, salva em 2026-10-26: abre https://jcapps.dev.br/onlyus/privacidade/ no navegador do app).
+
+**Pendente (nada validado em aparelho):**
+1. App Store Connect: enviar as duas assinaturas junto com a primeira versão para a App Store.
+2. Paywall: ~~link da política de privacidade~~ feito em 2026-10-26 (rodapé da Superwall e tela própria `PaywallGateView`); falta a revisão visual do usuário.
+3. ~~CloudKit~~ **feito em 2026-10-26:** `CD_accessExpiresAt` (Date/Time, sem índices) criado à mão em `CD_CoupleSpace` no Development pelo CloudKit Console (o usuário fez o login; a ferramenta `-AppCasalInitializeCloudKitSchema` não foi usada porque o iPhone tinha o build do TestFlight e ela abre os stores reais) e publicado em Production ("Modify 1 field on CD_CoupleSpace", nada mais); conferido em Production.
+4. ~~Privacidade~~ feito em 2026-10-26: "App Privacy" publicado no App Store Connect (ver Ficha da App Store).
+5. Testar no aparelho: compra, teste grátis, restauração, par liberado pelo espaço, fim da tolerância.
+
+## Ficha da App Store (versão 1.0, preenchida pelo `superwall asc` em 2026-10-26)
+
+App `6825528600`, versão `75f04923-8f15-41f2-9389-4dd0a5adff73` (1.0, `PREPARE_FOR_SUBMISSION`), app info `ab4e4d14-63fb-4507-b8a1-7402072579ca`, idioma principal pt-BR (único).
+
+**Preenchido:** descrição, palavras-chave, texto promocional (localização pt-BR da versão); subtítulo "Memórias e rotina do casal"; categoria principal Estilo de vida (`LIFESTYLE`), sem secundária; copyright "2026 Julio Cezar Teixeira"; direitos de conteúdo "não usa conteúdo de terceiros"; classificação etária respondida (tudo "nenhum", exceto mensagens/chat e conteúdo gerado pelo usuário = sim, pelos recadinhos e fotos compartilhados com o par; resultado 4+ / Brasil L); exportação: `ITSAppUsesNonExemptEncryption = NO` já no build.
+
+Dados de revisão: contato Julio Cezar Teixeira (e-mail e telefone do usuário), sem conta de demonstração, notas em inglês (iCloud no aparelho, paywall na abertura, uma assinatura para o casal via convite, dados só no iCloud do casal).
+Preço e disponibilidade (pelo site, Claude in Chrome, 2026-10-26): app grátis, referência Brasil (R$ 0,00); disponível só no Brasil ("Disponível no lançamento do app"), demais 174 indisponíveis. A proxy não envia recursos embutidos (`included`), exigidos por `appPriceSchedules`/`appAvailabilities`.
+Capturas: 5 imagens 1320×2868 (`APP_IPHONE_67`, set `0e1c03a6-513a-4af3-8002-de6d5cd69cb2`), modo demonstração no simulador iPhone 17 Pro Max em pt-BR, barra de status 9:41: Início, Hoje, Memórias, Mapa, Recados. Feitas a pedido do usuário para a loja (não para conferência).
+
+Site (Netlify, domínio `jcapps.dev.br`, o mesmo do Orante; páginas do Orante intocadas): https://jcapps.dev.br/onlyus/ (início), `/onlyus/privacidade/` (política, pt-BR com seção em inglês) e `/onlyus/suporte/` (perguntas frequentes e contato `support@jcapps.dev.br`, o mesmo e-mail do Orante). A página inicial do domínio ganhou o link "OnlyUs" no menu e um cartão do app depois do do Orante. Publicado pela CLI do Netlify (login pelo navegador do usuário) com deploy por resumo: só os 4 arquivos novos/alterados enviados; conferido que os arquivos do Orante ficaram idênticos (SHA-1). Deploy `6adfceb1429fc9f06f4eb64a`. Os arquivos-fonte do site não estão neste repositório.
+URLs no App Store Connect: política de privacidade (informações do app e TestFlight), URL de suporte e URL de marketing (versão 1.0, pt-BR); descrição com linha de privacidade.
+Link de privacidade dentro do app (diretriz 3.1.2): rodapé do paywall da Superwall e `PaywallGateView` ("Termos de uso" e "Política de privacidade").
+Privacidade do app (rótulos, publicados pelo site em 2026-10-26): dados vinculados à identidade, nenhum usado para rastreamento: ID de usuário e ID do dispositivo (Funcionalidade do app e Análise), Histórico de compras (Funcionalidade do app e Análise), Interações com o produto (Análise). Tudo por causa da Superwall (identificador pseudônimo, vendor ID, compras, eventos do paywall); o conteúdo do casal fica só no iCloud. O manifesto da Superwall declara histórico de compras sem rastreamento; o do app continua sem dados coletados pelo código próprio.
+
+**Falta:**
+- Anexar o build do TestFlight à versão e enviar as duas assinaturas junto (decisão e envio do usuário).
 
 ## Compartilhamento
 
@@ -279,8 +318,8 @@ Contraste ≥ 4,5:1 medido por `PaletteContrastTests` nos dois modos. Tipografia
 **Pendências manuais antes do TestFlight:**
 1. Esquema — **Development completo (2026-10-19, verificado no CloudKit Console):** a ferramenta rodou no iPhone 13 Pro Max (Debug, `devicectl ... -- -AppCasalInitializeCloudKitSchema YES`; log "CloudKit Development schema initialized"). Antes faltavam o tipo `CD_DateIdea` e campos nunca preenchidos (`deletedAt`/`deletedBy` em quase tudo, `CD_CoupleSpace.sharingEndedAt`, `CD_Memory.revisitOfMemoryID`, `CD_DailyQuestion.memoryID`, `CD_DatePlan.memoryID`, `CD_GameRound.cancelledAt`, `CD_Place.memoryID`, `CD_Goal.dueDate`, os `_ckAsset` das fotos). Agora os 16 tipos `CD_*` + `Users` + `cloudkit.share` têm todos os campos do modelo v2 (mais os `_ckAsset` de texto e `CD_moveReceipt`, gerados pelo Core Data). **Publicado em Production em 2026-10-19 (autorizado pelo usuário):** Deploy Schema Changes pelo CloudKit Console criou os 16 tipos `CD_*` e `cloudkit.share`, os índices dos 16 tipos e as permissões padrão (`_creator` WRITE, `_icloud` CREATE, `_world` READ; só valem no banco público, não usado); `Users` inalterado; nada removido. Conferido depois: Development e Production idênticos (18 tipos, 310 campos com tipo e índices iguais), sem marcas "Modified". Se o modelo ganhar campos ou entidades, rodar a ferramenta de novo e publicar outra vez antes do TestFlight. Aviso inofensivo da ferramenta: o `defer` apaga a pasta temporária com o store ainda aberto ("vnode unlinked while in use" só no `SchemaInit-*/Schema.sqlite`). Procedimento original: no iPhone com iCloud, rodar o build Debug pelo Xcode com o argumento `-AppCasalInitializeCloudKitSchema YES`; no Console do Xcode, esperar "CloudKit Development schema initialized". Depois, no CloudKit Console (container `iCloud.jc.app.dev.casal`), conferir em Development os tipos `CD_*` de todas as entidades (incluindo `CD_DailyQuestion`, `CD_DailyAnswer`, `CD_GameRound`, `CD_GameAnswer`, `CD_DateIdea`, `CD_DatePlan` e os campos novos de `CD_CoupleSpace` e `CD_Memory`) e usar "Deploy Schema Changes" para Production. Não exige índices: o espelhamento lê mudanças por zona, sem consultas. A publicação é só aditiva; tipos e campos publicados em Production não podem ser apagados depois.
 2. App Store Connect: criar o app com o bundle `jc.app.dev.AppCasal`, URL da política de privacidade, URL de suporte, informações de revisão (notas abaixo) e questionário de classificação etária.
-3. Política de privacidade: hospedar uma página e informar a URL; a diretriz 5.1.1(i) pede link também dentro do app (falta a URL para colocar em Nosso espaço).
-4. Privacidade do app ("App Privacy"): o desenvolvedor não recebe dados (tudo fica no iCloud de cada pessoa e no espaço compartilhado entre os dois); declaração provável "Dados não coletados", a confirmar pelo usuário.
+3. ~~Política de privacidade~~ feito em 2026-10-26: https://jcapps.dev.br/onlyus/privacidade/, com link no paywall (ver Ficha da App Store). Link em Nosso espaço ainda não existe.
+4. ~~Privacidade do app~~ substituído: com a Superwall há dados coletados; publicado em 2026-10-26 (ver Ficha da App Store).
 5. Classificação etária: conteúdo do catálogo leve (sem conteúdo sexual; álcool só citado como "sem álcool"); declarar mensagens privadas entre os dois (recados, respostas) no questionário.
 
 **Notas para a revisão (rascunho):** o app usa a conta iCloud do iPhone, sem cadastro nem senha. Para testar sozinho: abrir, criar "Nosso espaço" e usar memórias, mapa, recados, metas, lembretes e "Hoje, nós dois". O compartilhamento com o par exige uma segunda conta iCloud (convite por link pelo Compartilhar). Localização só no Mapa, para mostrar a distância; notificações para recados, respostas do par e lembretes. Os dados ficam no iCloud do usuário; o dono pode apagar o espaço em Nosso espaço, e o par pode sair.
@@ -358,6 +397,8 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 | Push "seu par respondeu" por `CKDatabaseSubscription` + extensão; pergunta nova diária ligada por padrão | pedido do usuário (2026-10-19); a extensão identifica o evento pelos registros e cai em texto genérico verdadeiro quando não consegue |
 | "Hoje, nós dois" como aba "Hoje" na barra; Metas no fim do Início | pedido do usuário (escolheu tirar Metas da barra); no iPhone a sexta aba vai para "Mais" (observado no simulador, iOS 26) |
 | Modo demonstração só DEBUG, por argumento explícito, stores próprios | nunca misturar com dados reais |
+| App pago (Superwall + StoreKit 2), 7 dias grátis, uma assinatura para o casal via `accessExpiresAt` no espaço, paywall antes de tudo | pedido do usuário (2026-10-26); sem servidor; convite nunca bloqueado |
+| Testes de UI não paralelos (`parallelizable = "NO"` no scheme) | em paralelo o xcodebuild clona simuladores e o xctrunner não abre |
 
 ## Pendências do usuário
 
@@ -386,6 +427,8 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 
 | Data | O quê | Resultado |
 |---|---|---|
+| 2026-10-26 | Cabeçalho do Início com foto de capa horizontal: o título saía pela esquerda (a foto em "preencher" alargava o `ZStack`); a foto foi para um overlay de `Color.clear` com altura fixa | Visto nas capturas da loja (demonstração, 1320×2868) e corrigido; Debug simulador BUILD SUCCEEDED; testes unitários e 7 de UI passaram (TEST SUCCEEDED) |
+| 2026-10-26 | Assinatura com Superwall (gate, regras de acesso, modelo v3, StoreKit) | 139 testes unitários (8 novos em `SubscriptionTests`; migração v1 → atual e esquema CloudKit continuam passando) e 7 de UI passaram; Release iPhone BUILD SUCCEEDED sem avisos. UI só passou com `parallelizable = "NO"` de volta no scheme (sem isso o xctrunner não abre: "Application failed preflight checks"). Compra real não testada |
 | 2026-10-24 | Destinos só iPhone (Mac Catalyst, Mac e Vision Pro removidos); tentativa de iOS mínimo 18.6 desfeita (sem simulador iOS 18 no Xcode 27) | 131 testes unitários (18 suítes) e 7 de UI passaram no iPhone 17 Pro, iOS 26.3; Release iPhone (sem assinatura) BUILD SUCCEEDED sem avisos |
 | 2026-10-17 | Etapa 0: builds, perfil com container, Info.plist | OK |
 | 2026-10-17 | Design system: contraste (22 casos), Release sem código de demonstração | OK |
@@ -436,6 +479,8 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 - **Retomar em:** usuário revisa `audit/testflight`; (esquema do CloudKit já publicado em Production); testar H1–H18 com os dois iPhones na quarta-feira (2026-10-21); revalidação dos testes S/N pendentes.
 
 ## Próximos passos
+
+0. Assinatura: pendências 1–5 da seção "Assinatura".
 
 1. Usuário testa no próprio iPhone e autoriza o commit.
 2. Testes com dois aparelhos (ordem acima).
