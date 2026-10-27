@@ -55,8 +55,11 @@ struct CoupleHeroHeader: View {
     @ViewBuilder
     private var background: some View {
         if photoData != nil {
-            DecodedImage(data: photoData) { Palette.surfaceMuted }
+            // The filled photo sits in an overlay so a wide photo cannot widen the header
+            // (and push the title off screen).
+            Color.clear
                 .frame(maxWidth: .infinity, minHeight: height + topInset, maxHeight: height + topInset)
+                .overlay { DecodedImage(data: photoData) { Palette.surfaceMuted } }
                 .clipped()
                 .overlay(fade)
                 .accessibilityElement()
