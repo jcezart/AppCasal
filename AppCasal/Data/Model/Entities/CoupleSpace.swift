@@ -37,6 +37,10 @@ nonisolated final class CoupleSpace: NSManagedObject {
     @NSManaged var dateIdeas: Set<DateIdea>?
     /// Couple photo shown on Início, downscaled like memory photos.
     @NSManaged var coverPhotoData: Data?
+    /// Subscription (model v3): end of the paid period, written by whichever partner
+    /// subscribes. One subscription covers the couple, so the other partner unlocks
+    /// from this date. Client-side only: a cheap honor system, not a server check.
+    @NSManaged var accessExpiresAt: Date?
 }
 
 // `id` is set on insert by the repositories.

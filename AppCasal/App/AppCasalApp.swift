@@ -15,6 +15,7 @@ struct AppCasalApp: App {
         LaunchLog.mark("app init")
         NavigationAppearance.apply()
         environment = AppEnvironment.shared
+        environment.subscription.configure()
         LaunchLog.mark("environment ready")
         #if DEBUG
         if UserDefaults.standard.bool(forKey: "AppCasalInitializeCloudKitSchema") {

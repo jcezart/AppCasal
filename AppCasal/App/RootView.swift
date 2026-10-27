@@ -15,6 +15,9 @@ struct RootView: View {
     /// so reading membership in `body` alone would not refresh the screen.
     @State private var isMember = false
     @State private var didLoad = false
+    /// Paid period recorded in the space; in state because the space object does not
+    /// change identity when the partner's device renews it.
+    @State private var spaceAccessExpiresAt: Date?
 
     private var account: AccountService { environment.account }
 
@@ -45,6 +48,11 @@ struct RootView: View {
                 await environment.syncNoteAlerts()
                 environment.scheduleNotificationRefresh()
             }
+            .task {
+                await environment.subscription.refresh()
+                environment.recordSubscriptionAccess()
+            }
+            .task { await environment.subscription.observe() }
             .task { await account.observeAccountChanges() }
             .task { await environment.sync.observe(environment.persistence.container) }
             .task { await environment.network.observe() }
@@ -69,7 +77,16 @@ struct RootView: View {
                 }
             }
             .onChange(of: environment.sharing.acceptance) { reload() }
-            .onChange(of: account.userRecordName) { reload() }
+            .onChange(of: account.userRecordName, initial: true) {
+                if let userRecordName = account.userRecordName {
+                    environment.subscription.identify(userRecordName: userRecordName)
+                }
+                reload()
+            }
+            .onChange(of: environment.subscription.expirationDate) {
+                environment.recordSubscriptionAccess()
+                reload()
+            }
     }
 
     @ViewBuilder
@@ -77,8 +94,11 @@ struct RootView: View {
         if let error = environment.persistence.loadError {
             ErrorBanner(message: error.localizedDescription)
                 .padding(Spacing.screen)
-        } else if account.status == .checking || !didLoad || Self.holdsWelcome {
+        } else if account.status == .checking || !didLoad || Self.holdsWelcome || access == .checking {
             WelcomeView()
+                .transition(.opacity)
+        } else if case .locked(let reason) = access {
+            PaywallGateView(environment: environment, reason: reason)
                 .transition(.opacity)
         } else if account.status == .available, let userRecordName = account.userRecordName {
             if let space {
@@ -109,6 +129,11 @@ struct RootView: View {
         #endif
     }
 
+    /// The paywall comes before everything else, so it does not wait for iCloud.
+    private var access: AccessRules.Decision {
+        environment.access(spaceAccessExpiresAt: spaceAccessExpiresAt)
+    }
+
     /// After accepting an invitation, until the shared space is on this iPhone.
     private var isWaitingForSharedSpace: Bool {
         guard space == nil else { return false }
@@ -121,6 +146,7 @@ struct RootView: View {
     private func reload() {
         let active = environment.spaces.activeSpace()
         space = active
+        spaceAccessExpiresAt = active?.accessExpiresAt
         isMember = active.flatMap { active in
             account.userRecordName.flatMap { environment.spaces.member(for: $0, in: active) }
         } != nil

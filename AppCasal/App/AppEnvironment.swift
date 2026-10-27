@@ -59,6 +59,7 @@ final class AppEnvironment {
     let noteAlerts = NoteAlerts()
     let answerAlerts = AnswerAlerts()
     let momentNotifications = MomentNotifications()
+    let subscription: SubscriptionService
     /// Tab to open next, set when a notification is tapped.
     var pendingTab: AppTab?
     /// "Hoje, nós dois" screen to open next, set when its notification is tapped.
@@ -140,6 +141,29 @@ final class AppEnvironment {
         sharing = ShareService(persistence: persistence, spaces: spaces)
         moments = MomentsRepository(persistence: persistence)
         sync = SyncMonitor()
+        subscription = SubscriptionService(isEnforced: runMode == .production)
+    }
+
+    /// Whether this person may use the app now (see `AccessRules`).
+    func access(spaceAccessExpiresAt: Date?, now: Date = .now) -> AccessRules.Decision {
+        let isJoining = switch sharing.acceptance {
+        case .accepting, .accepted: true
+        case .idle, .rejected, .failed: false
+        }
+        return AccessRules.decide(.init(
+            isEnforced: subscription.isEnforced,
+            isSubscribed: subscription.isSubscribed,
+            isJoiningSpace: isJoining,
+            spaceAccessExpiresAt: spaceAccessExpiresAt,
+            now: now
+        ))
+    }
+
+    /// A subscriber's device writes the paid period into the space, which unlocks the
+    /// partner. Runs after every subscription change and in the background refresh.
+    func recordSubscriptionAccess() {
+        guard let expiration = subscription.expirationDate, let space = spaces.activeSpace() else { return }
+        try? spaces.recordAccess(until: expiration, in: space)
     }
 
     /// Content of "Hoje, nós dois", read from the bundle on first use (not at launch).
@@ -232,6 +256,9 @@ final class AppEnvironment {
     /// The background refresh: next request first, then the day and the reminders.
     func refreshNotificationsInBackground() async {
         scheduleNotificationRefresh()
+        // Renewals reach the space even when the subscriber does not open the app.
+        await subscription.refresh()
+        recordSubscriptionAccess()
         prepareMoments()
         await syncReminderNotifications()
     }

@@ -107,6 +107,15 @@ final class SpaceRepository {
         try persistence.save()
     }
 
+    /// A subscriber's device records how long the couple has access. Only moves forward,
+    /// so an older device or an earlier transaction never shortens it.
+    func recordAccess(until expiration: Date, in space: CoupleSpace, now: Date = .now) throws {
+        if let current = space.accessExpiresAt, current >= expiration { return }
+        space.accessExpiresAt = expiration
+        space.modifiedAt = now
+        try persistence.save()
+    }
+
     @discardableResult
     private func insertMember(
         named name: String,
