@@ -9,6 +9,16 @@ import SwiftUI
 /// "Nosso espaço": both partners, connection, profile, couple photo, relationship date,
 /// reminders, notifications, recently deleted, sharing and space management, sync status.
 struct SpaceView: View {
+    /// Store screenshots (`-AppCasalStoreScreenshots YES`, DEBUG only): no demo banner
+    /// or diagnostics, which do not exist in the shipped app.
+    private static var hidesDemoChrome: Bool {
+        #if DEBUG
+        UserDefaults.standard.bool(forKey: "AppCasalStoreScreenshots")
+        #else
+        false
+        #endif
+    }
+
     let environment: AppEnvironment
     @ObservedObject var space: CoupleSpace
     let userRecordName: String
@@ -49,23 +59,27 @@ struct SpaceView: View {
                         ErrorBanner(message: errorMessage)
                     }
 
-                    SyncStatusBanner(state: environment.sync.displayState(
-                        isDemo: environment.isDemo,
-                        accountStatus: environment.account.status,
-                        isConnected: environment.network.isConnected
-                    ))
+                    if !Self.hidesDemoChrome {
+                        SyncStatusBanner(state: environment.sync.displayState(
+                            isDemo: environment.isDemo,
+                            accountStatus: environment.account.status,
+                            isConnected: environment.network.isConnected
+                        ))
+                    }
 
                     if !environment.isDemo {
                         sharingRows
                     }
 
                     #if DEBUG
-                    NavigationLink {
-                        SharingSpikeView(environment: environment)
-                    } label: {
-                        Label("Diagnóstico de compartilhamento", systemImage: "wrench.and.screwdriver")
+                    if !Self.hidesDemoChrome {
+                        NavigationLink {
+                            SharingSpikeView(environment: environment)
+                        } label: {
+                            Label("Diagnóstico de compartilhamento", systemImage: "wrench.and.screwdriver")
+                        }
+                        .buttonStyle(.soft)
                     }
-                    .buttonStyle(.soft)
                     #endif
                 }
                 .padding(.horizontal, Spacing.screen)

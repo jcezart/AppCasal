@@ -52,10 +52,10 @@ enum DemoData {
             try environment.notes.create(text: text, in: space, by: author, now: now.addingTimeInterval(TimeInterval(minutes * 60)))
         }
 
-        let memories: [(String, String, MemoryCategory, Int, [UIColor])] = [
-            ("O primeiro encontro", "Café, boas conversas e um monte de planos.", .date, -12,
+        let memories: [(String, String, MemoryCategory, Int, String, [UIColor])] = [
+            ("O primeiro encontro", "Café, boas conversas e um monte de planos.", .date, -12, "primeiro-encontro",
              [UIColor(red: 0.55, green: 0.33, blue: 0.24, alpha: 1), UIColor(red: 0.93, green: 0.78, blue: 0.62, alpha: 1)]),
-            ("Nosso fim de tarde", "Um pôr do sol que vou guardar sempre na memória.", .beach, -5,
+            ("Nosso fim de tarde", "Um pôr do sol que vou guardar sempre na memória.", .beach, -5, "por-do-sol",
              [UIColor(red: 0.96, green: 0.62, blue: 0.38, alpha: 1), UIColor(red: 0.42, green: 0.36, blue: 0.52, alpha: 1)]),
         ]
         // Places around a fictitious beach town (Florianópolis area coordinates).
@@ -76,9 +76,9 @@ enum DemoData {
             in: space, by: partnerID, now: now
         )
 
-        for (title, details, category, days, colors) in memories {
+        for (title, details, category, days, photoName, colors) in memories {
             let date = calendar.date(byAdding: .day, value: days, to: now) ?? now
-            let photo = try PhotoProcessing.processSynchronously(placeholderPhoto(colors))
+            let photo = try PhotoProcessing.processSynchronously(photoData(photoName, fallback: colors))
             let place = category == .beach ? beach : cafe
             var draft = MemoryDraft(title: title, details: details, date: date, category: category)
             draft.place = PlaceLink(placeID: place.id, name: place.name ?? "", latitude: place.latitude, longitude: place.longitude)
@@ -86,7 +86,21 @@ enum DemoData {
             try environment.places.markVisited(place, memoryID: memory.id, on: date, by: ownerID, now: date)
         }
 
+        // Store screenshots only: more memories when real photos are available.
+        let extras: [(String, String, MemoryCategory, Int, String)] = [
+            ("Show no parque", "Cantamos todas, até ficar sem voz.", .celebration, -40, "show"),
+            ("Passeio de barco", "O mar mais verde que já vimos.", .trip, -75, "passeio-barco"),
+            ("Noite de fondue", "Queijo, chocolate e a nossa playlist.", .date, -110, "fondue"),
+        ]
+        for (title, details, category, days, photoName) in extras {
+            guard let data = demoPhoto(photoName) else { continue }
+            let date = calendar.date(byAdding: .day, value: days, to: now) ?? now
+            let photo = try PhotoProcessing.processSynchronously(data)
+            try environment.memories.create(MemoryDraft(title: title, details: details, date: date, category: category), photos: [photo], in: space, by: days < -60 ? partnerID : ownerID, now: date)
+        }
+
         var trip = GoalDraft(title: "Nossa próxima viagem", category: .trip)
+        trip.coverPhotoData = try demoPhoto("meta-viagem").map { try PhotoProcessing.processSynchronously($0).thumbnailData }
         trip.dueDate = calendar.date(byAdding: .month, value: 2, to: now)
         trip.steps = ["Escolher o destino", "Pesquisar passagens", "Reservar a hospedagem", "Montar o roteiro", "Comprar os ingressos"].map { .init(title: $0) }
         let tripGoal = try environment.goals.create(trip, in: space, by: ownerID, now: now)
@@ -94,21 +108,29 @@ enum DemoData {
             try environment.goals.toggle(step, by: partnerID, now: now)
         }
         var dates = GoalDraft(title: "Mais encontros a dois", category: .relationship)
+        dates.coverPhotoData = try demoPhoto("meta-encontros").map { try PhotoProcessing.processSynchronously($0).thumbnailData }
         dates.steps = ["Planejar um jantar especial", "Fazer uma noite de filmes em casa", "Conhecer um lugar novo na cidade"].map { .init(title: $0) }
         let datesGoal = try environment.goals.create(dates, in: space, by: partnerID, now: now)
         if let first = datesGoal.visibleSteps.first {
             try environment.goals.toggle(first, by: ownerID, now: now)
         }
-        let finished = try environment.goals.create(GoalDraft(title: "Adotar uma plantinha", category: .home), in: space, by: ownerID, now: now)
+        var plant = GoalDraft(title: "Adotar uma plantinha", category: .home)
+        plant.coverPhotoData = try demoPhoto("meta-plantinha").map { try PhotoProcessing.processSynchronously($0).thumbnailData }
+        let finished = try environment.goals.create(plant, in: space, by: ownerID, now: now)
         try environment.goals.complete(finished, by: ownerID, now: calendar.date(byAdding: .day, value: -20, to: now) ?? now)
 
         if let favoriteID = space.notes?.first(where: { $0.authorID == partnerID })?.id {
             try environment.favorites.toggle(noteID: favoriteID, for: ownerID, now: now)
         }
-        let cover = try PhotoProcessing.processSynchronously(placeholderPhoto([
+        let cover = try PhotoProcessing.processSynchronously(photoData("capa", fallback: [
             UIColor(red: 0.96, green: 0.74, blue: 0.56, alpha: 1), UIColor(red: 0.62, green: 0.42, blue: 0.40, alpha: 1),
         ]))
         try environment.spaces.setCoverPhoto(cover.imageData, in: space)
+        for (member, photoName) in [(space.members?.first { $0.userRecordName == ownerID }, "avatar-ana"), (partner, "avatar-lucas")] {
+            if let member, let data = demoPhoto(photoName) {
+                try environment.spaces.setAvatar(PhotoProcessing.processSynchronously(data).thumbnailData, for: member)
+            }
+        }
 
         if let start = space.relationshipStart {
             try environment.reminders.create(
@@ -133,12 +155,27 @@ enum DemoData {
         )
         let calendar = Calendar.current
         let lastYear = calendar.date(byAdding: .year, value: -1, to: now) ?? now
-        let photo = try PhotoProcessing.processSynchronously(placeholderPhoto([
+        let photo = try PhotoProcessing.processSynchronously(photoData("piquenique", fallback: [
             UIColor(red: 0.42, green: 0.56, blue: 0.68, alpha: 1), UIColor(red: 0.95, green: 0.84, blue: 0.70, alpha: 1),
         ]))
         var picnic = MemoryDraft(title: "Piquenique no parque", details: "Sanduíches, sol e uma tarde inteira de conversa.", date: lastYear, category: .date)
         picnic.place = PlaceLink(placeID: nil, name: "Parque da Luz", latitude: -27.5867, longitude: -48.5531)
         try environment.memories.create(picnic, photos: [photo], in: space, by: ownerID, now: lastYear)
+    }
+
+    /// Store screenshots: `-AppCasalDemoPhotos <folder>` points at real photos on the Mac
+    /// (the simulator reads host paths; not a TCC-protected folder such as Desktop, where
+    /// the read blocks). A file whose name ends in `-<name>` is used.
+    private static func demoPhoto(_ name: String) -> Data? {
+        guard let folder = UserDefaults.standard.string(forKey: "AppCasalDemoPhotos"),
+              let files = try? FileManager.default.contentsOfDirectory(atPath: folder),
+              let file = files.first(where: { ($0 as NSString).deletingPathExtension.hasSuffix("-" + name) })
+        else { return nil }
+        return FileManager.default.contents(atPath: (folder as NSString).appendingPathComponent(file))
+    }
+
+    private static func photoData(_ name: String, fallback colors: [UIColor]) -> Data {
+        demoPhoto(name) ?? placeholderPhoto(colors)
     }
 
     /// Fictitious "photo": a warm gradient with a sun. Demo and previews only.
