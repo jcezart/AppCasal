@@ -18,6 +18,8 @@ struct RootView: View {
     /// Paid period recorded in the space; in state because the space object does not
     /// change identity when the partner's device renews it.
     @State private var spaceAccessExpiresAt: Date?
+    /// The partner's subscription unlocked this iPhone while the paywall was up.
+    @State private var isShowingPartnerUnlocked = false
 
     private var account: AccountService { environment.account }
 
@@ -87,6 +89,18 @@ struct RootView: View {
                 environment.recordSubscriptionAccess()
                 reload()
             }
+            .onChange(of: access) { old, new in
+                guard case .locked = old, new == .unlocked else { return }
+                environment.subscription.dismissPaywall()
+                if environment.subscription.isSubscribed != true {
+                    isShowingPartnerUnlocked = true
+                }
+            }
+            .alert("Seu par já assinou", isPresented: $isShowingPartnerUnlocked) {
+                Button("Que bom!", role: .cancel) {}
+            } message: {
+                Text("Uma assinatura vale para os dois. Vocês estão liberados, sem pagar de novo.")
+            }
     }
 
     @ViewBuilder
@@ -98,7 +112,7 @@ struct RootView: View {
             WelcomeView()
                 .transition(.opacity)
         } else if case .locked(let reason) = access {
-            PaywallGateView(environment: environment, reason: reason)
+            PaywallGateView(environment: environment, reason: reason, checkPartnerAccess: partnerAccessCheck)
                 .transition(.opacity)
         } else if account.status == .available, let userRecordName = account.userRecordName {
             if let space {
@@ -132,6 +146,24 @@ struct RootView: View {
     /// The paywall comes before everything else, so it does not wait for iCloud.
     private var access: AccessRules.Decision {
         environment.access(spaceAccessExpiresAt: spaceAccessExpiresAt)
+    }
+
+    /// Both partners are in the space, so the other one may already pay for the couple.
+    private var hasPartner: Bool {
+        (space?.members?.count ?? 0) >= 2
+    }
+
+    private var partnerAccessCheck: (() async -> Bool)? {
+        guard hasPartner else { return nil }
+        return { await checkPartnerAccess() }
+    }
+
+    /// Before offering a purchase: the subscriber's date may be in iCloud but not here.
+    /// True when that unlocked this iPhone.
+    private func checkPartnerAccess() async -> Bool {
+        await environment.syncSpaceAccessFromCloud()
+        reload()
+        return access == .unlocked
     }
 
     /// After accepting an invitation, until the shared space is on this iPhone.

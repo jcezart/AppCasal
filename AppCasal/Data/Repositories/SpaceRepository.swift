@@ -3,6 +3,7 @@
 //  AppCasal
 //
 
+import CloudKit
 import CoreData
 
 /// Creates and finds the couple space and its members.
@@ -114,6 +115,17 @@ final class SpaceRepository {
         space.accessExpiresAt = expiration
         space.modifiedAt = now
         try persistence.save()
+    }
+
+    /// The paid period as iCloud has it now. A device still on a version without the
+    /// field drops it when importing the subscriber's change, and Core Data does not fetch
+    /// that record again after the update, so the local copy can miss the partner's date.
+    func accessExpirationInCloud(for space: CoupleSpace) async -> Date? {
+        guard case .cloudKit = persistence.mode,
+              let recordID = persistence.container.recordID(for: space.objectID) else { return nil }
+        let container = persistence.cloudKitContainer
+        let database = persistence.isInSharedStore(space) ? container.sharedCloudDatabase : container.privateCloudDatabase
+        return try? await database.record(for: recordID)["CD_accessExpiresAt"] as? Date
     }
 
     @discardableResult

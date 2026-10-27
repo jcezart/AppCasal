@@ -112,6 +112,13 @@ final class SubscriptionService {
         }
     }
 
+    /// Closes the paywall once the couple is unlocked by the partner's subscription:
+    /// the app opens underneath, but Superwall's screen stays on top until dismissed.
+    func dismissPaywall() {
+        guard isEnforced, Superwall.shared.isPaywallPresented else { return }
+        Superwall.shared.dismiss()
+    }
+
     /// "Restaurar compras": syncs with the App Store, then reads the plan again.
     func restore() async {
         guard isEnforced else { return }

@@ -166,6 +166,14 @@ final class AppEnvironment {
         try? spaces.recordAccess(until: expiration, in: space)
     }
 
+    /// The partner's side: reads the paid period from iCloud when the local copy may lack
+    /// it (see `SpaceRepository.accessExpirationInCloud`). Only moves the date forward.
+    func syncSpaceAccessFromCloud() async {
+        guard subscription.isEnforced, let space = spaces.activeSpace(),
+              let expiration = await spaces.accessExpirationInCloud(for: space) else { return }
+        try? spaces.recordAccess(until: expiration, in: space)
+    }
+
     /// Content of "Hoje, nós dois", read from the bundle on first use (not at launch).
     @ObservationIgnored private(set) lazy var catalog: Result<MomentsCatalog, MomentsCatalog.CatalogError> = {
         do {
