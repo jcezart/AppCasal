@@ -4,10 +4,12 @@
 //
 
 import CloudKit
+import StoreKit
 import SwiftUI
 
 /// "Nosso espaço": both partners, connection, profile, couple photo, relationship date,
-/// reminders, notifications, recently deleted, sharing and space management, sync status.
+/// reminders, notifications, subscription, recently deleted, sharing and space management,
+/// sync status.
 struct SpaceView: View {
     /// Store screenshots (`-AppCasalStoreScreenshots YES`, DEBUG only): no demo banner
     /// or diagnostics, which do not exist in the shipped app.
@@ -28,6 +30,7 @@ struct SpaceView: View {
     @State private var isWorking = false
     @State private var errorMessage: String?
     @State private var confirmation: Confirmation?
+    @State private var isManagingSubscription = false
 
     private enum Confirmation: Identifiable {
         case leave, startNew, delete
@@ -37,6 +40,10 @@ struct SpaceView: View {
     private var me: Member? { environment.spaces.member(for: userRecordName, in: space) }
     private var partner: Member? { environment.spaces.partner(of: userRecordName, in: space) }
     private var isOwner: Bool { environment.spaces.role(in: space) == .owner }
+    /// Only who subscribed on this Apple ID: the partner unlocked by the couple has nothing to manage.
+    private var showsSubscription: Bool {
+        environment.subscription.isEnforced && environment.subscription.isSubscribed == true
+    }
 
     var body: some View {
         NavigationStack {
@@ -122,6 +129,12 @@ struct SpaceView: View {
             .sheet(isPresented: Binding(get: { confirmation == .delete }, set: { if !$0 { confirmation = nil } })) {
                 DeleteSpaceView { run { try await environment.sharing.deletePermanently(space) } }
             }
+            // Apple's own sheet: change plan or cancel without leaving the app (test sheet in TestFlight).
+            .manageSubscriptionsSheet(isPresented: $isManagingSubscription)
+            .onChange(of: isManagingSubscription) { _, isPresented in
+                guard !isPresented else { return }
+                Task { await environment.subscription.refresh() }
+            }
         }
         .task {
             reloadShare()
@@ -202,6 +215,14 @@ struct SpaceView: View {
             .buttonStyle(.plain)
             .accessibilityIdentifier("space.notifications")
             divider
+            if showsSubscription {
+                Button { isManagingSubscription = true } label: {
+                    SettingsRow(systemImage: "creditcard", title: "Gerenciar assinatura")
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("space.subscription")
+                divider
+            }
             NavigationLink {
                 DeletedItemsView(environment: environment, space: space, userRecordName: userRecordName)
             } label: {
