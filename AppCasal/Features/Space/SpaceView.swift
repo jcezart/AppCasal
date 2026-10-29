@@ -171,6 +171,14 @@ struct SpaceView: View {
         return CoupleLimit.acceptedPartnerCount(CoupleLimit.summaries(of: share)) > 0
     }
 
+    /// The partner left or was removed but their profile is still here: the invitation can
+    /// bring them back to the same space, while someone new should start a new one.
+    private var formerPartnerName: String? {
+        guard isOwner, !isPartnerConnected, let partner else { return nil }
+        let name = partner.displayName?.trimmingCharacters(in: .whitespaces) ?? ""
+        return name.isEmpty ? String(localized: "seu par") : name
+    }
+
     private var rows: some View {
         VStack(spacing: 0) {
             if let me {
@@ -270,16 +278,31 @@ struct SpaceView: View {
                             reloadShare()
                         }
                     } label: {
-                        SettingsRow(
-                            systemImage: "person.badge.plus",
-                            title: "Convidar seu par",
-                            subtitle: String(localized: "No WhatsApp, toque em Continuar: só quem abrir o link primeiro entra.")
-                        )
+                        if let formerPartnerName {
+                            SettingsRow(
+                                systemImage: "person.badge.plus",
+                                title: "Convidar \(formerPartnerName) de volta",
+                                subtitle: String(localized: "Quem abrir o link vê tudo o que vocês guardaram. Para outra pessoa, comece um novo espaço.")
+                            )
+                        } else {
+                            SettingsRow(
+                                systemImage: "person.badge.plus",
+                                title: "Convidar seu par",
+                                subtitle: String(localized: "No WhatsApp, toque em Continuar: só quem abrir o link primeiro entra.")
+                            )
+                        }
                     }
                     .buttonStyle(.plain)
                     if let share {
                         divider
                         manageSharingButton(share, title: "Gerenciar convite")
+                    }
+                    if formerPartnerName != nil {
+                        divider
+                        Button { confirmation = .startNew } label: {
+                            SettingsRow(systemImage: "plus.circle", title: "Começar um novo espaço")
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
                 divider
