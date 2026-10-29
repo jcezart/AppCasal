@@ -153,13 +153,22 @@ struct SpaceView: View {
 
     @ViewBuilder
     private var connectionChip: some View {
-        if partner != nil {
+        if isPartnerConnected {
             StatusChip(title: "Conectados", systemImage: "circle.fill", tone: .success)
         } else if let share, CoupleLimit.activePartnerCount(CoupleLimit.summaries(of: share)) > 0 {
             StatusChip(title: "Convite enviado", systemImage: "paperplane", tone: .neutral)
         } else {
             StatusChip(title: "Aguardando seu par", systemImage: "hourglass", tone: .neutral)
         }
+    }
+
+    /// The partner's profile stays in the space after they leave or are removed (it signs
+    /// their notes and memories), so the owner also needs them in the share.
+    private var isPartnerConnected: Bool {
+        guard partner != nil else { return false }
+        guard isOwner, !environment.isDemo else { return true }
+        guard let share else { return false }
+        return CoupleLimit.acceptedPartnerCount(CoupleLimit.summaries(of: share)) > 0
     }
 
     private var rows: some View {

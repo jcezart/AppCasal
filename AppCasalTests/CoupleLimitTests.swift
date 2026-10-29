@@ -31,6 +31,14 @@ struct CoupleLimitTests {
         #expect(CoupleLimit.activePartnerCount([owner, removedPartner, partner]) == 1)
     }
 
+    @Test func onlyAnAcceptedPartnerIsConnected() {
+        let accepted = CoupleLimit.ParticipantSummary(isOwner: false, isRemoved: false, isAccepted: true)
+        #expect(CoupleLimit.acceptedPartnerCount([owner, accepted]) == 1)
+        // Invited but not joined yet, or removed: not connected.
+        #expect(CoupleLimit.acceptedPartnerCount([owner, partner]) == 0)
+        #expect(CoupleLimit.acceptedPartnerCount([owner, removedPartner]) == 0)
+    }
+
     @Test func onlyOneSpacePerPerson() {
         let mine = CKRecordZone.ID(zoneName: "space-a", ownerName: "_owner")
         let other = CKRecordZone.ID(zoneName: "space-b", ownerName: "_someoneElse")
