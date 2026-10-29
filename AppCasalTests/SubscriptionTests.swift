@@ -15,9 +15,14 @@ struct SubscriptionTests {
         enforced: Bool = true,
         subscribed: Bool? = false,
         joining: Bool = false,
+        inSpace: Bool = true,
+        participant: Bool = false,
         spaceExpiration: Date? = nil
     ) -> AccessRules.Input {
-        .init(isEnforced: enforced, isSubscribed: subscribed, isJoiningSpace: joining, spaceAccessExpiresAt: spaceExpiration, now: now)
+        .init(
+            isEnforced: enforced, isSubscribed: subscribed, isJoiningSpace: joining,
+            isInSpace: inSpace, isParticipant: participant, spaceAccessExpiresAt: spaceExpiration, now: now
+        )
     }
 
     @Test func demoAndTestsAreNeverLocked() {
@@ -49,6 +54,22 @@ struct SubscriptionTests {
     @Test func acceptingAnInvitationIsNeverBlocked() {
         #expect(AccessRules.decide(input(subscribed: false, joining: true)) == .unlocked)
         #expect(AccessRules.decide(input(subscribed: nil, joining: true)) == .unlocked)
+    }
+
+    @Test func onboardingComesBeforeThePaywall() {
+        #expect(AccessRules.decide(input(subscribed: false, inSpace: false)) == .unlocked)
+        #expect(AccessRules.decide(input(subscribed: nil, inSpace: false)) == .unlocked)
+    }
+
+    @Test func invitedPartnerNeverSeesThePaywall() {
+        // The owner's date may not have synced yet: still in.
+        #expect(AccessRules.decide(input(subscribed: false, participant: true)) == .unlocked)
+        #expect(AccessRules.decide(input(subscribed: nil, participant: true)) == .unlocked)
+        #expect(AccessRules.decide(input(participant: true, spaceExpiration: now.addingTimeInterval(5 * day))) == .unlocked)
+    }
+
+    @Test func invitedPartnerIsLockedOnlyWhenTheCoupleLapses() {
+        #expect(AccessRules.decide(input(participant: true, spaceExpiration: now.addingTimeInterval(-8 * day))) == .locked(.coupleAccessEnded))
     }
 
     @Test func recordedAccessOnlyMovesForward() throws {

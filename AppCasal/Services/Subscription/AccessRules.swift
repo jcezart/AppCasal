@@ -7,7 +7,9 @@ import Foundation
 
 /// Who may use the app. It is fully paid (7-day free trial) and one subscription covers
 /// the couple: the subscriber records the paid period in the space, and the partner
-/// unlocks from it. Pure, so the rules are tested apart from StoreKit and Superwall.
+/// unlocks from it. The paywall stands only at the door of the space: onboarding comes
+/// first, and whoever joins through the partner's invitation never sees it.
+/// Pure, so the rules are tested apart from StoreKit and Superwall.
 nonisolated enum AccessRules {
     enum Decision: Equatable {
         case unlocked
@@ -17,7 +19,7 @@ nonisolated enum AccessRules {
     }
 
     enum Reason: Equatable {
-        /// Nobody in this couple subscribed (or this person has no space yet).
+        /// Nobody in this couple subscribed.
         case noSubscription
         /// The space's paid period ended: the subscriber's plan lapsed or their device
         /// has not renewed the date in a while.
@@ -36,17 +38,23 @@ nonisolated enum AccessRules {
         /// An invitation is being accepted: joining a subscribed partner is free, so the
         /// paywall never stands between the invitation and the space.
         var isJoiningSpace: Bool
+        /// This person is a member of a space: before that, onboarding runs unpaid.
+        var isInSpace: Bool
+        /// Joined through the partner's invitation. The owner can only invite from
+        /// inside the paid app, so a missing date means it has not synced yet.
+        var isParticipant: Bool
         /// Paid period recorded in the active space, if any.
         var spaceAccessExpiresAt: Date?
         var now: Date
     }
 
     static func decide(_ input: Input) -> Decision {
-        guard input.isEnforced, input.isSubscribed != true, !input.isJoiningSpace else { return .unlocked }
+        guard input.isEnforced, input.isSubscribed != true, !input.isJoiningSpace, input.isInSpace else { return .unlocked }
         if let expiration = input.spaceAccessExpiresAt {
             if input.now < expiration.addingTimeInterval(partnerGrace) { return .unlocked }
             return input.isSubscribed == nil ? .checking : .locked(.coupleAccessEnded)
         }
+        if input.isParticipant { return .unlocked }
         return input.isSubscribed == nil ? .checking : .locked(.noSubscription)
     }
 }

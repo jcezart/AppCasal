@@ -62,6 +62,7 @@ struct CreateSpaceView: View {
 
     @State private var name = ""
     @State private var errorMessage: String?
+    @State private var isShowingInvitationHelp = false
 
     var body: some View {
         OnboardingScaffold(
@@ -76,9 +77,15 @@ struct CreateSpaceView: View {
                 ErrorBanner(message: errorMessage)
             }
             acceptanceStatus
-            Text("Recebeu um convite? Abra o link que seu par enviou e o espaço de vocês aparece aqui.")
-                .font(.footnote)
-                .foregroundStyle(Palette.textSecondary)
+            // Before the paywall on purpose: whoever was invited joins without paying.
+            Button("Recebi um convite do meu par") { isShowingInvitationHelp = true }
+                .buttonStyle(.soft)
+                .accessibilityIdentifier("onboarding.invitation")
+        }
+        .alert("Convite do seu par", isPresented: $isShowingInvitationHelp) {
+            Button("Entendi", role: .cancel) {}
+        } message: {
+            Text("Não crie um espaço novo. Abra o link que seu par enviou (pelo WhatsApp, Mensagens ou outro app): o espaço de vocês aparece aqui, sem pagar nada, porque a assinatura de quem convidou vale para os dois.")
         }
     }
 

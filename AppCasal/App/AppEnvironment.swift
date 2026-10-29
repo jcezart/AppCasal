@@ -145,7 +145,7 @@ final class AppEnvironment {
     }
 
     /// Whether this person may use the app now (see `AccessRules`).
-    func access(spaceAccessExpiresAt: Date?, now: Date = .now) -> AccessRules.Decision {
+    func access(spaceAccessExpiresAt: Date?, isInSpace: Bool, isParticipant: Bool, now: Date = .now) -> AccessRules.Decision {
         let isJoining = switch sharing.acceptance {
         case .accepting, .accepted: true
         case .idle, .rejected, .failed: false
@@ -154,6 +154,8 @@ final class AppEnvironment {
             isEnforced: subscription.isEnforced,
             isSubscribed: subscription.isSubscribed,
             isJoiningSpace: isJoining,
+            isInSpace: isInSpace,
+            isParticipant: isParticipant,
             spaceAccessExpiresAt: spaceAccessExpiresAt,
             now: now
         ))

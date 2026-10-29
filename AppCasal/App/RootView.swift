@@ -18,6 +18,8 @@ struct RootView: View {
     /// Paid period recorded in the space; in state because the space object does not
     /// change identity when the partner's device renews it.
     @State private var spaceAccessExpiresAt: Date?
+    /// Joined through the partner's invitation (the space lives in the shared store).
+    @State private var isParticipant = false
     /// The partner's subscription unlocked this iPhone while the paywall was up.
     @State private var isShowingPartnerUnlocked = false
 
@@ -143,9 +145,13 @@ struct RootView: View {
         #endif
     }
 
-    /// The paywall comes before everything else, so it does not wait for iCloud.
+    /// The paywall stands at the door of the space, after onboarding (see `AccessRules`).
     private var access: AccessRules.Decision {
-        environment.access(spaceAccessExpiresAt: spaceAccessExpiresAt)
+        environment.access(
+            spaceAccessExpiresAt: spaceAccessExpiresAt,
+            isInSpace: space != nil && isMember,
+            isParticipant: isParticipant
+        )
     }
 
     /// Both partners are in the space, so the other one may already pay for the couple.
@@ -179,6 +185,7 @@ struct RootView: View {
         let active = environment.spaces.activeSpace()
         space = active
         spaceAccessExpiresAt = active?.accessExpiresAt
+        isParticipant = active.map { environment.spaces.role(in: $0) == .participant } ?? false
         isMember = active.flatMap { active in
             account.userRecordName.flatMap { environment.spaces.member(for: $0, in: active) }
         } != nil
