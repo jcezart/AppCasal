@@ -328,7 +328,7 @@ Contraste ≥ 4,5:1 medido por `PaletteContrastTests` nos dois modos. Tipografia
 4. ~~Privacidade do app~~ substituído: com a Superwall há dados coletados; publicado em 2026-10-26 (ver Ficha da App Store).
 5. Classificação etária: conteúdo do catálogo leve (sem conteúdo sexual; álcool só citado como "sem álcool"); declarar mensagens privadas entre os dois (recados, respostas) no questionário.
 
-**Notas para a revisão (atualizadas em 2026-10-30; as enviadas ao App Store Connect em 2026-10-26 ainda dizem "paywall na abertura" e precisam ser trocadas por este texto):** "Sign in to iCloud on the device. Open the app, create \"Nosso espaço\" with your name; the subscription paywall appears when entering the space (7-day free trial, sandbox). After subscribing, all features work solo: memories, map, notes, goals, reminders and \"Hoje, nós dois\". Inviting a partner requires a second iCloud account (Share link). The invited partner never pays: one subscription covers the couple. All content lives only in the users' iCloud; the owner can delete everything in Nosso espaço > Apagar o espaço. Location is used only on the Map tab to show distances; notifications are for notes, partner answers and reminders."
+**Notas para a revisão:** atualizadas no App Store Connect em 2026-10-30 (Claude in Chrome, a pedido do usuário). O texto enviado em 2026-10-26 foi mantido; só a frase "The paywall appears on first launch." virou "The paywall appears when entering the space, right after creating it (\"Criar nosso espaço\"); the prices are shown under the trial button." Conferido depois de recarregar a página.
 
 ## Testes que dependem de dois aparelhos
 
@@ -433,6 +433,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 
 | Data | O quê | Resultado |
 |---|---|---|
+| 2026-10-30 | 7 textos novos no `Localizable.xcstrings`; notas de revisão no App Store Connect | Debug simulador BUILD SUCCEEDED; notas conferidas após recarregar a página |
 | 2026-10-30 | Itens 6, 9, 10 e 11 da revisão | 155 testes (147 unitários + 8 de UI) passaram, TEST SUCCEEDED; no simulador: alvos de 44 pt (Recados, Hoje), cartão da memória e filtros do Mapa inteiros em AX5, "Abrir Ajustes" sem conta iCloud. Preço do StoreKit não aparece no simulador sem configuração StoreKit |
 | 2026-10-30 | Correções 4, 5, 8 e notas de revisão; auditoria de acessibilidade | 154 testes (146 unitários + 8 de UI) passaram, TEST SUCCEEDED; "1 lembrete" no simulador. Cota cheia e rajada real de importação só observáveis com iCloud |
 | 2026-10-30 | Correções 1, 2, 3 e 7 da revisão | 151 testes (144 unitários + 7 de UI) passaram, TEST SUCCEEDED; ícone de "Vamos reviver?" sem falha no log (simulador, demonstração). Fluxos de convite e push só validáveis com dois iPhones |
@@ -466,7 +467,7 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 
 ## Revisão de 2026-10-30
 
-Observado no código ou no simulador; nada validado em dois aparelhos. **Corrigidos em 2026-10-30 (sem commit):** todos os itens (ver o fim de cada um), mais o 11, achado na verificação. Continua aberto só o que depende do usuário ou do aparelho: trocar as notas no App Store Connect, EULA, `aps-environment` do `.ipa` e o pedido de login da Conta Apple no TestFlight.
+Observado no código ou no simulador; nada validado em dois aparelhos. **Corrigidos em 2026-10-30 (commit `043fb24`, enviado ao `main`):** todos os itens (ver o fim de cada um), mais o 11, achado na verificação. Notas de revisão trocadas no App Store Connect. Continua aberto só o que depende do usuário ou do aparelho: EULA, `aps-environment` do `.ipa` e o pedido de login da Conta Apple no TestFlight.
 
 1. **"Começar um novo espaço" com par antigo (`formerPartnerName`) não encerra o `CKShare`:** `SpaceRepository.archive` só grava `deletedAt`. Quem abrir um link antigo entra num espaço arquivado; no aparelho dele `activeSpace()` filtra `deletedAt` e o app fica preso em `AcceptingInvitationView`. **Corrigido:** `ShareService.archive` apaga o `CKShare` no banco privado (precisa de rede; sem rede, nada é arquivado e o erro aparece) e grava `sharingEndedAt` antes de arquivar; usado nas duas linhas "Começar um novo espaço". Teste `startingOverEndsSharingOfTheArchivedSpace`. Apagar o share direto pelo `CKDatabase` é hipótese a validar com dois aparelhos.
 2. **`AcceptingInvitationView` sem saída nem tempo-limite:** com `acceptance == .accepted` e o espaço que nunca chega (dono apagou/arquivou, importação falhou), só reabrir o app resolve. `acceptance` também nunca volta a `.idle` depois de entrar (o paywall fica liberado o resto da sessão). **Corrigido:** depois de 60 s a tela mostra "Tentar de novo" e "Voltar ao início"; `ShareService.finishAcceptance()` volta `acceptance` a `.idle` quando o espaço chega (em `RootView.reload`) ou quando a pessoa desiste.

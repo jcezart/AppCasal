@@ -389,6 +389,9 @@
     "100 ideias para casais." : {
 
     },
+    "7 dias grátis na primeira assinatura. Depois, %@/mês ou %@/ano, com renovação automática." : {
+
+    },
     "A %@ de você" : {
 
     },
@@ -831,6 +834,9 @@
     "Ele vai para Excluídos recentemente." : {
 
     },
+    "Voltar ao início" : {
+
+    },
     "em %lld d" : {
 
     },
@@ -925,6 +931,9 @@
 
     },
     "Este espaço fica arquivado com você e um novo espaço, vazio, é criado para um novo convite." : {
+
+    },
+    "Está demorando mais que o normal. Confira a internet. Se o seu par apagou ou encerrou o espaço, peça um convite novo." : {
 
     },
     "Etapa" : {
@@ -1109,6 +1118,9 @@
 
     },
     "Humor" : {
+
+    },
+    "iCloud cheio" : {
 
     },
     "iCloud indisponível" : {
@@ -1414,6 +1426,12 @@
 
     },
     "O espaço compartilhado foi encerrado. Abra o app para ver." : {
+
+    },
+    "O espaço de vocês fica no iCloud do seu par, que está cheio. Peça para seu par liberar espaço. Até lá, o que você salvar fica só neste iPhone." : {
+
+    },
+    "O espaço de vocês fica no seu iCloud, que está cheio. Libere espaço ou aumente o plano nos Ajustes do iPhone. Até lá, nada novo chega ao seu par." : {
 
     },
     "O espaço fica completo com vocês dois. Envie o convite pelo WhatsApp, por Mensagens ou como preferir." : {
@@ -1811,6 +1829,9 @@
 
     },
     "Tem novidade no quiz de vocês. Toque para ver." : {
+
+    },
+    "Tentar de novo" : {
 
     },
     "Tentar novamente" : {
