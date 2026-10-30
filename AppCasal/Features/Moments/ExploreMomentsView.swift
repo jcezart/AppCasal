@@ -35,7 +35,7 @@ struct ExploreMomentsView: View {
                     divider
                     row(.gesture, systemImage: "hand.wave", title: "Pequeno gesto", subtitle: String(localized: "Uma gentileza simples para hoje."))
                     divider
-                    row(.revive, systemImage: "arrow.counterclockwise.heart", title: "Vamos reviver?", subtitle: String(localized: "Uma memória de vocês para lembrar juntos."))
+                    row(.revive, systemImage: "arrow.counterclockwise.circle", title: "Vamos reviver?", subtitle: String(localized: "Uma memória de vocês para lembrar juntos."))
                 }
                 .padding(.horizontal, Spacing.card)
                 .padding(.vertical, Spacing.xxs)
@@ -61,6 +61,8 @@ struct ExploreMomentsView: View {
         NavigationLink(value: route) {
             MomentsActivityRow(systemImage: systemImage, title: title, subtitle: subtitle)
                 .padding(.vertical, Spacing.s)
+                .frame(minHeight: 44)
+                .contentShape(.rect)
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("moments.explore.\(route.payload)")

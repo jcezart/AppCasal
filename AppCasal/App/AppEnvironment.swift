@@ -285,9 +285,31 @@ final class AppEnvironment {
     }
 
     private func resyncMoments(on name: Notification.Name, preparing: Bool) async {
-        for await _ in NotificationCenter.default.notifications(named: name) {
+        for await _ in Self.coalescedNotifications(named: name) {
             if preparing { prepareMoments() }
             await syncMomentNotifications()
+        }
+    }
+
+    /// One element per burst of `name`, once `quiet` passes without another. CloudKit
+    /// posts a remote change per imported transaction (hundreds when the partner joins);
+    /// handling each one replayed the same work and blocked the main actor. A burst that
+    /// arrives while the consumer is busy collapses into a single pending element.
+    static func coalescedNotifications(named name: Notification.Name, quiet: Duration = .milliseconds(500)) -> AsyncStream<Void> {
+        AsyncStream(bufferingPolicy: .bufferingNewest(1)) { continuation in
+            let listener = Task {
+                var pending: Task<Void, Never>?
+                for await _ in NotificationCenter.default.notifications(named: name) {
+                    pending?.cancel()
+                    pending = Task {
+                        try? await Task.sleep(for: quiet)
+                        if !Task.isCancelled { continuation.yield() }
+                    }
+                }
+                pending?.cancel()
+                continuation.finish()
+            }
+            continuation.onTermination = { _ in listener.cancel() }
         }
     }
 

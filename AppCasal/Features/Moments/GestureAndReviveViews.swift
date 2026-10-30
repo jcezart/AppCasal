@@ -150,7 +150,7 @@ struct ReviveView: View {
     private var content: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.l) {
-                MomentsHeader(systemImage: "arrow.counterclockwise.heart", title: "Vamos reviver?", message: "Uma memória de vocês para lembrar juntos e, quem sabe, repetir um pedaço.")
+                MomentsHeader(systemImage: "arrow.counterclockwise.circle", title: "Vamos reviver?", message: "Uma memória de vocês para lembrar juntos e, quem sabe, repetir um pedaço.")
                 if let memory {
                     if let yearsAgo {
                         StatusChip(title: yearsAgo == 1 ? "Há 1 ano, neste dia" : "Há \(yearsAgo) anos, neste dia", systemImage: "calendar")

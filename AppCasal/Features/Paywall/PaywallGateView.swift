@@ -50,6 +50,12 @@ struct PaywallGateView: View {
                 .buttonStyle(.primary)
                 .disabled(isCheckingPartner)
                 .accessibilityIdentifier("paywall.start")
+            if let prices = subscription.priceSummary {
+                Text(prices)
+                    .font(.footnote)
+                    .foregroundStyle(Palette.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
             if let checkPartnerAccess {
                 Button("Meu par já assinou") {
                     Task {
@@ -92,6 +98,7 @@ struct PaywallGateView: View {
             .font(.footnote)
             .foregroundStyle(Palette.textSecondary)
         }
+        .task { await subscription.loadPrices() }
         .task {
             // Once per appearance of the gate, so closing the paywall does not reopen it.
             guard !didPresent else { return }

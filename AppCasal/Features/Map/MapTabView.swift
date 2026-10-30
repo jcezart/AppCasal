@@ -152,7 +152,7 @@ struct MapTabView: View {
                         Image(systemName: "list.bullet")
                             .font(.body.weight(.semibold))
                             .foregroundStyle(Palette.textPrimary)
-                            .frame(width: 40, height: 40)
+                            .frame(width: 44, height: 44)
                     }
                     .buttonStyle(.plain)
                     .glassEffect(.regular.interactive(), in: .circle)
@@ -163,6 +163,10 @@ struct MapTabView: View {
         }
         .padding(.horizontal, Spacing.screen)
         .padding(.top, Spacing.xs)
+        // Floating controls over the map: at accessibility sizes the filter names broke
+        // letter by letter and covered the map. Capped like the system bars; touch and
+        // hold shows the label enlarged (Large Content Viewer).
+        .dynamicTypeSize(...DynamicTypeSize.xLarge)
     }
 
     private func filterButton(_ option: Filter) -> some View {
@@ -173,10 +177,13 @@ struct MapTabView: View {
             Text(option.title)
                 .font(.subheadline.weight(.medium))
                 .foregroundStyle(isSelected ? Palette.onAccent : Palette.textPrimary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
                 .padding(.horizontal, Spacing.m)
-                .frame(minHeight: 40)
+                .frame(minHeight: 44)
         }
         .buttonStyle(.plain)
+        .accessibilityShowsLargeContentViewer()
         .glassEffect(isSelected ? .regular.tint(Palette.accent).interactive() : .regular.interactive(), in: .capsule)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }

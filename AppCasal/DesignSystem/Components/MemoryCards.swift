@@ -68,9 +68,13 @@ struct MemoryRow: View {
     var body: some View {
         AdaptiveStack {
             if let cover = memory.visiblePhotos.first {
-                PhotoView(photo: cover)
+                // In an overlay of a fixed frame, so the filled photo cannot widen the
+                // card's layout (at accessibility sizes it pushed the card off screen).
+                Color.clear
                     .frame(width: thumbnailSize, height: thumbnailSize)
+                    .overlay { PhotoView(photo: cover) }
                     .clipShape(.rect(cornerRadius: Radius.photo, style: .continuous))
+                    .accessibilityHidden(true)
             } else {
                 Image(systemName: memory.memoryCategory.systemImage)
                     .font(.title3)

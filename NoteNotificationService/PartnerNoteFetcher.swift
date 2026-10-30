@@ -75,7 +75,17 @@ enum ZoneChangeReader {
         var deleted: [CKRecordZone.ID] = []
         var moreComing = true
         while moreComing {
-            let changes = try await database.databaseChanges(since: token)
+            let changes: (modifications: [CKDatabase.DatabaseChange.Modification], deletions: [CKDatabase.DatabaseChange.Deletion], changeToken: CKServerChangeToken, moreComing: Bool)
+            do {
+                changes = try await database.databaseChanges(since: token)
+            } catch where token != nil && isExpiredToken(error) {
+                // The server dropped this token: start over from scratch once, otherwise
+                // every later push would fail the same way and stay generic.
+                token = nil
+                modified = []
+                deleted = []
+                continue
+            }
             modified += changes.modifications.map(\.zoneID)
             deleted += changes.deletions.map(\.zoneID)
             token = changes.changeToken
@@ -99,11 +109,23 @@ enum ZoneChangeReader {
         var records: [CKRecord] = []
         var moreComing = true
         while moreComing {
-            let changes = try await database.recordZoneChanges(
-                inZoneWith: zoneID,
-                since: token,
-                desiredKeys: desiredKeys
-            )
+            let changes: (modificationResultsByID: [CKRecord.ID: Result<CKDatabase.RecordZoneChange.Modification, any Error>], deletions: [CKDatabase.RecordZoneChange.Deletion], changeToken: CKServerChangeToken, moreComing: Bool)
+            do {
+                changes = try await database.recordZoneChanges(
+                    inZoneWith: zoneID,
+                    since: token,
+                    desiredKeys: desiredKeys
+                )
+            } catch where token != nil && isExpiredToken(error) {
+                token = nil
+                records = []
+                continue
+            } catch let error as CKError where error.code == .zoneNotFound || error.code == .userDeletedZone {
+                // Deleted between the database and the zone fetch: nothing to read; the
+                // callers report the ended space from the zone list.
+                tokens.setZoneToken(nil, for: zoneID)
+                return []
+            }
             for case .success(let modification) in changes.modificationResultsByID.values {
                 records.append(modification.record)
             }
@@ -112,6 +134,10 @@ enum ZoneChangeReader {
         }
         tokens.setZoneToken(token, for: zoneID)
         return records
+    }
+
+    static func isExpiredToken(_ error: any Error) -> Bool {
+        (error as? CKError)?.code == .changeTokenExpired
     }
 }
 

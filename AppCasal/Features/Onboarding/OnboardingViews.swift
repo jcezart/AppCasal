@@ -122,6 +122,12 @@ struct CreateSpaceView: View {
 /// Shown after the invitation is accepted while the shared space comes from iCloud.
 /// No form here, so the participant cannot create a separate space by mistake.
 struct AcceptingInvitationView: View {
+    /// The space has not arrived after a while: offer a way out instead of waiting forever
+    /// (the space may have been deleted or archived by its owner meanwhile).
+    var isTakingLong = false
+    var retry: () -> Void = {}
+    var giveUp: () -> Void = {}
+
     var body: some View {
         OnboardingScaffold(
             title: "Convite aceito",
@@ -129,6 +135,17 @@ struct AcceptingInvitationView: View {
         ) {
             LoadingStateView(message: "Preparando o espaço de vocês…")
                 .frame(height: 80)
+            if isTakingLong {
+                Text("Está demorando mais que o normal. Confira a internet. Se o seu par apagou ou encerrou o espaço, peça um convite novo.")
+                    .font(.footnote)
+                    .foregroundStyle(Palette.textSecondary)
+                Button("Tentar de novo", action: retry)
+                    .buttonStyle(.soft)
+                    .accessibilityIdentifier("accepting.retry")
+                Button("Voltar ao início", action: giveUp)
+                    .buttonStyle(.text)
+                    .accessibilityIdentifier("accepting.giveUp")
+            }
         }
     }
 }
@@ -184,6 +201,16 @@ struct AccountUnavailableView: View {
                 actionTitle: "Tentar novamente",
                 action: retry
             )
+            if status == .noAccount {
+                // The app's page in Ajustes; Ajustes > [your name] is one tap back from it.
+                Button("Abrir Ajustes") {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
+                }
+                .buttonStyle(.text)
+                .accessibilityIdentifier("account.openSettings")
+            }
             Spacer()
         }
         .padding(Spacing.screen)

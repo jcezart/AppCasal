@@ -75,6 +75,11 @@ struct HomeView: View {
                     if let errorMessage {
                         ErrorBanner(message: errorMessage)
                     }
+                    // Only on Início for a full iCloud: nothing reaches the partner until
+                    // it is solved, and the other states live in Nosso espaço.
+                    if case .iCloudFull = syncState {
+                        SyncStatusBanner(state: syncState)
+                    }
                     if InvitePartner.isPending(environment, space: space, userRecordName: userRecordName) {
                         InvitePartnerCard(environment: environment, space: space)
                     }
@@ -196,6 +201,15 @@ struct HomeView: View {
 
     private var momentsContext: MomentsContext {
         MomentsContext(environment: environment, space: space, userRecordName: userRecordName)
+    }
+
+    private var syncState: SyncDisplayState {
+        environment.sync.displayState(
+            isDemo: environment.isDemo,
+            accountStatus: environment.account.status,
+            isConnected: environment.network.isConnected,
+            isOwner: environment.spaces.role(in: space) == .owner
+        )
     }
 
     private var coupleTitle: String {

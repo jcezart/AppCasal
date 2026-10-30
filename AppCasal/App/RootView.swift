@@ -22,6 +22,10 @@ struct RootView: View {
     @State private var isParticipant = false
     /// The partner's subscription unlocked this iPhone while the paywall was up.
     @State private var isShowingPartnerUnlocked = false
+    /// The accepted space is taking long to arrive: "Convite aceito" offers a way out.
+    @State private var isWaitingTooLong = false
+    /// Bumped by "Tentar de novo" to restart the wait.
+    @State private var waitAttempt = 0
 
     private var account: AccountService { environment.account }
 
@@ -61,7 +65,7 @@ struct RootView: View {
             .task { await environment.sync.observe(environment.persistence.container) }
             .task { await environment.network.observe() }
             .task {
-                for await _ in NotificationCenter.default.notifications(named: .NSPersistentStoreRemoteChange) {
+                for await _ in AppEnvironment.coalescedNotifications(named: .NSPersistentStoreRemoteChange) {
                     reload()
                     await environment.sync.refreshPendingChanges(in: environment.persistence.container)
                     // Reminders created or changed by the partner are scheduled here too.
@@ -72,12 +76,16 @@ struct RootView: View {
                     await environment.syncNoteAlerts()
                 }
             }
-            .task(id: isWaitingForSharedSpace) {
+            .task(id: WaitKey(isWaiting: isWaitingForSharedSpace, attempt: waitAttempt)) {
                 // Importing an accepted space can take a while; besides remote-change
-                // notifications, look again every few seconds until it arrives.
+                // notifications, look again every few seconds until it arrives. Past a
+                // minute, the screen offers to retry or go back (it may never arrive).
+                isWaitingTooLong = false
+                let start = ContinuousClock.now
                 while isWaitingForSharedSpace, !Task.isCancelled {
                     try? await Task.sleep(for: .seconds(2))
                     reload()
+                    if ContinuousClock.now - start > Self.patientWait { isWaitingTooLong = true }
                 }
             }
             .onChange(of: environment.sharing.acceptance) { reload() }
@@ -124,8 +132,12 @@ struct RootView: View {
                     JoinSpaceView(environment: environment, space: space, userRecordName: userRecordName, onJoined: reload)
                 }
             } else if isWaitingForSharedSpace {
-                AcceptingInvitationView()
-                    .transition(.opacity)
+                AcceptingInvitationView(
+                    isTakingLong: isWaitingTooLong,
+                    retry: { waitAttempt += 1 },
+                    giveUp: { environment.sharing.finishAcceptance() }
+                )
+                .transition(.opacity)
             } else {
                 CreateSpaceView(environment: environment, userRecordName: userRecordName, onCreated: reload)
             }
@@ -172,6 +184,13 @@ struct RootView: View {
         return access == .unlocked
     }
 
+    private struct WaitKey: Equatable {
+        var isWaiting: Bool
+        var attempt: Int
+    }
+
+    private static let patientWait: Duration = .seconds(60)
+
     /// After accepting an invitation, until the shared space is on this iPhone.
     private var isWaitingForSharedSpace: Bool {
         guard space == nil else { return false }
@@ -183,6 +202,9 @@ struct RootView: View {
 
     private func reload() {
         let active = environment.spaces.activeSpace()
+        if active != nil {
+            environment.sharing.finishAcceptance()
+        }
         space = active
         spaceAccessExpiresAt = active?.accessExpiresAt
         isParticipant = active.map { environment.spaces.role(in: $0) == .participant } ?? false

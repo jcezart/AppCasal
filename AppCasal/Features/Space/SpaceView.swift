@@ -70,7 +70,8 @@ struct SpaceView: View {
                         SyncStatusBanner(state: environment.sync.displayState(
                             isDemo: environment.isDemo,
                             accountStatus: environment.account.status,
-                            isConnected: environment.network.isConnected
+                            isConnected: environment.network.isConnected,
+                            isOwner: isOwner
                         ))
                     }
 
@@ -112,7 +113,7 @@ struct SpaceView: View {
                 case .leave:
                     Button("Sair do espaço", role: .destructive) { run { try await environment.sharing.leave(space) } }
                 case .startNew:
-                    Button("Começar um novo espaço", role: .destructive) { run { try environment.spaces.archive(space) } }
+                    Button("Começar um novo espaço", role: .destructive) { run { try await environment.sharing.archive(space) } }
                 case .delete:
                     EmptyView()
                 }

@@ -36,6 +36,9 @@ final class SubscriptionService {
     private(set) var expirationDate: Date?
     /// Set when the paywall could not be shown (no network, no campaign yet).
     var paywallProblem: String?
+    /// Prices after the trial, from the App Store in the person's currency
+    /// ("R$ 14,90/mês ou R$ 89,90/ano"); nil until loaded or offline.
+    private(set) var priceSummary: String?
 
     private let log = Logger(subsystem: "jc.app.dev.AppCasal", category: "subscription")
 
@@ -71,6 +74,17 @@ final class SubscriptionService {
         }
         expirationDate = latest
         isSubscribed = latest != nil || Superwall.shared.subscriptionStatus.isActive
+    }
+
+    /// Loads the plans' prices for the gate screen, so the free trial is never shown without
+    /// what it costs afterwards (App Review guideline 3.1.2).
+    func loadPrices() async {
+        guard isEnforced, priceSummary == nil,
+              let products = try? await Product.products(for: Self.productIDs) else { return }
+        let monthly = products.first { $0.subscription?.subscriptionPeriod.unit == .month }
+        let yearly = products.first { $0.subscription?.subscriptionPeriod.unit == .year }
+        guard let monthly, let yearly else { return }
+        priceSummary = String(localized: "7 dias grátis na primeira assinatura. Depois, \(monthly.displayPrice)/mês ou \(yearly.displayPrice)/ano, com renovação automática.")
     }
 
     /// Follows renewals, refunds and purchases made on other devices, plus Superwall's

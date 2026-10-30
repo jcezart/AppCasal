@@ -112,17 +112,77 @@
 
     },
     "%lld alterações aguardando envio ao iCloud." : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld alteração aguardando envio ao iCloud."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld alterações aguardando envio ao iCloud."
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "%lld alterações aguardando envio. Você pode continuar editando." : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld alteração aguardando envio. Você pode continuar editando."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld alterações aguardando envio. Você pode continuar editando."
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "%lld convite(s) de %@ esperando resposta." : {
       "localizations" : {
         "pt-BR" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld convite(s) de %2$@ esperando resposta."
+            "state" : "translated",
+            "value" : "%#@invitations@ de %2$@ esperando resposta."
+          },
+          "substitutions" : {
+            "invitations" : {
+              "argNum" : 1,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg convite"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg convites"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -138,28 +198,180 @@
       }
     },
     "%lld dias antes" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld dia antes"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld dias antes"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "%lld dias juntos" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld dia juntos"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld dias juntos"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "%lld fotos" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld foto"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld fotos"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "%lld ideia(s) com esses filtros." : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld ideia com esses filtros."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld ideias com esses filtros."
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "%lld ideia(s) de vocês." : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld ideia de vocês."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld ideias de vocês."
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "%lld lembretes" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld lembrete"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld lembretes"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "%lld lugar(es) salvos no Mapa." : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld lugar salvo no Mapa."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld lugares salvos no Mapa."
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "%lld plano(s) em aberto." : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld plano em aberto."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld planos em aberto."
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "%lld/%lld" : {
       "localizations" : {
@@ -743,7 +955,26 @@
 
     },
     "Faltam %lld dias." : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Falta %lld dia."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Faltam %lld dias."
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "Favoritar" : {
 
@@ -816,10 +1047,48 @@
 
     },
     "Há %lld anos" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Há %lld ano"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Há %lld anos"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "Há %lld anos, neste dia" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Há %lld ano, neste dia"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Há %lld anos, neste dia"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "Há 1 ano" : {
 
@@ -960,7 +1229,26 @@
 
     },
     "Não foi possível adicionar %lld foto(s)." : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Não foi possível adicionar %lld foto."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Não foi possível adicionar %lld fotos."
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "Não foi possível buscar agora. Verifique a conexão." : {
 
@@ -1053,7 +1341,26 @@
 
     },
     "Notificação %lld dias antes" : {
-
+      "localizations" : {
+        "pt-BR" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Notificação %lld dia antes"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Notificação %lld dias antes"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "Notificação 1 dia antes" : {
 

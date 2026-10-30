@@ -102,6 +102,8 @@ enum SyncDisplayState: Equatable {
     /// Connected, local changes not yet sent.
     case pending(Int)
     case accountUnavailable
+    /// The iCloud storage holding the space (the owner's) is full: nothing is sent.
+    case iCloudFull(isOwner: Bool)
     /// Local demo data, never synced.
     case demo
 }
@@ -136,7 +138,7 @@ struct SyncStatusBanner: View {
         switch state {
         case .upToDate: "checkmark.icloud"
         case .syncing: "arrow.triangle.2.circlepath.icloud"
-        case .failed: "exclamationmark.icloud"
+        case .failed, .iCloudFull: "exclamationmark.icloud"
         case .offline: "wifi.slash"
         case .pending: "arrow.up.circle"
         case .accountUnavailable: "icloud.slash"
@@ -149,6 +151,7 @@ struct SyncStatusBanner: View {
         case .upToDate: "Tudo sincronizado"
         case .syncing: "Sincronizando"
         case .failed: "Não foi possível sincronizar"
+        case .iCloudFull: "iCloud cheio"
         case .offline: "Sem conexão"
         case .pending: "Enviando alterações"
         case .accountUnavailable: "iCloud indisponível"
@@ -165,6 +168,8 @@ struct SyncStatusBanner: View {
         case .offline: "Você pode continuar editando. Tudo é enviado quando a conexão voltar."
         case .pending(let count): "\(count) alterações aguardando envio ao iCloud."
         case .accountUnavailable: "Suas alterações ficam neste iPhone até o iCloud voltar."
+        case .iCloudFull(isOwner: true): "O espaço de vocês fica no seu iCloud, que está cheio. Libere espaço ou aumente o plano nos Ajustes do iPhone. Até lá, nada novo chega ao seu par."
+        case .iCloudFull(isOwner: false): "O espaço de vocês fica no iCloud do seu par, que está cheio. Peça para seu par liberar espaço. Até lá, o que você salvar fica só neste iPhone."
         case .demo: "Dados fictícios, só neste aparelho. Nada é enviado ao iCloud."
         }
     }

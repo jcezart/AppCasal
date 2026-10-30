@@ -183,4 +183,16 @@ struct FeatureTests {
         #expect(spaces.activeSpace() == fresh)
         #expect(fresh.notes?.isEmpty ?? true, "the new space starts empty")
     }
+
+    @Test func startingOverEndsSharingOfTheArchivedSpace() async throws {
+        let persistence = PersistenceController(mode: .inMemory)
+        let spaces = SpaceRepository(persistence: persistence)
+        let sharing = ShareService(persistence: persistence, spaces: spaces)
+        let space = try spaces.createSpace(ownerName: "Ana", userRecordName: owner)
+
+        try await sharing.archive(space)
+        #expect(spaces.activeSpace() == nil)
+        #expect(space.sharingEndedAt != nil, "the archived space is never shared again")
+        #expect(!space.isDeleted, "archiving keeps the data")
+    }
 }

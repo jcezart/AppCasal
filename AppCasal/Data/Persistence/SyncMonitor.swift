@@ -3,6 +3,7 @@
 //  AppCasal
 //
 
+import CloudKit
 import CoreData
 import Observation
 
@@ -16,6 +17,8 @@ final class SyncMonitor {
         let succeeded: Bool
         let isFinished: Bool
         let errorDescription: String?
+        /// The iCloud storage that holds the space is full: the owner's, for both partners.
+        let isQuotaExceeded: Bool
         let date: Date
     }
 
@@ -24,6 +27,9 @@ final class SyncMonitor {
     /// succeeded in this session (otherwise every past change would count as pending).
     private(set) var pendingChanges: Int?
     private var lastSuccessfulExport: Date?
+    private var didPurgeHistory = false
+    /// Persistent history older than this is deleted (see `purgeHistory`).
+    static let historyRetention: TimeInterval = 30 * 24 * 60 * 60
     private let limit = 20
 
     /// Records events from `container` until cancelled.
@@ -38,6 +44,10 @@ final class SyncMonitor {
             record(event, storeName: Self.storeName(for: event, in: container))
             if event.type == .export, event.succeeded, let end = event.endDate {
                 lastSuccessfulExport = end
+                if !didPurgeHistory {
+                    didPurgeHistory = true
+                    await Self.purgeHistory(before: end.addingTimeInterval(-Self.historyRetention), in: container)
+                }
             }
             await refreshPendingChanges(in: container)
         }
@@ -47,6 +57,18 @@ final class SyncMonitor {
     func refreshPendingChanges(in container: NSPersistentCloudKitContainer) async {
         guard let since = lastSuccessfulExport else { return }
         pendingChanges = await Self.countLocalTransactions(after: since, in: container)
+    }
+
+    /// Deletes persistent history before `date`, once per session and only after an export
+    /// succeeded, so what mirroring still has to send is weeks newer. Without it the
+    /// history grows with every change for the life of the app. Mirroring keeps its own
+    /// position in the history; a device offline for longer than the retention is the case
+    /// to watch (Core Data then has to rescan instead of reading the history).
+    static func purgeHistory(before date: Date, in container: NSPersistentContainer) async {
+        let context = container.newBackgroundContext()
+        await context.perform {
+            _ = try? context.execute(NSPersistentHistoryChangeRequest.deleteHistory(before: date))
+        }
     }
 
     /// Counts transactions written by this app (`transactionAuthor = "app"`) after `date`,
@@ -70,6 +92,7 @@ final class SyncMonitor {
             succeeded: event.succeeded,
             isFinished: event.endDate != nil,
             errorDescription: event.error?.localizedDescription,
+            isQuotaExceeded: Self.isQuotaExceeded(event.error),
             date: event.endDate ?? event.startDate
         )
         // Start and end of an event share the identifier; keep the latest state.
@@ -80,14 +103,30 @@ final class SyncMonitor {
         }
     }
 
+    /// Whether a mirroring error comes from full iCloud storage, directly, inside a partial
+    /// failure or as the underlying error Core Data wraps.
+    nonisolated static func isQuotaExceeded(_ error: (any Error)?) -> Bool {
+        guard let error else { return false }
+        if let ckError = error as? CKError {
+            if ckError.code == .quotaExceeded { return true }
+            if ckError.code == .partialFailure {
+                return ckError.partialErrorsByItemID?.values.contains { isQuotaExceeded($0) } ?? false
+            }
+        }
+        return isQuotaExceeded((error as NSError).userInfo[NSUnderlyingErrorKey] as? any Error)
+    }
+
     /// Summary for the sync banner. Demo and missing accounts take precedence over events.
-    func displayState(isDemo: Bool, accountStatus: AccountService.Status, isConnected: Bool = true) -> SyncDisplayState {
+    /// `isOwner`: the space lives in the owner's iCloud, so a full storage reads differently
+    /// for the partner.
+    func displayState(isDemo: Bool, accountStatus: AccountService.Status, isConnected: Bool = true, isOwner: Bool = true) -> SyncDisplayState {
         if isDemo { return .demo }
         guard accountStatus == .available else { return .accountUnavailable }
         if !isConnected { return .offline(pending: pendingChanges) }
         if let pending = pendingChanges, pending > 0 { return .pending(pending) }
         guard let latest = entries.first else { return .upToDate }
         if !latest.isFinished { return .syncing }
+        if !latest.succeeded, latest.isQuotaExceeded { return .iCloudFull(isOwner: isOwner) }
         if !latest.succeeded { return .failed(latest.errorDescription ?? String(localized: "Erro desconhecido.")) }
         return .upToDate
     }

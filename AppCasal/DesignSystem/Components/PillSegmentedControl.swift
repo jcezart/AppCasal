@@ -51,7 +51,8 @@ struct PillSegmentedControl<Value: Hashable>: View {
                 .font(.subheadline.weight(.medium))
                 .lineLimit(dynamicTypeSize.isAccessibilitySize ? nil : 1)
                 .minimumScaleFactor(0.8)
-                .frame(maxWidth: .infinity, minHeight: 36)
+                // 44 pt: Apple's minimum touch target.
+                .frame(maxWidth: .infinity, minHeight: 44)
                 .padding(.horizontal, Spacing.xs)
                 .foregroundStyle(isSelected ? Palette.onAccent : Palette.textSecondary)
                 .background {

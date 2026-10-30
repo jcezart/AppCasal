@@ -143,6 +143,13 @@ final class ShareService {
         }
     }
 
+    /// The accepted space is on this iPhone (or the person gave up waiting): back to idle,
+    /// so the free pass of `AccessRules.isJoiningSpace` ends with the joining itself.
+    func finishAcceptance() {
+        guard acceptance == .accepted else { return }
+        acceptance = .idle
+    }
+
     func accept(_ metadata: CKShare.Metadata) async {
         guard CoupleLimit.isValidCouple(CoupleLimit.summaries(of: metadata.share)) else {
             acceptance = .rejected(String(localized: "Este convite inclui mais de uma pessoa além do dono. Um espaço é só para o casal."))
@@ -201,6 +208,26 @@ final class ShareService {
             persistence.viewContext.delete(space)
             try persistence.save()
         }
+        shareRevision += 1
+    }
+
+    /// Owner starts over: the space is archived (data kept) and its share, if still there,
+    /// is deleted first. Otherwise an old invitation link could still bring someone into
+    /// the archived space, which their iPhone would never show (stuck on "Convite aceito").
+    /// Needs the network when a share exists: nothing is archived if deleting it fails.
+    func archive(_ space: CoupleSpace) async throws {
+        guard !persistence.isInSharedStore(space) else { throw ShareError.storeUnavailable }
+        if let share = existingShare(for: space) {
+            do {
+                try await persistence.cloudKitContainer.privateCloudDatabase.deleteRecord(withID: share.recordID)
+            } catch let error as CKError where error.code == .unknownItem {
+                // Already deleted elsewhere.
+            }
+        }
+        if space.sharingEndedAt == nil {
+            space.sharingEndedAt = .now
+        }
+        try spaces.archive(space)
         shareRevision += 1
     }
 
