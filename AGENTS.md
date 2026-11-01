@@ -214,7 +214,7 @@ Link de privacidade dentro do app (diretriz 3.1.2): rodapé do paywall da Superw
 Privacidade do app (rótulos, publicados pelo site em 2026-10-26): dados vinculados à identidade, nenhum usado para rastreamento: ID de usuário e ID do dispositivo (Funcionalidade do app e Análise), Histórico de compras (Funcionalidade do app e Análise), Interações com o produto (Análise). Tudo por causa da Superwall (identificador pseudônimo, vendor ID, compras, eventos do paywall); o conteúdo do casal fica só no iCloud. O manifesto da Superwall declara histórico de compras sem rastreamento; o do app continua sem dados coletados pelo código próprio.
 
 **Falta:**
-- Anexar o build do TestFlight à versão e enviar as duas assinaturas junto (decisão e envio do usuário).
+- **2026-11-01:** build 1.0 (18) anexado à versão 1.0 e salvo; versão adicionada a um rascunho de envio ("Pronto para revisão", ainda **não enviado**). Ao adicionar "Premium Anual" ao rascunho, o App Store Connect mostrou "Atualização de contrato" e não adicionou. Causa em Negócios: "Formulário fiscal do Brasil" com "Faltam informações fiscais" ("Devido a mudanças na legislação brasileira, você precisa atualizar sua identificação fiscal"). Acordo de apps pagos ativo. O usuário precisa preencher os dados fiscais (não é feito por agente); depois, adicionar as duas assinaturas ao mesmo rascunho e enviar. Não enviar o app sem as assinaturas.
 
 ## Compartilhamento
 
