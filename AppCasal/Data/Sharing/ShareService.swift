@@ -88,7 +88,9 @@ final class ShareService {
     /// Saves the share first when needed, then opens the share sheet with it. With the
     /// share already saved, the app picked in the sheet (WhatsApp, Mensagens…) opens on
     /// the first tap; letting the sheet prepare the share sent the person back to it.
-    func presentInvitation(for space: CoupleSpace) async throws {
+    /// `onFinish` runs once the sheet closes (sent, cancelled or never shown); the app may
+    /// be in the background then, while the picked app is open.
+    func presentInvitation(for space: CoupleSpace, onFinish: (() -> Void)? = nil) async throws {
         let share = try await ensureShare(for: space)
         let provider = NSItemProvider()
         provider.registerCKShare(share, container: persistence.cloudKitContainer, allowedSharingOptions: Self.invitationOptions)
@@ -103,7 +105,13 @@ final class ShareService {
             default: nil
             }
         }
-        Self.topViewController()?.present(UIActivityViewController(activityItemsConfiguration: configuration), animated: true)
+        let controller = UIActivityViewController(activityItemsConfiguration: configuration)
+        controller.completionWithItemsHandler = { _, _, _, _ in onFinish?() }
+        guard let presenter = Self.topViewController() else {
+            onFinish?()
+            return
+        }
+        presenter.present(controller, animated: true)
     }
 
     /// Presents the system sharing UI, restricted to private, read-write invitations.

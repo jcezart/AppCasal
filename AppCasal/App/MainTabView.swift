@@ -19,6 +19,10 @@ struct MainTabView: View {
     @State private var isShowingInvitePrompt = false
     /// The prompt saved the share; the share sheet opens once the prompt has closed.
     @State private var invitesAfterPrompt = false
+    /// The share sheet from that first invitation closed: offer notifications once the
+    /// app is in front again (the person may still be in WhatsApp).
+    @State private var offersNotificationsWhenActive = false
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         TabView(selection: $selection) {
@@ -99,6 +103,8 @@ struct MainTabView: View {
                 await offerNotificationsIfNeeded()
             }
         }
+        .onChange(of: offersNotificationsWhenActive) { offerNotificationsWhenActive() }
+        .onChange(of: scenePhase) { offerNotificationsWhenActive() }
         #if DEBUG
         .onAppear {
             if UserDefaults.standard.bool(forKey: "AppCasalShowSpace") {
@@ -134,10 +140,25 @@ struct MainTabView: View {
         if invitesAfterPrompt {
             invitesAfterPrompt = false
             // The share was saved by the prompt; failures show again from the Início card.
-            Task { try? await environment.sharing.presentInvitation(for: space) }
+            // Notifications are offered right after the share sheet, not on the next launch.
+            Task {
+                do {
+                    try await environment.sharing.presentInvitation(for: space) {
+                        offersNotificationsWhenActive = true
+                    }
+                } catch {
+                    offersNotificationsWhenActive = true
+                }
+            }
         } else {
             Task { await offerNotificationsIfNeeded() }
         }
+    }
+
+    private func offerNotificationsWhenActive() {
+        guard offersNotificationsWhenActive, scenePhase == .active else { return }
+        offersNotificationsWhenActive = false
+        Task { await offerNotificationsIfNeeded() }
     }
 
     /// Asked once, after the space is ready, with an explanation first.
