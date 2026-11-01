@@ -79,6 +79,8 @@ struct SpaceView: View {
                         sharingRows
                     }
 
+                    aboutRows
+
                     #if DEBUG
                     if !Self.hidesDemoChrome {
                         NavigationLink {
@@ -317,6 +319,33 @@ struct SpaceView: View {
                 }
                 .buttonStyle(.plain)
             }
+        }
+        .padding(.horizontal, Spacing.card)
+        .padding(.vertical, Spacing.xxs)
+        .surfaceCard(padding: 0)
+    }
+
+    /// Support, privacy policy and terms, also after subscribing (the paywall is gone by
+    /// then). They open in the browser.
+    private var aboutRows: some View {
+        VStack(spacing: 0) {
+            Link(destination: AppLinks.support) {
+                SettingsRow(systemImage: "questionmark.circle", title: "Ajuda e suporte")
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("space.support")
+            divider
+            Link(destination: AppLinks.privacyPolicy) {
+                SettingsRow(systemImage: "hand.raised", title: "Política de privacidade")
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("space.privacy")
+            divider
+            Link(destination: AppLinks.termsOfUse) {
+                SettingsRow(systemImage: "doc.text", title: "Termos de uso")
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("space.terms")
         }
         .padding(.horizontal, Spacing.card)
         .padding(.vertical, Spacing.xxs)

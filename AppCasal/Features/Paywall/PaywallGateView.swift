@@ -77,10 +77,14 @@ struct PaywallGateView: View {
             }
             Button {
                 Task {
+                    partnerNotice = nil
                     isRestoring = true
                     await subscription.restore()
                     environment.recordSubscriptionAccess()
                     isRestoring = false
+                    // Found: the gate leaves on its own. Not found: say so, instead of nothing.
+                    guard subscription.isSubscribed != true else { return }
+                    partnerNotice = String(localized: "Nenhuma assinatura encontrada para este Apple ID. Se você assinou com outro Apple ID, entre com ele nos Ajustes e toque em Restaurar compras de novo.")
                 }
             } label: {
                 if isRestoring {
@@ -92,8 +96,8 @@ struct PaywallGateView: View {
             .buttonStyle(.text)
             .disabled(isRestoring)
             HStack(spacing: Spacing.m) {
-                Link("Termos de uso", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
-                Link("Política de privacidade", destination: URL(string: "https://jcapps.dev.br/onlyus/privacidade/")!)
+                Link("Termos de uso", destination: AppLinks.termsOfUse)
+                Link("Política de privacidade", destination: AppLinks.privacyPolicy)
             }
             .font(.footnote)
             .foregroundStyle(Palette.textSecondary)

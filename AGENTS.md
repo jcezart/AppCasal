@@ -433,6 +433,8 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 
 | Data | O quê | Resultado |
 |---|---|---|
+| 2026-10-31 | Links de suporte, privacidade e termos em Nosso espaço; retorno de "Restaurar compras" | 147 testes unitários + 9 de UI passaram, TEST SUCCEEDED; Release iPhone BUILD SUCCEEDED; 5 textos adicionados ao `Localizable.xcstrings` |
+| 2026-10-31 | Revisão de prontidão para a App Store (código, configuração, App Store Connect pela CLI da Superwall) | 147 testes unitários (19 suítes) + 8 de UI passaram, TEST SUCCEEDED (iPhone 17 Pro); Release iPhone BUILD SUCCEEDED sem avisos do app; binário Release sem demonstração, ferramenta de esquema nem tela de teste; extensão embutida. ASC: build 1.0 (10) VALID, ainda não anexado à versão 1.0 (`PREPARE_FOR_SUBMISSION`); assinaturas anual e mensal `READY_TO_SUBMIT`; descrição com links de Termos (EULA da Apple) e privacidade. Achados em "Revisão de 2026-10-31" |
 | 2026-10-30 | 7 textos novos no `Localizable.xcstrings`; notas de revisão no App Store Connect | Debug simulador BUILD SUCCEEDED; notas conferidas após recarregar a página |
 | 2026-10-30 | Itens 6, 9, 10 e 11 da revisão | 155 testes (147 unitários + 8 de UI) passaram, TEST SUCCEEDED; no simulador: alvos de 44 pt (Recados, Hoje), cartão da memória e filtros do Mapa inteiros em AX5, "Abrir Ajustes" sem conta iCloud. Preço do StoreKit não aparece no simulador sem configuração StoreKit |
 | 2026-10-30 | Correções 4, 5, 8 e notas de revisão; auditoria de acessibilidade | 154 testes (146 unitários + 8 de UI) passaram, TEST SUCCEEDED; "1 lembrete" no simulador. Cota cheia e rajada real de importação só observáveis com iCloud |
@@ -481,6 +483,14 @@ Observado no código ou no simulador; nada validado em dois aparelhos. **Corrigi
 10. **App Store** (**corrigido no app:** preço abaixo de "Começar 7 dias grátis", lido do StoreKit: "7 dias grátis na primeira assinatura. Depois, R$ …/mês ou R$ …/ano, com renovação automática."; "Abrir Ajustes" em "Precisamos do iCloud" quando não há conta, abrindo a página do app nos Ajustes): notas de revisão no rascunho dizem "paywall na abertura" (hoje é ao entrar no espaço); botão "Começar 7 dias grátis" da tela nativa sem preço ao lado; simulador sem conta mostrou o pedido de login da Conta Apple (StoreKit) na primeira abertura, conferir no aparelho de revisão.
 
 11. **Mapa em tamanhos de acessibilidade:** os filtros sobre o mapa quebravam letra por letra ("To-do-s") e cobriam o mapa (visto no simulador, AX5). **Corrigido:** controles flutuantes limitados a `.xLarge` (como as barras do sistema), uma linha com `minimumScaleFactor(0.7)`, Large Content Viewer nos filtros, filtros e botão de lista com 44 pt.
+
+## Revisão de 2026-10-31
+
+Nenhum bloqueio encontrado no código. Para enviar: anexar o build mais novo (hoje 1.0 (10), que inclui `613d0da`) à versão 1.0 e incluir as duas assinaturas no envio. Recomendações:
+1. **Corrigido:** Política de privacidade, Termos e Suporte só existiam no paywall (diretriz 5.1.1(i) pede acesso fácil). Agora Nosso espaço tem um cartão com "Ajuda e suporte", "Política de privacidade" e "Termos de uso" (abrem no navegador; URLs em `AppLinks`, também usadas pelo paywall). Teste de UI `testSpaceShowsSupportPrivacyAndTerms`.
+2. **Corrigido:** "Restaurar compras" sem assinatura encontrada mostra "Nenhuma assinatura encontrada para este Apple ID…" na tela do paywall.
+3. **Recusado pelo usuário (2026-10-31):** compra nativa de reserva (`SubscriptionStoreView`) se a Superwall não abrir o paywall. Motivo: o Orante passou na revisão sem isso. Não implementar.
+4. Revisor sem iCloud fica em "Precisamos do iCloud" (as notas de revisão já explicam).
 
 ## Última tarefa / ponto de retomada
 

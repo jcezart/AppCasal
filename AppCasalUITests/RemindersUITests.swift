@@ -36,6 +36,22 @@ final class RemindersUITests: XCTestCase {
         XCTAssertTrue(reminderRow("Dia do primeiro beijo", in: reopened).waitForExistence(timeout: 10))
     }
 
+    /// Support, privacy policy and terms stay reachable after subscribing (guideline 5.1.1).
+    @MainActor
+    func testSpaceShowsSupportPrivacyAndTerms() {
+        let app = XCUIApplication()
+        app.launchArguments = baseArguments + ["-AppCasalDemoReset", "YES"]
+        app.launch()
+
+        XCTAssertTrue(app.buttons["space.reminders"].waitForExistence(timeout: 15))
+        for identifier in ["space.support", "space.privacy", "space.terms"] {
+            let row = app.descendants(matching: .any)[identifier]
+            for _ in 0..<5 where !row.isHittable { app.swipeUp() }
+            XCTAssertTrue(row.exists, "\(identifier) is missing")
+            XCTAssertTrue(row.isHittable, "\(identifier) is not reachable")
+        }
+    }
+
     @MainActor
     private func openReminders(in app: XCUIApplication) {
         let link = app.buttons["space.reminders"]
