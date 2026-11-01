@@ -72,6 +72,18 @@ struct SubscriptionTests {
         #expect(AccessRules.decide(input(participant: true, spaceExpiration: now.addingTimeInterval(-8 * day))) == .locked(.coupleAccessEnded))
     }
 
+    /// Someone who created a space instead of opening the partner's link is not trapped
+    /// behind the paywall, but a paid couple's space is never offered for deletion.
+    @Test func onlyAnUnpaidOwnerAloneMayDiscardTheSpace() {
+        let unpaid = AccessRules.Decision.locked(.noSubscription)
+        #expect(AccessRules.mayDiscardUnpaidSpace(decision: unpaid, isParticipant: false, hasPartner: false))
+        #expect(!AccessRules.mayDiscardUnpaidSpace(decision: unpaid, isParticipant: false, hasPartner: true))
+        #expect(!AccessRules.mayDiscardUnpaidSpace(decision: unpaid, isParticipant: true, hasPartner: false))
+        #expect(!AccessRules.mayDiscardUnpaidSpace(decision: .locked(.coupleAccessEnded), isParticipant: false, hasPartner: false))
+        #expect(!AccessRules.mayDiscardUnpaidSpace(decision: .unlocked, isParticipant: false, hasPartner: false))
+        #expect(!AccessRules.mayDiscardUnpaidSpace(decision: .checking, isParticipant: false, hasPartner: false))
+    }
+
     @Test func recordedAccessOnlyMovesForward() throws {
         let persistence = PersistenceController(mode: .inMemory)
         let spaces = SpaceRepository(persistence: persistence)

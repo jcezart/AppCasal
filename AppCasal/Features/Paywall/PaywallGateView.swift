@@ -16,12 +16,16 @@ struct PaywallGateView: View {
     /// Set when both partners are in the space: reads the partner's paid period again,
     /// true when it unlocked the app.
     let checkPartnerAccess: (() async -> Bool)?
+    /// Set for an owner alone in a space that was never paid: deletes it, so the
+    /// partner's invitation can be opened (an owner cannot accept one).
+    let discardSpace: (() async throws -> Void)?
 
     @State private var didPresent = false
     @State private var isRestoring = false
     @State private var isShowingInvitationHelp = false
     @State private var isCheckingPartner = false
     @State private var partnerNotice: String?
+    @State private var isDiscarding = false
 
     private var subscription: SubscriptionService { environment.subscription }
 
@@ -117,9 +121,34 @@ struct PaywallGateView: View {
             subscription.presentPaywall()
         }
         .alert("Convite do seu par", isPresented: $isShowingInvitationHelp) {
-            Button("Entendi", role: .cancel) {}
+            if discardSpace != nil {
+                Button("Apagar e usar o convite", role: .destructive, action: discard)
+                Button("Cancelar", role: .cancel) {}
+            } else {
+                Button("Entendi", role: .cancel) {}
+            }
         } message: {
-            Text("Você não precisa pagar. Feche esta tela e abra o link que seu par enviou (pelo WhatsApp, Mensagens ou outro app): você entra no espaço de vocês, e a assinatura de quem convidou vale para os dois.")
+            if discardSpace != nil {
+                Text("Você não precisa pagar. Para entrar no espaço do seu par, o espaço vazio que você criou será apagado. Depois, abra o link que seu par enviou (pelo WhatsApp, Mensagens ou outro app).")
+            } else {
+                Text("Você não precisa pagar. Feche esta tela e abra o link que seu par enviou (pelo WhatsApp, Mensagens ou outro app): você entra no espaço de vocês, e a assinatura de quem convidou vale para os dois.")
+            }
+        }
+        .overlay { if isDiscarding { ProgressView() } }
+        .disabled(isDiscarding)
+    }
+
+    private func discard() {
+        guard let discardSpace else { return }
+        partnerNotice = nil
+        isDiscarding = true
+        Task {
+            do {
+                try await discardSpace()
+            } catch {
+                partnerNotice = String(localized: "Não foi possível apagar o espaço agora. Confira a conexão e tente de novo.")
+            }
+            isDiscarding = false
         }
     }
 

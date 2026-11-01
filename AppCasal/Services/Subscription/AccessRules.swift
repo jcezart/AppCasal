@@ -48,6 +48,14 @@ nonisolated enum AccessRules {
         var now: Date
     }
 
+    /// An owner alone in a space nobody ever paid for (someone who created a space
+    /// instead of opening the partner's link) may delete it from the gate: an owner
+    /// cannot accept an invitation, so it would otherwise trap them. Never once the
+    /// couple paid (the space may hold their history) or the partner joined.
+    static func mayDiscardUnpaidSpace(decision: Decision, isParticipant: Bool, hasPartner: Bool) -> Bool {
+        decision == .locked(.noSubscription) && !isParticipant && !hasPartner
+    }
+
     static func decide(_ input: Input) -> Decision {
         guard input.isEnforced, input.isSubscribed != true, !input.isJoiningSpace, input.isInSpace else { return .unlocked }
         if let expiration = input.spaceAccessExpiresAt {

@@ -100,7 +100,8 @@ struct RootView: View {
                 reload()
             }
             .onChange(of: access) { old, new in
-                guard case .locked = old, new == .unlocked else { return }
+                // Not after discarding an unpaid space: that unlocks by leaving the space.
+                guard case .locked = old, new == .unlocked, space != nil, isMember else { return }
                 environment.subscription.dismissPaywall()
                 if environment.subscription.isSubscribed != true {
                     isShowingPartnerUnlocked = true
@@ -122,7 +123,12 @@ struct RootView: View {
             WelcomeView()
                 .transition(.opacity)
         } else if case .locked(let reason) = access {
-            PaywallGateView(environment: environment, reason: reason, checkPartnerAccess: partnerAccessCheck)
+            PaywallGateView(
+                environment: environment,
+                reason: reason,
+                checkPartnerAccess: partnerAccessCheck,
+                discardSpace: discardUnpaidSpace
+            )
                 .transition(.opacity)
         } else if account.status == .available, let userRecordName = account.userRecordName {
             if let space {
@@ -174,6 +180,20 @@ struct RootView: View {
     private var partnerAccessCheck: (() async -> Bool)? {
         guard hasPartner else { return nil }
         return { await checkPartnerAccess() }
+    }
+
+    /// The owner created a space, has no partner and never paid: someone who meant to
+    /// open the partner's link instead. The gate offers to delete this empty space so the
+    /// invitation can be accepted (an owner's invitations are refused). Never offered once
+    /// the couple paid or the partner joined.
+    private var discardUnpaidSpace: (() async throws -> Void)? {
+        guard let space, AccessRules.mayDiscardUnpaidSpace(
+            decision: access, isParticipant: isParticipant, hasPartner: hasPartner
+        ) else { return nil }
+        return {
+            try await environment.sharing.deletePermanently(space)
+            reload()
+        }
     }
 
     /// Before offering a purchase: the subscriber's date may be in iCloud but not here.
