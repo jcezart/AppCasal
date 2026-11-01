@@ -22,7 +22,6 @@ enum InvitePartner {
 struct InvitePartnerPromptView: View {
     let environment: AppEnvironment
     let space: CoupleSpace
-    let onInvite: () -> Void
 
     @Environment(\.dismiss) private var dismiss
     @State private var isPreparing = false
@@ -60,16 +59,20 @@ struct InvitePartnerPromptView: View {
         .interactiveDismissDisabled(isPreparing)
     }
 
+    /// Saves the share and opens the share sheet on top of this screen, which keeps its
+    /// progress until the sheet is up and closes only after the invitation is sent or
+    /// cancelled: no gap where the person sees Início and thinks nothing happened.
     private func prepare() {
         isPreparing = true
         errorMessage = nil
         Task {
-            defer { isPreparing = false }
             do {
-                _ = try await environment.sharing.ensureShare(for: space)
-                onInvite()
-                dismiss()
+                try await environment.sharing.presentInvitation(for: space) {
+                    isPreparing = false
+                    dismiss()
+                }
             } catch {
+                isPreparing = false
                 errorMessage = error.localizedDescription
             }
         }

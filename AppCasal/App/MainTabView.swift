@@ -17,10 +17,8 @@ struct MainTabView: View {
     @State private var isShowingSpace = false
     @State private var isShowingNotificationPrompt = false
     @State private var isShowingInvitePrompt = false
-    /// The prompt saved the share; the share sheet opens once the prompt has closed.
-    @State private var invitesAfterPrompt = false
-    /// The share sheet from that first invitation closed: offer notifications once the
-    /// app is in front again (the person may still be in WhatsApp).
+    /// The invitation prompt closed (invitation sent, cancelled or "Agora não"): offer
+    /// notifications once the app is in front again (the person may still be in WhatsApp).
     @State private var offersNotificationsWhenActive = false
     @Environment(\.scenePhase) private var scenePhase
 
@@ -91,8 +89,8 @@ struct MainTabView: View {
         .sheet(isPresented: $isShowingNotificationPrompt) {
             NotificationPromptView(environment: environment)
         }
-        .sheet(isPresented: $isShowingInvitePrompt, onDismiss: afterInvitePrompt) {
-            InvitePartnerPromptView(environment: environment, space: space) { invitesAfterPrompt = true }
+        .sheet(isPresented: $isShowingInvitePrompt, onDismiss: { offersNotificationsWhenActive = true }) {
+            InvitePartnerPromptView(environment: environment, space: space)
         }
         .task {
             // Right after creating the space, inviting comes first; notifications after.
@@ -134,25 +132,6 @@ struct MainTabView: View {
 
     private var momentsContext: MomentsContext {
         MomentsContext(environment: environment, space: space, userRecordName: userRecordName)
-    }
-
-    private func afterInvitePrompt() {
-        if invitesAfterPrompt {
-            invitesAfterPrompt = false
-            // The share was saved by the prompt; failures show again from the Início card.
-            // Notifications are offered right after the share sheet, not on the next launch.
-            Task {
-                do {
-                    try await environment.sharing.presentInvitation(for: space) {
-                        offersNotificationsWhenActive = true
-                    }
-                } catch {
-                    offersNotificationsWhenActive = true
-                }
-            }
-        } else {
-            Task { await offerNotificationsIfNeeded() }
-        }
     }
 
     private func offerNotificationsWhenActive() {
