@@ -58,6 +58,16 @@ final class ShareService {
         return shares?[space.objectID]
     }
 
+    /// The share as it is on the server now. The local copy kept by the mirroring can lag
+    /// behind a participant accepting or leaving (observed 2026-11-01: the owner saw
+    /// "Convite enviado" after the partner had joined). Read only, for display; nil
+    /// offline or without a share.
+    func currentShare(for space: CoupleSpace) async -> CKShare? {
+        guard let local = existingShare(for: space), !persistence.isInSharedStore(space) else { return nil }
+        let record = try? await persistence.cloudKitContainer.privateCloudDatabase.record(for: local.recordID)
+        return record as? CKShare
+    }
+
     func createShare(for space: CoupleSpace) async throws -> CKShare {
         guard space.sharingEndedAt == nil else { throw ShareError.partnershipEnded }
         guard let store = persistence.privateStore else { throw ShareError.storeUnavailable }

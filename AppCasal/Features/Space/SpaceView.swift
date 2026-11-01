@@ -143,6 +143,12 @@ struct SpaceView: View {
             reloadShare()
             await environment.reminderNotifications.refreshAuthorization()
         }
+        .task(id: environment.sharing.shareRevision) {
+            // The local copy can lag behind the partner accepting or leaving.
+            guard !environment.isDemo, isOwner,
+                  let current = await environment.sharing.currentShare(for: space) else { return }
+            share = current
+        }
         .onChange(of: environment.sharing.shareRevision) { reloadShare() }
     }
 
