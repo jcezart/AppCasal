@@ -344,12 +344,12 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 |---|---|---|
 | S1 | Dono cria espaço e envia convite | **validado (2026-11-01, TestFlight, dois iPhones, contas distintas; relato do usuário):** convite pelo link funcionou. Histórico: parcial (2026-10-18): convite pelo WhatsApp chegou; ícone de documento corrigido; share agora salvo antes de abrir a folha. O aviso do sistema "Compartilhe o link no app WhatsApp" (opções "Permitir a Qualquer Pessoa com o Link" e "Continuar") é do iOS para `specifiedRecipientsOnly` em apps de terceiros e não pode ser removido sem link público; "Continuar" mantém o convite privado (só a primeira pessoa a abrir entra). A linha "Convidar seu par" orienta a tocar em Continuar. Terceiro teste: WhatsApp abriu direto depois de "Continuar" (com demora do sistema) |
 | S2 | Participante aceita (app fechado e aberto) e entra com o nome | **validado (2026-11-01, relato do usuário):** a parceira entrou pelo link e não viu paywall (assinatura do dono valeu para os dois). Histórico: parcial (2026-10-18): aceitou, mas só entrou após reabrir o app; corrigido, revalidar |
-| S3 | Recadinho de A aparece em B e vice-versa | não testado |
+| S3 | Recadinho de A aparece em B e vice-versa | parcial (2026-11-01, TestFlight, relato do usuário): recadinho do dono chegou à parceira depois que o envio pendente ("1 alteração aguardando envio") terminou; parceira → dono não testado |
 | S4 | Edição, exclusão lógica e restauração propagam | não testado |
 | S5 | Itens criados pelo dono após o share chegam ao participante | não testado |
 | S6 | Convite com segundo parceiro é recusado | não testado |
 | S7 | Parar de compartilhar revoga acesso, mantém dados do dono, bloqueia novo convite | não testado |
-| S8 | Participante "Sair do espaço" não apaga dados do dono | não testado |
+| S8 | Participante "Sair do espaço" não apaga dados do dono | parcial (2026-11-01, relato do usuário): parceira saiu e voltou pelo link novo ("Convidar de volta"), entrou como participante ("Sair do espaço" visível); conferir se o dono manteve tudo |
 | M1 | Memória com 3 fotos criada em A aparece com fotos em B | não testado |
 | M2 | Mesma memória editada offline nos dois | não testado |
 | G1 | Etapas marcadas ao mesmo tempo nos dois aparelhos | não testado |
