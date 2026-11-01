@@ -190,7 +190,8 @@ Legenda: **validado localmente** = build + testes automatizados (unitários e/ou
 2. Paywall: ~~link da política de privacidade~~ feito em 2026-10-26 (rodapé da Superwall e tela própria `PaywallGateView`); falta a revisão visual do usuário.
 3. ~~CloudKit~~ **feito em 2026-10-26:** `CD_accessExpiresAt` (Date/Time, sem índices) criado à mão em `CD_CoupleSpace` no Development pelo CloudKit Console (o usuário fez o login; a ferramenta `-AppCasalInitializeCloudKitSchema` não foi usada porque o iPhone tinha o build do TestFlight e ela abre os stores reais) e publicado em Production ("Modify 1 field on CD_CoupleSpace", nada mais); conferido em Production.
 4. ~~Privacidade~~ feito em 2026-10-26: "App Privacy" publicado no App Store Connect (ver Ficha da App Store).
-5. Testar no aparelho: compra, teste grátis, restauração, par liberado pelo espaço (inclusive com o paywall aberto no aparelho do par e depois de atualizar de uma versão sem o campo), fim da tolerância.
+5. **Preço em dólar no TestFlight (observado em 2026-11-01, iPhone da parceira com conta do Brasil):** o paywall mostrou US$ 12,99/ano e US$ 1,99/mês, que são os preços dos EUA calculados pela Apple. Conferido no Chrome: Superwall com R$ 89,90 e R$ 14,90; App Store Connect com Brasil R$ 89,90 e R$ 14,90. O paywall usa `{{ products.*.price }}` (preço do StoreKit). Causa provável: o StoreKit no TestFlight devolve dados de produto da loja dos EUA mesmo com a conta em outro país (relatado nos fóruns da Apple e da RevenueCat; sem confirmação oficial). **Confirmado pelo usuário (2026-11-01):** a folha de compra da Apple mostrou R$ nos dois planos (compra cancelada). Nada mudado; conferir o paywall na primeira compra real da App Store.
+6. Testar no aparelho: compra, teste grátis, restauração, par liberado pelo espaço (inclusive com o paywall aberto no aparelho do par e depois de atualizar de uma versão sem o campo), fim da tolerância.
 
 ## Ficha da App Store (versão 1.0, preenchida pelo `superwall asc` em 2026-10-26)
 
@@ -338,8 +339,8 @@ Disponibilidade dos dois aparelhos: **não confirmada**. Simulador não conta co
 
 | ID | Teste | Estado |
 |---|---|---|
-| S1 | Dono cria espaço e envia convite | parcial (2026-10-18): convite pelo WhatsApp chegou; ícone de documento corrigido; share agora salvo antes de abrir a folha. O aviso do sistema "Compartilhe o link no app WhatsApp" (opções "Permitir a Qualquer Pessoa com o Link" e "Continuar") é do iOS para `specifiedRecipientsOnly` em apps de terceiros e não pode ser removido sem link público; "Continuar" mantém o convite privado (só a primeira pessoa a abrir entra). A linha "Convidar seu par" orienta a tocar em Continuar. Terceiro teste: WhatsApp abriu direto depois de "Continuar" (com demora do sistema) |
-| S2 | Participante aceita (app fechado e aberto) e entra com o nome | parcial (2026-10-18): aceitou, mas só entrou após reabrir o app; corrigido, revalidar |
+| S1 | Dono cria espaço e envia convite | **validado (2026-11-01, TestFlight, dois iPhones, contas distintas; relato do usuário):** convite pelo link funcionou. Histórico: parcial (2026-10-18): convite pelo WhatsApp chegou; ícone de documento corrigido; share agora salvo antes de abrir a folha. O aviso do sistema "Compartilhe o link no app WhatsApp" (opções "Permitir a Qualquer Pessoa com o Link" e "Continuar") é do iOS para `specifiedRecipientsOnly` em apps de terceiros e não pode ser removido sem link público; "Continuar" mantém o convite privado (só a primeira pessoa a abrir entra). A linha "Convidar seu par" orienta a tocar em Continuar. Terceiro teste: WhatsApp abriu direto depois de "Continuar" (com demora do sistema) |
+| S2 | Participante aceita (app fechado e aberto) e entra com o nome | **validado (2026-11-01, relato do usuário):** a parceira entrou pelo link e não viu paywall (assinatura do dono valeu para os dois). Histórico: parcial (2026-10-18): aceitou, mas só entrou após reabrir o app; corrigido, revalidar |
 | S3 | Recadinho de A aparece em B e vice-versa | não testado |
 | S4 | Edição, exclusão lógica e restauração propagam | não testado |
 | S5 | Itens criados pelo dono após o share chegam ao participante | não testado |
