@@ -215,6 +215,7 @@ Privacidade do app (rótulos, publicados pelo site em 2026-10-26): dados vincula
 
 **Falta:**
 - **2026-11-01:** build 1.0 (18) anexado à versão 1.0 e salvo, depois trocado pelo 1.0 (20) a pedido do usuário (19 e 20 vieram de pushes só de documentação; mesmo código do 18); versão adicionada a um rascunho de envio ("Pronto para revisão", ainda **não enviado**). Ao adicionar "Premium Anual" ao rascunho, o App Store Connect mostrou "Atualização de contrato" e não adicionou. Causa em Negócios: "Formulário fiscal do Brasil" com "Faltam informações fiscais" ("Devido a mudanças na legislação brasileira, você precisa atualizar sua identificação fiscal"). Acordo de apps pagos ativo. O aviso pede o CNPJ. **Decisão do usuário (2026-11-01):** abrir um MEI e só então preencher; envio em espera até lá. O usuário precisa preencher os dados fiscais (não é feito por agente); depois, adicionar as duas assinaturas ao mesmo rascunho e enviar. Não enviar o app sem as assinaturas.
+- **2026-11-02:** formulário fiscal do Brasil preenchido pelo usuário com CNPJ (status Ativo em Negócios). Enviados para revisão juntos, no mesmo envio: app 1.0 (20), Premium Anual, Premium Mensal e o grupo "OnlyUs Premium" (a Apple exige o grupo junto com a primeira assinatura). Confirmação: "4 itens enviados". Lançamento configurado como automático após aprovação.
 
 ## Compartilhamento
 
